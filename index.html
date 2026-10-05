@@ -117,6 +117,36 @@ a{color:var(--accent); text-decoration:none;}
 #syncBanner.show{display:block;}
 #syncBanner .sb-title{font-size:13px; font-weight:700;}
 #syncBanner .sb-sub{font-size:11px; color:var(--text-2); line-height:1.5; margin-top:4px;}
+
+.stories-row{display:flex; gap:14px; padding:14px 16px 6px; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.stories-row::-webkit-scrollbar{display:none;}
+.story-item{display:flex; flex-direction:column; align-items:center; gap:5px; width:62px; flex-shrink:0;}
+.story-ring{width:58px;height:58px;border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; background:var(--surface-2); padding:2px;}
+.story-ring.has{background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));}
+.story-avatar-inner{width:100%;height:100%;border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; overflow:hidden; border:2px solid var(--bg); font-weight:700; font-size:19px;}
+.story-avatar-inner img{width:100%;height:100%;object-fit:cover;}
+.story-plus{position:absolute; bottom:-3px; right:-3px; width:21px;height:21px; border-radius:50%; background:var(--accent); border:2.5px solid var(--bg); display:flex; align-items:center; justify-content:center;}
+.story-plus .icon{width:11px;height:11px; color:#fff;}
+.story-label{font-size:11px; color:var(--text-2); max-width:62px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+#storyViewer{position:fixed; inset:0; background:#000; z-index:200; display:none; flex-direction:column;}
+#storyViewer.show{display:flex;}
+.sv-progress{display:flex; gap:4px; padding:12px 10px 0; padding-top:calc(12px + env(safe-area-inset-top));}
+.sv-progress .seg{flex:1; height:2.5px; background:rgba(255,255,255,.3); border-radius:2px; overflow:hidden;}
+.sv-progress .seg i{display:block; height:100%; width:0%; background:#fff;}
+.sv-progress .seg.done i{width:100%;}
+.sv-head{display:flex; align-items:center; gap:9px; padding:10px 12px;}
+.sv-head .av{width:28px;height:28px;border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4)); display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700; flex-shrink:0;}
+.sv-head .nm{color:#fff;font-size:13px;font-weight:700;}
+.sv-head .tm{color:rgba(255,255,255,.6);font-size:11px;}
+.sv-head .sp{flex:1;}
+.sv-head button{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;}
+.sv-body{flex:1; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#000;}
+.sv-body img{max-width:100%; max-height:100%; object-fit:contain; -webkit-user-drag:none;}
+.sv-tap{position:absolute; top:0; bottom:0; width:33%; z-index:2;}
+.sv-tap.left{left:0;} .sv-tap.right{right:0;}
+.sv-cap{position:absolute; left:0; right:0; bottom:0; padding:18px 16px calc(16px + env(safe-area-inset-bottom)); background:linear-gradient(to top, rgba(0,0,0,.65), transparent); color:#fff; font-size:14px; line-height:1.4;}
+
 .fav-btn{position:absolute; top:10px; right:10px; width:32px;height:32px; border-radius:50%;
   background:rgba(255,255,255,.85); display:flex; align-items:center; justify-content:center; z-index:2;}
 .fav-btn .icon{color:#20212b; width:17px;height:17px;}
@@ -375,6 +405,7 @@ a{color:var(--accent); text-decoration:none;}
 <div id="app"></div>
 <div class="bottom-nav" id="bottomNav"></div>
 <div class="sheet-overlay" id="sheetOverlay"><div class="sheet" id="sheetContent"></div></div>
+<div id="storyViewer"></div>
 <div id="syncBanner">
     <div class="sb-title">🔔 <b></b></div>
     <div class="sb-sub"></div>
@@ -446,6 +477,7 @@ const I18N = {
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
     notifyTitle:'Уведомления бота', notifyHint:'Бот следит за избранным: напоминает до 3 раз в день, пока лоты доступны. Если лот продадут — напоминания прекратятся. Через 2 дня без визита — напомню проверить каталог.', syncBtn:'🔔 Синхронизировать с ботом', syncedLbl:'Синхронизировано', syncToast:'Синхронизирую с ботом…', syncErr:'Открой мини-апп из Telegram', later:'Позже',
+    yourStory:'Моя история', addStory:'Добавить историю', storyHint:'История видна только на этом устройстве — она личная, как заметка, и не публикуется другим пользователям. Исчезает через 24 часа.', choosePhoto:'Выбрать фото', storyCaption:'Подпись', storyCaptionPh:'Необязательно…', postStory:'Опубликовать', storyPosted:'История добавлена', storyAgoNow:'сейчас', storyAgoH:'ч назад',
   sum:'сум', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  },
@@ -482,6 +514,7 @@ const I18N = {
   saveLocal:'Saqlash', saved:'Saqlandi — chiqarish uchun Publish bosing',
   cancel:'Bekor qilish', confirm:'Tasdiqlash', deleteL:'O‘chirish', editAction:'Tahrirlash',
     notifyTitle:'Bot xabarnomalar', notifyHint:'Bot sevimlilarni kuzatadi: lotlar mavjud bo‘lguncha kuniga 3 martagacha eslatadi. Lot sotilsa — eslatmalar to‘xtaydi. 2 kun kirmasang — katalogni tekshirishni eslatadi.', syncBtn:'🔔 Bot bilan sinxronlash', syncedLbl:'Sinxronlandi', syncToast:'Bot bilan sinxronlanmoqda…', syncErr:'Mini-apni Telegramdan oching', later:'Keyinroq',
+    yourStory:'Mening tarixim', addStory:'Tarix qo‘shish', storyHint:'Tarix faqat shu qurilmada ko‘rinadi — u shaxsiy, boshqa foydalanuvchilarga chop etilmaydi. 24 soatdan keyin yo‘qoladi.', choosePhoto:'Rasm tanlash', storyCaption:'Sarlavha', storyCaptionPh:'Ixtiyoriy…', postStory:'Chop etish', storyPosted:'Tarix qo‘shildi', storyAgoNow:'hozir', storyAgoH:'soat oldin',
   sum:'so‘m', loading:'Yuklanmoqda…', reload:'Qayta yuklash', added:'Listing qo‘shildi',
   deleted:'O‘chirildi', userId:'Telegram ID', about:'Loyiha haqida'
  },
@@ -518,6 +551,7 @@ const I18N = {
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
     notifyTitle:'Bot notifications', notifyHint:'The bot tracks your favorites: up to 3 reminders a day while listings are available. If one sells, reminders stop. After 2 days without a visit you get a check-the-catalog ping.', syncBtn:'🔔 Sync with bot', syncedLbl:'Synced', syncToast:'Syncing with the bot…', syncErr:'Open the mini app from Telegram', later:'Later',
+    yourStory:'Your story', addStory:'Add story', storyHint:'Your story is visible only on this device — it is personal and is not published to other users. It disappears after 24 hours.', choosePhoto:'Choose photo', storyCaption:'Caption', storyCaptionPh:'Optional…', postStory:'Post', storyPosted:'Story added', storyAgoNow:'now', storyAgoH:'h ago',
   sum:'UZS', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  }
@@ -775,6 +809,139 @@ function syncFavs(){
   setTimeout(()=>{ try{ tg.sendData(JSON.stringify({v:1, favs: FAVS})); }catch(e){} }, 400);
 }
 
+/* ---------------- STORIES (personal, local-only, available to EVERY user) ---------------- */
+let STORIES = store.get('savdo_stories', []);
+function pruneStories(){
+  const before = STORIES.length;
+  STORIES = STORIES.filter(st => Date.now() - st.createdAt < 24*3600e3);
+  if(STORIES.length !== before) store.set('savdo_stories', STORIES);
+}
+pruneStories();
+function saveStories(){ store.set('savdo_stories', STORIES); }
+function escHTML(x){ return String(x).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function storiesRowHTML(){
+  pruneStories();
+  const has = STORIES.length>0;
+  const initial = ((tgUser&&tgUser.first_name)||'S')[0].toUpperCase();
+  const thumb = has ? STORIES[STORIES.length-1].img : null;
+  return `<div class="stories-row">
+    <div class="story-item">
+      <div class="story-ring ${has?'has':''}" onclick="${has?'openStoryViewer(0)':'openAddStory()'}">
+        <div class="story-avatar-inner">${thumb?`<img src="${thumb}">`:initial}</div>
+        <div class="story-plus" onclick="event.stopPropagation(); openAddStory()"><i data-lucide="plus" class="icon"></i></div>
+      </div>
+      <div class="story-label">${t('yourStory')}</div>
+    </div>
+  </div>`;
+}
+
+let STORY_DRAFT = null;
+function openAddStory(){
+  STORY_DRAFT = null;
+  openSheet(`<h3>${t('addStory')}</h3>
+    <p style="font-size:12px;color:var(--text-2);line-height:1.5">${t('storyHint')}</p>
+    <div id="storyPickArea" style="margin-top:12px; height:280px; border-radius:16px; border:1.5px dashed var(--border); background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; cursor:pointer; overflow:hidden; position:relative"
+      onclick="document.getElementById('storyFileInput').click()">
+      <i data-lucide="image-plus" class="icon" style="width:30px;height:30px;color:var(--text-2)"></i>
+      <span style="font-size:12px;color:var(--text-2)">${t('choosePhoto')}</span>
+    </div>
+    <input type="file" id="storyFileInput" accept="image/*" style="display:none" onchange="handleStoryFile(event)">
+    <div class="field"><label>${t('storyCaption')}</label><input id="storyCapInput" maxlength="120" placeholder="${t('storyCaptionPh')}"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" onclick="closeSheet()">${t('cancel')}</button>
+      <button class="btn btn-primary" id="storyPostBtn" onclick="submitStory()" disabled style="opacity:.5">${t('postStory')}</button>
+    </div>`);
+}
+function handleStoryFile(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const maxD = 1080;
+      let w = img.width, h = img.height;
+      if(w>=h && w>maxD){ h = Math.round(h*maxD/w); w = maxD; }
+      else if(h>w && h>maxD){ w = Math.round(w*maxD/h); h = maxD; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      STORY_DRAFT = canvas.toDataURL('image/jpeg', 0.82);
+      const area = document.getElementById('storyPickArea');
+      if(area){ area.style.border='none'; area.innerHTML = `<img src="${STORY_DRAFT}" style="width:100%;height:100%;object-fit:cover">`; }
+      const btn = document.getElementById('storyPostBtn');
+      if(btn){ btn.disabled=false; btn.style.opacity='1'; }
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function submitStory(){
+  if(!STORY_DRAFT) return;
+  const cap = (document.getElementById('storyCapInput')||{}).value||'';
+  STORIES.push({ id:'st'+Date.now(), img:STORY_DRAFT, caption:cap.trim(), createdAt:Date.now() });
+  saveStories(); STORY_DRAFT=null; closeSheet(); toast(t('storyPosted')); haptic('medium'); render();
+}
+
+let SV_IDX = 0, SV_TIMER = null;
+function openStoryViewer(idx){
+  pruneStories();
+  if(!STORIES.length) return;
+  SV_IDX = Math.min(idx, STORIES.length-1);
+  document.getElementById('storyViewer').classList.add('show');
+  renderStoryViewer();
+}
+function closeStoryViewer(){
+  clearTimeout(SV_TIMER);
+  const el = document.getElementById('storyViewer');
+  el.classList.remove('show'); el.innerHTML='';
+  render();
+}
+function svAgo(ts){
+  const h = Math.floor((Date.now()-ts)/3600e3);
+  if(h<1) return t('storyAgoNow');
+  return h+(LANG==='ru'?' ':'')+t('storyAgoH');
+}
+function renderStoryViewer(){
+  clearTimeout(SV_TIMER);
+  const st = STORIES[SV_IDX];
+  if(!st){ closeStoryViewer(); return; }
+  const initial = ((tgUser&&tgUser.first_name)||'S')[0].toUpperCase();
+  const el = document.getElementById('storyViewer');
+  el.innerHTML = `
+    <div class="sv-progress">${STORIES.map((_,i)=>`<div class="seg ${i<SV_IDX?'done':''}"><i ${i===SV_IDX?'id="svBar"':''}></i></div>`).join('')}</div>
+    <div class="sv-head">
+      <div class="av">${initial}</div>
+      <div><div class="nm">${t('yourStory')}</div><div class="tm">${svAgo(st.createdAt)}</div></div>
+      <div class="sp"></div>
+      <button onclick="deleteCurrentStory()" aria-label="delete"><i data-lucide="trash-2" class="icon" style="width:19px;height:19px"></i></button>
+      <button onclick="closeStoryViewer()" aria-label="close"><i data-lucide="x" class="icon" style="width:22px;height:22px"></i></button>
+    </div>
+    <div class="sv-body">
+      <img src="${st.img}">
+      <div class="sv-tap left" onclick="svPrev()"></div>
+      <div class="sv-tap right" onclick="svNext()"></div>
+      ${st.caption?`<div class="sv-cap">${escHTML(st.caption)}</div>`:''}
+    </div>`;
+  try{ lucide.createIcons(); }catch(e){}
+  requestAnimationFrame(()=>{
+    const bar = document.getElementById('svBar');
+    if(bar){ bar.style.transition='none'; bar.style.width='0%';
+      requestAnimationFrame(()=>{ bar.style.transition='width 5s linear'; bar.style.width='100%'; }); }
+  });
+  SV_TIMER = setTimeout(svNext, 5000);
+}
+function svNext(){ if(SV_IDX < STORIES.length-1){ SV_IDX++; renderStoryViewer(); } else closeStoryViewer(); }
+function svPrev(){ if(SV_IDX>0){ SV_IDX--; renderStoryViewer(); } else renderStoryViewer(); }
+function deleteCurrentStory(){
+  STORIES.splice(SV_IDX,1); saveStories();
+  if(!STORIES.length){ closeStoryViewer(); toast(t('deleted')); return; }
+  if(SV_IDX>=STORIES.length) SV_IDX = STORIES.length-1;
+  toast(t('deleted'));
+  renderStoryViewer();
+}
+
 /* ---------------- HOME ---------------- */
 function renderHome(){
   const featured = LISTINGS.filter(l=>l.featured && l.status==='active');
@@ -782,6 +949,7 @@ function renderHome(){
   latest = sortList(latest, STATE.homeSort==='newest'?'newest':STATE.homeSort==='price'?'priceLow':'recommended').slice(0,8);
   return `<div class="view">
     ${topbarHTML()}
+    ${storiesRowHTML()}
     ${searchHTML(true)}
     <div class="section"><div class="section-head"><h3>${t('categories')}</h3></div></div>
     <div class="cat-row">
