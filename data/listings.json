@@ -1,3 +1,31 @@
 {
-  "listings": []
+  "listings": [
+    {
+      "id": "relay_test_1",
+      "username": "@test.relay",
+      "displayName": "Test Relay",
+      "category": "username",
+      "description": "тест доставки уведомлений",
+      "followers": 90000,
+      "following": 10,
+      "posts": 50,
+      "engagement": 5.1,
+      "accountAge": 36,
+      "niche": "test",
+      "country": "Uzbekistan",
+      "language": "Russian",
+      "price": 7770000,
+      "currency": "UZS",
+      "minOffer": null,
+      "sellerHandle": "",
+      "tags": [
+        "test"
+      ],
+      "featured": true,
+      "status": "active",
+      "curated": true,
+      "createdAt": 0,
+      "updatedAt": 0
+    }
+  ]
 }
