@@ -1,0 +1,14 @@
+{
+  "name": "Savdo — Instagram Usernames Marketplace",
+  "short_name": "Savdo",
+  "description": "Маркетплейс Instagram-юзернеймов: покупай, продавай, торгуйся безопасно.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F5F7",
+  "theme_color": "#F4F5F7",
+  "lang": "ru",
+  "icons": [
+    { "src": "https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0b5eee824_generated_image.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
