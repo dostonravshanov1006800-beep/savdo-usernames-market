@@ -1,4 +1,4 @@
-const CACHE = 'savdo-v3';
+const CACHE = 'savdo-v4';
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
 const NEVER_CACHE = ['/data/listings.json'];
 

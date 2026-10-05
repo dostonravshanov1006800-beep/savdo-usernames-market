@@ -444,44 +444,44 @@ function haptic(s){ try{ tg && tg.HapticFeedback && tg.HapticFeedback.impactOccu
 
 /* ---------------- i18n ---------------- */
 const I18N = {
- ru:{ home:'Home', market:'Marketplace', profile:'Profile', admin:'Admin',
-  greeting:'Savdo Marketplace', search:'Search username, category…', recent:'Recent',
-  categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All',
-  recommended:'Recommended', listingsFound:'listings found', filters:'Filters', sort:'Sort by',
-  recommended_:'Recommended', newest:'Newest', priceLow:'Lowest price', priceHigh:'Highest price',
-  mostFollowers:'Most followers', highEngagement:'Highest engagement', bestRated:'Best rated seller',
-  priceRange:'Price range', followers:'Followers', engagement:'Engagement', following:'Following',
-  posts:'Posts', accountAge:'Account age', niche:'Niche', country:'Country', language:'Language',
-  verifiedSeller:'Verified seller only', availability:'Availability', any:'Any',
-  reset:'Reset', showResults:'Show results',
-  available:'Available', reserved:'Reserved', sold:'Sold',
-  buyNow:'Buy now', makeOffer:'Make an offer', contactSeller:'Contact seller', share:'Share', report:'Report',
-  safety:'Safe deal', payProtect:'Payment protection', noPass:'No password sharing', secureTransfer:'Secure transfer',
-  dispute:'Dispute support', stats:'Statistics', description:'Description', tags:'Tags',
-  created:'Listed', updated:'Updated', offerPrice:'Your offer', message:'Message (optional)',
-  sendOffer:'Send via Telegram', reportTitle:'Report listing',
-  reasons:['Scam','Misleading information','Duplicate','Inappropriate','Other'],
-  curated:'Curated by Savdo', seller:'Seller',
-  favorites:'Favorites', theme:'Dark theme', languageLbl:'Language', settings:'Settings',
-  emptyCatalog:'Catalog is empty', emptyCatalogD:'Listings will appear here soon', emptySearch:'No listings found',
-  emptyFav:'No favorites yet', denied:'Admin access only', rating:'Rating',
-  offerCopied:'Offer text copied — paste it in the chat', openingTg:'Opening Telegram…',
-  adminListings:'Listings', adminAdd:'Add listing', adminEditTitle:'Edit listing',
-  adminSync:'Sync', publish:'Publish to site', reloadSite:'Reload from site', unpublished:'unpublished changes',
-  published:'Published ✓', publishErr:'Publish failed — check token', tokenTitle:'GitHub token',
-  tokenDesc:'Fine-grained PAT (Contents: Read and write) for the repo. Stored only on this device.',
-  tokenSave:'Save token', tokenSaved:'Token saved', noToken:'Token required',
-  username:'Username', displayName:'Display name', category:'Category', status:'Status',
-  featuredLbl:'Featured (Hot)', sellerHandle:'Seller Telegram (@handle, optional)',
-  priceLbl:'Price', currency:'Currency', minOffer:'Minimum offer (optional)',
-  saveLocal:'Save', saved:'Saved — press Publish to make it live',
-  cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
-    notifyTitle:'Уведомления бота', notifyHint:'Бот следит за избранным: напоминает до 3 раз в день, пока лоты доступны. Если лот продадут — напоминания прекратятся. Через 2 дня без визита — напомню проверить каталог.', syncBtn:'🔔 Синхронизировать с ботом', syncedLbl:'Синхронизировано', syncToast:'Синхронизирую с ботом…', syncErr:'Открой мини-апп из Telegram', later:'Позже',
-    profileSaved:'Профиль сохранён', 
-  editProfile:'Редактировать профиль', changePhoto:'Изменить фото', nameLbl:'Имя', bannerCtaTitle:'Попади в баннер', bannerCtaSub:'Добавь фото и имя в профиле', 
-  yourStory:'Моя история', addStory:'Добавить историю', storyHint:'История видна только на этом устройстве — она личная, как заметка, и не публикуется другим пользователям. Исчезает через 24 часа.', choosePhoto:'Выбрать фото', storyCaption:'Подпись', storyCaptionPh:'Необязательно…', postStory:'Опубликовать', storyPosted:'История добавлена', storyAgoNow:'сейчас', storyAgoH:'ч назад',
-  sum:'сум', loading:'Loading…', reload:'Reload', added:'Listing added',
-  deleted:'Deleted', userId:'Telegram ID', about:'About'
+ ru:{ home:'Главная', market:'Маркет', profile:'Профиль', admin:'Админ',
+  greeting:'Savdo Marketplace', search:'Поиск юзернейма, категории…', recent:'Недавние',
+  categories:'Категории маркетплейса', featured:'Рекомендованные лоты', seeAll:'Все',
+  recommended:'Рекомендуем', listingsFound:'лотов найдено', filters:'Фильтры', sort:'Сортировка',
+  recommended_:'Рекомендуемые', newest:'Сначала новые', priceLow:'Сначала дешевле', priceHigh:'Сначала дороже',
+  mostFollowers:'Больше подписчиков', highEngagement:'Высокая активность', bestRated:'Лучший продавец',
+  priceRange:'Диапазон цен', followers:'Подписчики', engagement:'Активность', following:'Подписки',
+  posts:'Посты', accountAge:'Возраст аккаунта', niche:'Ниша', country:'Страна', language:'Язык',
+  verifiedSeller:'Только проверенный продавец', availability:'Наличие', any:'Любое',
+  reset:'Сбросить', showResults:'Показать результаты',
+  available:'Доступен', reserved:'Забронирован', sold:'Продан',
+  buyNow:'Купить сейчас', makeOffer:'Предложить цену', contactSeller:'Написать продавцу', share:'Поделиться', report:'Жалоба',
+  safety:'Безопасная сделка', payProtect:'Защита платежа', noPass:'Без передачи пароля', secureTransfer:'Безопасная передача',
+  dispute:'Помощь при спорах', stats:'Статистика', description:'Описание', tags:'Теги',
+  created:'Размещён', updated:'Обновлён', offerPrice:'Ваша цена', message:'Сообщение (необязательно)',
+  sendOffer:'Отправить через Telegram', reportTitle:'Жалоба на лот',
+  reasons:['Мошенничество','Недостоверная информация','Дубликат','Неподходящий контент','Другое'],
+  curated:'Проверено Savdo', seller:'Продавец',
+  favorites:'Избранное', theme:'Тёмная тема', languageLbl:'Язык', settings:'Настройки',
+  emptyCatalog:'Каталог пуст', emptyCatalogD:'Лоты скоро появятся здесь', emptySearch:'Ничего не найдено',
+  emptyFav:'В избранном пока пусто', denied:'Только для админа', rating:'Рейтинг',
+  offerCopied:'Текст предложения скопирован — вставь его в чат', openingTg:'Открываю Telegram…',
+  adminListings:'Лоты', adminAdd:'Добавить лот', adminEditTitle:'Редактировать лот',
+  adminSync:'Синхронизация', publish:'Опубликовать на сайт', reloadSite:'Загрузить с сайта', unpublished:'неопубликованных изменений',
+  published:'Опубликовано ✓', publishErr:'Не удалось опубликовать — проверь токен', tokenTitle:'GitHub токен',
+  tokenDesc:'Fine-grained PAT (Contents: Read and write) для репозитория. Хранится только на этом устройстве.',
+  tokenSave:'Сохранить токен', tokenSaved:'Токен сохранён', noToken:'Нужен токен',
+  username:'Юзернейм', displayName:'Отображаемое имя', category:'Категория', status:'Статус',
+  featuredLbl:'Рекомендованный (Hot)', sellerHandle:'Telegram продавца (@handle, необязательно)',
+  priceLbl:'Цена', currency:'Валюта', minOffer:'Минимальное предложение (необязательно)',
+  saveLocal:'Сохранить', saved:'Сохранено — нажми «Опубликовать», чтобы выложить на сайт',
+  cancel:'Отмена', confirm:'Подтвердить', deleteL:'Удалить', editAction:'Изменить',
+  notifyTitle:'Уведомления бота', notifyHint:'Бот следит за избранным: напоминает до 3 раз в день, пока лоты доступны. Если лот продадут — напоминания прекратятся. Через 2 дня без визита — напомню проверить каталог.', syncBtn:'🔔 Синхронизировать с ботом', syncedLbl:'Синхронизировано', syncToast:'Синхронизирую с ботом…', syncErr:'Открой мини-апп из Telegram', later:'Позже',
+  profileSaved:'Профиль сохранён',
+  editProfile:'Редактировать профиль', changePhoto:'Изменить фото', nameLbl:'Имя', bannerCtaTitle:'Попади в баннер', bannerCtaSub:'Добавь фото и имя в профиле',
+  yourStory:'Моя история', addStory:'Добавить историю', storyHint:'История видна только на этом устройстве — она личная, как заметка, и не публикуется другим пользователям. Исчезает через 24 часа.', choosePhoto:'Фото или видео', storyCaption:'Подпись', storyCaptionPh:'Необязательно…', postStory:'Опубликовать', storyPosted:'История добавлена', storyAgoNow:'сейчас', storyAgoH:'ч назад', processing:'Обработка видео…', storyVideoErr:'Не удалось обработать видео', storageFull:'Память устройства заполнена — удали старые истории',
+  sum:'сум', loading:'Загрузка…', reload:'Перезагрузить', added:'Лот добавлен',
+  deleted:'Удалено', userId:'Telegram ID', about:'О проекте'
  },
  uz:{ home:'Home', market:'Marketplace', profile:'Profile', admin:'Admin',
   greeting:'Savdo Marketplace', search:'Username, kategoriya bo‘yicha qidir…', recent:'Yaqinda',
@@ -518,7 +518,7 @@ const I18N = {
     notifyTitle:'Bot xabarnomalar', notifyHint:'Bot sevimlilarni kuzatadi: lotlar mavjud bo‘lguncha kuniga 3 martagacha eslatadi. Lot sotilsa — eslatmalar to‘xtaydi. 2 kun kirmasang — katalogni tekshirishni eslatadi.', syncBtn:'🔔 Bot bilan sinxronlash', syncedLbl:'Sinxronlandi', syncToast:'Bot bilan sinxronlanmoqda…', syncErr:'Mini-apni Telegramdan oching', later:'Keyinroq',
     profileSaved:'Profil saqlandi', 
   editProfile:'Profilni tahrirlash', changePhoto:'Rasmni almashtirish', nameLbl:'Ism', bannerCtaTitle:'Bannerga tushing', bannerCtaSub:'Profilga rasm va ism qo‘shing', 
-  yourStory:'Mening tarixim', addStory:'Tarix qo‘shish', storyHint:'Tarix faqat shu qurilmada ko‘rinadi — u shaxsiy, boshqa foydalanuvchilarga chop etilmaydi. 24 soatdan keyin yo‘qoladi.', choosePhoto:'Rasm tanlash', storyCaption:'Sarlavha', storyCaptionPh:'Ixtiyoriy…', postStory:'Chop etish', storyPosted:'Tarix qo‘shildi', storyAgoNow:'hozir', storyAgoH:'soat oldin',
+  yourStory:'Mening tarixim', addStory:'Tarix qo‘shish', storyHint:'Tarix faqat shu qurilmada ko‘rinadi — u shaxsiy, boshqa foydalanuvchilarga chop etilmaydi. 24 soatdan keyin yo‘qoladi.', choosePhoto:'Rasm yoki video', processing:'Video qayta ishlanmoqda…', storyVideoErr:'Videoni qayta ishlashda xatolik', storageFull:'Xotira to‘lgan — eski tarixlarni o‘chirib ko‘ring', storyCaption:'Sarlavha', storyCaptionPh:'Ixtiyoriy…', postStory:'Chop etish', storyPosted:'Tarix qo‘shildi', storyAgoNow:'hozir', storyAgoH:'soat oldin',
   sum:'so‘m', loading:'Yuklanmoqda…', reload:'Qayta yuklash', added:'Listing qo‘shildi',
   deleted:'O‘chirildi', userId:'Telegram ID', about:'Loyiha haqida'
  },
@@ -557,7 +557,7 @@ const I18N = {
     notifyTitle:'Bot notifications', notifyHint:'The bot tracks your favorites: up to 3 reminders a day while listings are available. If one sells, reminders stop. After 2 days without a visit you get a check-the-catalog ping.', syncBtn:'🔔 Sync with bot', syncedLbl:'Synced', syncToast:'Syncing with the bot…', syncErr:'Open the mini app from Telegram', later:'Later',
     profileSaved:'Profile saved', 
   editProfile:'Edit profile', changePhoto:'Change photo', nameLbl:'Name', bannerCtaTitle:'Get featured', bannerCtaSub:'Add a photo and name to your profile', 
-  yourStory:'Your story', addStory:'Add story', storyHint:'Your story is visible only on this device — it is personal and is not published to other users. It disappears after 24 hours.', choosePhoto:'Choose photo', storyCaption:'Caption', storyCaptionPh:'Optional…', postStory:'Post', storyPosted:'Story added', storyAgoNow:'now', storyAgoH:'h ago',
+  yourStory:'Your story', addStory:'Add story', storyHint:'Your story is visible only on this device — it is personal and is not published to other users. It disappears after 24 hours.', choosePhoto:'Photo or video', processing:'Processing video…', storyVideoErr:'Could not process the video', storageFull:'Device storage full — delete old stories', storyCaption:'Caption', storyCaptionPh:'Optional…', postStory:'Post', storyPosted:'Story added', storyAgoNow:'now', storyAgoH:'h ago',
   sum:'UZS', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  }
@@ -623,7 +623,7 @@ function statusChip(s){
 /* ---------------- DATA: single source of truth = data/listings.json ---------------- */
 const store = {
   get(k, def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } },
-  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ console.warn('quota', e); } }
 };
 let LISTINGS = [];          // working copy (admin edits here)
 let LOADING = true;
@@ -890,13 +890,13 @@ function pruneStories(){
   if(STORIES.length !== before) store.set('savdo_stories', STORIES);
 }
 pruneStories();
-function saveStories(){ store.set('savdo_stories', STORIES); }
+function saveStories(){ let ok=true; try{ localStorage.setItem('savdo_stories', JSON.stringify(STORIES)); }catch(e){ ok=false; } if(!ok) toast(t('storageFull')); return ok; }
 
 function storiesRowHTML(){
   pruneStories();
   const has = STORIES.length>0;
   const initial = (profileName()[0]||'S').toUpperCase();
-  const thumb = has ? STORIES[STORIES.length-1].img : null;
+  const thumb = has ? (STORIES[STORIES.length-1].poster || STORIES[STORIES.length-1].img) : null;
   return `<div class="stories-row">
     <div class="story-item">
       <div class="story-ring ${has?'has':''}" onclick="${has?'openStoryViewer(0)':'openAddStory()'}">
@@ -918,7 +918,7 @@ function openAddStory(){
       <i data-lucide="image-plus" class="icon" style="width:30px;height:30px;color:var(--text-2)"></i>
       <span style="font-size:12px;color:var(--text-2)">${t('choosePhoto')}</span>
     </div>
-    <input type="file" id="storyFileInput" accept="image/*" style="display:none" onchange="handleStoryFile(event)">
+    <input type="file" id="storyFileInput" accept="image/*,video/*" style="display:none" onchange="handleStoryFile(event)">
     <div class="field"><label>${t('storyCaption')}</label><input id="storyCapInput" maxlength="120" placeholder="${t('storyCaptionPh')}"></div>
     <div class="sheet-actions">
       <button class="btn btn-ghost" onclick="closeSheet()">${t('cancel')}</button>
@@ -928,6 +928,7 @@ function openAddStory(){
 function handleStoryFile(e){
   const file = e.target.files && e.target.files[0];
   if(!file) return;
+  if(file.type.startsWith('video/')){ handleStoryVideo(file); return; }
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
@@ -939,9 +940,9 @@ function handleStoryFile(e){
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      STORY_DRAFT = canvas.toDataURL('image/jpeg', 0.82);
+      STORY_DRAFT = { type:'image', src: canvas.toDataURL('image/jpeg', 0.82) };
       const area = document.getElementById('storyPickArea');
-      if(area){ area.style.border='none'; area.innerHTML = `<img src="${STORY_DRAFT}" style="width:100%;height:100%;object-fit:cover">`; }
+      if(area){ area.style.border='none'; area.innerHTML = `<img src="${STORY_DRAFT.src}" style="width:100%;height:100%;object-fit:cover">`; }
       const btn = document.getElementById('storyPostBtn');
       if(btn){ btn.disabled=false; btn.style.opacity='1'; }
     };
@@ -949,11 +950,65 @@ function handleStoryFile(e){
   };
   reader.readAsDataURL(file);
 }
+function handleStoryVideo(file){
+  const btn = document.getElementById('storyPostBtn');
+  const area = document.getElementById('storyPickArea');
+  if(btn){ btn.disabled=true; btn.style.opacity='.5'; btn.textContent=t('processing'); }
+  if(area){ area.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-2);font-size:12px"><i data-lucide="video" class="icon" style="width:30px;height:30px"></i><span>${t('processing')}</span></div>`; try{ lucide.createIcons(); }catch(e){} }
+  const url = URL.createObjectURL(file);
+  const v = document.createElement('video');
+  v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+  let done = false;
+  const fail = ()=>{ if(done) return; done = true; URL.revokeObjectURL(url); toast(t('storyVideoErr'));
+    if(btn){ btn.disabled=false; btn.style.opacity='1'; btn.textContent=t('postStory'); } };
+  v.onerror = fail;
+  v.onloadedmetadata = ()=>{
+    try{
+      const END = Math.min(v.duration && isFinite(v.duration) ? v.duration : 15, 15);
+      const scale = Math.min(1, 480/Math.max(v.videoWidth||480, v.videoHeight||480));
+      const w = Math.max(2, Math.round((v.videoWidth||480)*scale));
+      const h = Math.max(2, Math.round((v.videoHeight||480)*scale));
+      const canvas = document.createElement('canvas'); canvas.width=w; canvas.height=h;
+      const ctx = canvas.getContext('2d');
+      const stream = canvas.captureStream(24);
+      let mime='video/webm;codecs=vp8';
+      try{ if(!MediaRecorder.isTypeSupported(mime)) mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':(MediaRecorder.isTypeSupported('video/webm')?'video/webm':''); }catch(e){ mime=''; }
+      const rec = new MediaRecorder(stream, Object.assign({videoBitsPerSecond:500000}, mime?{mimeType:mime}:{}));
+      const chunks=[];
+      rec.ondataavailable = ev=>{ if(ev.data && ev.data.size) chunks.push(ev.data); };
+      rec.onstop = ()=>{
+        if(done) return; done = true;
+        URL.revokeObjectURL(url);
+        const blob = new Blob(chunks, {type: mime||'video/webm'});
+        const fr = new FileReader();
+        fr.onload = ()=>{
+          const pc = document.createElement('canvas'); pc.width=w; pc.height=h;
+          try{ pc.getContext('2d').drawImage(v,0,0,w,h); }catch(e){}
+          STORY_DRAFT = { type:'video', src: fr.result, poster: pc.toDataURL('image/jpeg',0.6) };
+          if(area){ area.style.border='none'; area.innerHTML = `<img src="${STORY_DRAFT.poster}" style="width:100%;height:100%;object-fit:cover">`; }
+          if(btn){ btn.disabled=false; btn.style.opacity='1'; btn.textContent=t('postStory'); }
+        };
+        fr.onerror = fail;
+        fr.readAsDataURL(blob);
+      };
+      let stopped = false;
+      const stop = ()=>{ if(stopped) return; stopped = true; clearTimeout(to); try{ v.pause(); }catch(e){} try{ rec.stop(); }catch(e){} };
+      const to = setTimeout(stop, END*1000 + 400);
+      v.onended = stop;
+      rec.start(250);
+      v.currentTime = 0;
+      v.play().catch(fail);
+      (function draw(){ if(stopped || done) return; try{ ctx.drawImage(v,0,0,w,h); }catch(e){} requestAnimationFrame(draw); })();
+    }catch(err){ fail(); }
+  };
+}
+
 function submitStory(){
-  if(!STORY_DRAFT) return;
+  if(!STORY_DRAFT || !STORY_DRAFT.src) return;
   const cap = (document.getElementById('storyCapInput')||{}).value||'';
-  STORIES.push({ id:'st'+Date.now(), img:STORY_DRAFT, caption:cap.trim(), createdAt:Date.now() });
-  saveStories(); STORY_DRAFT=null; closeSheet(); toast(t('storyPosted')); haptic('medium'); render();
+  STORIES.push({ id:'st'+Date.now(), type:STORY_DRAFT.type||'image', img:STORY_DRAFT.src, poster:STORY_DRAFT.poster||null, caption:cap.trim(), createdAt:Date.now() });
+  if(saveStories()===false){ STORIES.pop(); STORY_DRAFT=null; closeSheet(); return; }
+  STORY_DRAFT=null; closeSheet(); toast(t('storyPosted')); haptic('medium'); render();
 }
 
 let SV_IDX = 0, SV_TIMER = null;
@@ -991,20 +1046,31 @@ function renderStoryViewer(){
       <button onclick="closeStoryViewer()" aria-label="close"><i data-lucide="x" class="icon" style="width:22px;height:22px"></i></button>
     </div>
     <div class="sv-body">
-      <img src="${st.img}">
+      ${st.type==='video'?`<video id="svVideo" src="${st.img}" autoplay muted playsinline style="max-width:100%; max-height:100%; object-fit:contain"></video>`:`<img src="${st.img}">`}
       <div class="sv-tap left" onclick="svPrev()"></div>
       <div class="sv-tap right" onclick="svNext()"></div>
       ${st.caption?`<div class="sv-cap">${escHTML(st.caption)}</div>`:''}
     </div>`;
   try{ lucide.createIcons(); }catch(e){}
-  requestAnimationFrame(()=>{
-    const bar = document.getElementById('svBar');
-    if(bar){ bar.style.transition='none'; bar.style.width='0%';
-      requestAnimationFrame(()=>{ bar.style.transition='width 5s linear'; bar.style.width='100%'; }); }
-  });
-  SV_TIMER = setTimeout(svNext, 5000);
+  const vid = document.getElementById('svVideo');
+  if(vid){
+    vid.onended = ()=> svNext();
+    vid.onerror = ()=> svNext();
+    vid.ontimeupdate = ()=>{
+      const bar = document.getElementById('svBar');
+      if(bar){ bar.style.transition='none'; bar.style.width = (vid.duration ? Math.min(100, vid.currentTime/vid.duration*100) : 100)+'%'; }
+    };
+  } else {
+    requestAnimationFrame(()=>{
+      const bar = document.getElementById('svBar');
+      if(bar){ bar.style.transition='none'; bar.style.width='0%';
+        requestAnimationFrame(()=>{ bar.style.transition='width 5s linear'; bar.style.width='100%'; }); }
+    });
+    SV_TIMER = setTimeout(svNext, 5000);
+  }
 }
-function svNext(){ if(SV_IDX < STORIES.length-1){ SV_IDX++; renderStoryViewer(); } else closeStoryViewer(); }
+function svNext(){ clearTimeout(SV_TIMER); if(SV_IDX < STORIES.length-1){ SV_IDX++; renderStoryViewer(); } else closeStoryViewer(); }
+function svVidFallback(){ const v=document.getElementById('svVideo'); if(v && v.duration && isFinite(v.duration)===false){ svNext(); } }
 function svPrev(){ if(SV_IDX>0){ SV_IDX--; renderStoryViewer(); } else renderStoryViewer(); }
 function deleteCurrentStory(){
   STORIES.splice(SV_IDX,1); saveStories();
