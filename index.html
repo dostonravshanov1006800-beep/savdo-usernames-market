@@ -477,7 +477,8 @@ const I18N = {
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
     notifyTitle:'Уведомления бота', notifyHint:'Бот следит за избранным: напоминает до 3 раз в день, пока лоты доступны. Если лот продадут — напоминания прекратятся. Через 2 дня без визита — напомню проверить каталог.', syncBtn:'🔔 Синхронизировать с ботом', syncedLbl:'Синхронизировано', syncToast:'Синхронизирую с ботом…', syncErr:'Открой мини-апп из Telegram', later:'Позже',
-    editProfile:'Редактировать профиль', changePhoto:'Изменить фото', nameLbl:'Имя', bannerCtaTitle:'Попади в баннер', bannerCtaSub:'Добавь фото и имя в профиле', 
+    profileSaved:'Профиль сохранён', 
+  editProfile:'Редактировать профиль', changePhoto:'Изменить фото', nameLbl:'Имя', bannerCtaTitle:'Попади в баннер', bannerCtaSub:'Добавь фото и имя в профиле', 
   yourStory:'Моя история', addStory:'Добавить историю', storyHint:'История видна только на этом устройстве — она личная, как заметка, и не публикуется другим пользователям. Исчезает через 24 часа.', choosePhoto:'Выбрать фото', storyCaption:'Подпись', storyCaptionPh:'Необязательно…', postStory:'Опубликовать', storyPosted:'История добавлена', storyAgoNow:'сейчас', storyAgoH:'ч назад',
   sum:'сум', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
@@ -515,7 +516,8 @@ const I18N = {
   saveLocal:'Saqlash', saved:'Saqlandi — chiqarish uchun Publish bosing',
   cancel:'Bekor qilish', confirm:'Tasdiqlash', deleteL:'O‘chirish', editAction:'Tahrirlash',
     notifyTitle:'Bot xabarnomalar', notifyHint:'Bot sevimlilarni kuzatadi: lotlar mavjud bo‘lguncha kuniga 3 martagacha eslatadi. Lot sotilsa — eslatmalar to‘xtaydi. 2 kun kirmasang — katalogni tekshirishni eslatadi.', syncBtn:'🔔 Bot bilan sinxronlash', syncedLbl:'Sinxronlandi', syncToast:'Bot bilan sinxronlanmoqda…', syncErr:'Mini-apni Telegramdan oching', later:'Keyinroq',
-    editProfile:'Profilni tahrirlash', changePhoto:'Rasmni almashtirish', nameLbl:'Ism', bannerCtaTitle:'Bannerga tushing', bannerCtaSub:'Profilga rasm va ism qo‘shing', 
+    profileSaved:'Profil saqlandi', 
+  editProfile:'Profilni tahrirlash', changePhoto:'Rasmni almashtirish', nameLbl:'Ism', bannerCtaTitle:'Bannerga tushing', bannerCtaSub:'Profilga rasm va ism qo‘shing', 
   yourStory:'Mening tarixim', addStory:'Tarix qo‘shish', storyHint:'Tarix faqat shu qurilmada ko‘rinadi — u shaxsiy, boshqa foydalanuvchilarga chop etilmaydi. 24 soatdan keyin yo‘qoladi.', choosePhoto:'Rasm tanlash', storyCaption:'Sarlavha', storyCaptionPh:'Ixtiyoriy…', postStory:'Chop etish', storyPosted:'Tarix qo‘shildi', storyAgoNow:'hozir', storyAgoH:'soat oldin',
   sum:'so‘m', loading:'Yuklanmoqda…', reload:'Qayta yuklash', added:'Listing qo‘shildi',
   deleted:'O‘chirildi', userId:'Telegram ID', about:'Loyiha haqida'
@@ -553,7 +555,8 @@ const I18N = {
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
     notifyTitle:'Bot notifications', notifyHint:'The bot tracks your favorites: up to 3 reminders a day while listings are available. If one sells, reminders stop. After 2 days without a visit you get a check-the-catalog ping.', syncBtn:'🔔 Sync with bot', syncedLbl:'Synced', syncToast:'Syncing with the bot…', syncErr:'Open the mini app from Telegram', later:'Later',
-    editProfile:'Edit profile', changePhoto:'Change photo', nameLbl:'Name', bannerCtaTitle:'Get featured', bannerCtaSub:'Add a photo and name to your profile', 
+    profileSaved:'Profile saved', 
+  editProfile:'Edit profile', changePhoto:'Change photo', nameLbl:'Name', bannerCtaTitle:'Get featured', bannerCtaSub:'Add a photo and name to your profile', 
   yourStory:'Your story', addStory:'Add story', storyHint:'Your story is visible only on this device — it is personal and is not published to other users. It disappears after 24 hours.', choosePhoto:'Choose photo', storyCaption:'Caption', storyCaptionPh:'Optional…', postStory:'Post', storyPosted:'Story added', storyAgoNow:'now', storyAgoH:'h ago',
   sum:'UZS', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
@@ -876,7 +879,7 @@ function saveProfileForm(){
   PROFILE.name = name;
   if(PROF_DRAFT_PHOTO) PROFILE.photo = PROF_DRAFT_PHOTO;
   saveProfileData(); PROF_DRAFT_PHOTO = null;
-  closeSheet(); toast(t('saved')); haptic('medium'); render();
+  closeSheet(); toast(t('profileSaved')); haptic('medium'); render();
 }
 
 /* ---------------- STORIES (personal, local-only, available to EVERY user) ---------------- */
