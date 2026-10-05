@@ -1,3 +1,29 @@
 {
-  "listings": []
+  "listings": [
+    {
+      "id": "relay_test_1",
+      "username": "@relay.test",
+      "displayName": "",
+      "category": "username",
+      "description": "",
+      "followers": 0,
+      "following": 0,
+      "posts": 0,
+      "engagement": 0,
+      "accountAge": 0,
+      "niche": "",
+      "country": "",
+      "language": "",
+      "price": 1234567,
+      "currency": "UZS",
+      "minOffer": null,
+      "sellerHandle": "",
+      "tags": [],
+      "featured": false,
+      "status": "active",
+      "curated": false,
+      "createdAt": 0,
+      "updatedAt": 0
+    }
+  ]
 }
