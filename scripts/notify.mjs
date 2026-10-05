@@ -65,6 +65,40 @@ const upsert = (id, name, uname) => {
   return s;
 };
 
+
+const WELCOME_PHOTO = 'https://dostonravshanov1006800-beep.github.io/savdo-usernames-market/welcome.jpg';
+const WELCOME_CAPTION =
+  '🛍 <b>Savdo Marketplace</b>\n' +
+  'Instagram username va akkauntlar bozori\n\n' +
+  '✅ Barcha lotlarni administrator tekshirib chiqaradi\n' +
+  '❤️ Yoqkan lotni sevimlilarga qo\u2018shing\n' +
+  '🔔 Bot lotlar mavjud bo\u2018lganda eslatib turadi\n' +
+  '⚡ Haqiqiy sotuvchilar, tekshirilgan lotlar\n\n' +
+  'Quydagi tugmani bosing va bozorga kiring 👇';
+const WELCOME_BTN = '🛍 Bozorga kirish';
+
+async function sendWelcome(id) {
+  if (DRY) { console.log(`DRY welcome -> ${id}`); return true; }
+  let res = await tg('sendPhoto', {
+    chat_id: id, photo: WELCOME_PHOTO, caption: WELCOME_CAPTION, parse_mode: 'HTML',
+    reply_markup: { inline_keyboard: [[{ text: WELCOME_BTN, web_app: { url: SITE } }]] }
+  });
+  if (!res.ok) {
+    console.log(`photo fail ${id}: ${res.description}`);
+    res = await tg('sendMessage', {
+      chat_id: id, text: WELCOME_CAPTION, parse_mode: 'HTML',
+      reply_markup: { inline_keyboard: [[{ text: WELCOME_BTN, web_app: { url: SITE } }]] }
+    });
+    if (!res.ok) console.log(`welcome fallback fail ${id}: ${res.description}`);
+  } else console.log(`welcome-photo ok ${id}`);
+  return res.ok;
+}
+
+if (process.env.PREVIEW_WELCOME) {
+  await sendWelcome(process.env.PREVIEW_WELCOME);
+  process.exit(0);
+}
+
 if (!DRY) {
   await tg('setChatMenuButton', { menu_button: { type: 'web_app', text: '🛍 Savdo', web_app: { url: SITE } } });
 }
@@ -91,7 +125,7 @@ for (const u of upd.result) {
       }
     } catch (e) { console.log('bad web_app_data payload'); }
   } else if ((m.text || '').startsWith('/start')) {
-    await send(s.id, `👋 <b>Savdo Marketplace</b>\nМаркетплейс Instagram-юзернеймов и аккаунтов.\n\n❤️ Добавляй лоты в избранное в каталоге\n🔔 Бот напомнит о доступных лотах (до 3 раз в день)\n⏳ Лот продан — напоминания сами прекратятся\n\nЖми кнопку ниже, чтобы войти 👇`);
+    await sendWelcome(s.id);
     s.welcomed = true;
     console.log(`welcome user=${s.id}`);
   } else {
