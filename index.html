@@ -1259,7 +1259,7 @@ function wizardHTML(){
   } else if(step===4){
     const price = Number(d.price)||0;
     const fee = Math.round(price*FEE_PCT);
-    body = `<div class="field"><label>${t('priceLbl')}</label><input id="w_price" type="number" inputmode="numeric" min="0" value="${d.price}">
+    body = `<div class="field"><label>${t('priceLbl')}</label><input id="w_price" type="number" inputmode="numeric" min="0" value="${d.price}" oninput="feeRecalc()">
       <div class="err" id="e_price">${t('invalidNumber')}</div></div>
     <div class="field"><label>${t('currency')}</label><select id="w_cur" onchange="STATE.sell.draft.currency=this.value; feeRecalc()">
       ${CURRENCIES.map(c=>`<option ${d.currency===c?'selected':''}>${c}</option>`).join('')}</select></div>
@@ -1469,7 +1469,7 @@ function offersHTML(){
       <div class="info">
         <div class="l1">${l.username} · ${fmtPrice(o.amount, l.currency)}</div>
         <div class="l2">${cur==='received'?t('from'):t('to')} @${other.username} · ${timeAgo(o.createdAt)}</div>
-        <div style="margin-top:4px"><span class="status-chip ${stMap[o.status]}">${t(o.status)}</span></div>
+        <div style="margin-top:4px"><span class="status-chip ${stMap[o.status]}">${o.status==='pending'?(LANG==='ru'?'Ожидает':LANG==='uz'?'Kutilmoqda':'Pending'):t(o.status)}</span></div>
         ${cur==='received'&&o.status==='pending'?`<div class="mini-actions">
           <button class="chip accept" onclick="respondOffer('${o.id}','accepted')">${t('accept')}</button>
           <button class="chip reject" onclick="respondOffer('${o.id}','rejected')">${t('decline')}</button>
