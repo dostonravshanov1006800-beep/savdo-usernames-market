@@ -15,7 +15,7 @@ import { execSync } from 'node:child_process';
 const API = process.env.TG_API_BASE || 'https://api.telegram.org';
 const TOKEN = process.env.SAVDO_BOT_TOKEN;
 const DRY = process.env.DRY_RUN === 'true';
-const SITE = 'https://dostonravshanov1006800-beep.github.io/savdo-usernames-market/?v=11';
+const SITE = 'https://dostonravshanov1006800-beep.github.io/savdo-usernames-market/?v=12';
 const TZ_MS = 5 * 3600e3;                 // Asia/Samarkand UTC+5
 const MAX_REM = 3;                          // max favorite-reminders per day
 const REM_GAP = 4 * 3600e3;                 // min gap between reminders

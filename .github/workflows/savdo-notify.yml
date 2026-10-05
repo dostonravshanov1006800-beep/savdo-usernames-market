@@ -1,32 +1,45 @@
-name: Savdo Notify
+name: savdo-notify
 on:
-  schedule:
-    - cron: '*/10 * * * *'   # every 10 minutes, free for public repos
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: 'dry run (no sending, no commit)'
-        type: boolean
-        default: false
+      chain:
+        description: 'continue the self-perpetuating chain ("false" = single run)'
+        default: 'true'
+  schedule:
+    - cron: '*/10 * * * *'   # backup only — GitHub schedules proved unreliable for this repo; the chain below is primary
 
+# Self-perpetuating chain: each run does the reminder sweep, sleeps out a ~9.5
+# min cycle, then dispatches the next run. This keeps the sweep alive 24/7 even
+# though scheduled runs never fire on their own for this repository.
 concurrency:
   group: savdo-notify
-  cancel-in-progress: false   # queue runs, never overlap (getUpdates conflicts)
+  cancel-in-progress: false
 
 permissions:
-  contents: write             # commit state files
+  contents: write
+  actions: write
 
 jobs:
-  notify:
+  sweep:
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 14
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Run notification cycle
-        run: node scripts/notify.mjs
+
+      - name: Reminder sweep
         env:
           SAVDO_BOT_TOKEN: ${{ secrets.SAVDO_BOT_TOKEN }}
-          DRY_RUN: ${{ inputs.dry_run == true }}
+        run: node scripts/notify.mjs
+
+      - name: Hold cycle (~9 min) then pass the baton
+        if: ${{ github.event.inputs.chain != 'false' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: savdo-notify.yml
+        run: |
+          sleep 540
+          if gh api -X POST repos/${{ github.repository }}/actions/workflows/$WORKFLOW/dispatches -f ref=main -f chain=true; then
+            echo "chain: next run dispatched"
+          else
+            echo "chain: dispatch FAILED"
+          fi
