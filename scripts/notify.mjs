@@ -33,6 +33,17 @@ const localHour = ts => local(ts).getUTCHours();
 const read = (p, d) => { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return structuredClone(d); } };
 const subs = read('data/subs.json', { subs: [] });
 const listings = read('data/listings.json', { listings: [] });
+
+// Auto-cleanup: a listing marked "sold" auto-removes itself from the catalog
+// SOLD_GRACE_MS after the sale (keeps the "Продан" badge visible for a while
+// so recent viewers still see confirmation, then the admin never has to
+// delete it by hand).
+const SOLD_GRACE_MS = 24 * 3600e3; // 24h after status->sold
+const beforeCount = listings.listings.length;
+listings.listings = listings.listings.filter(l => !(l.status === 'sold' && now - (l.updatedAt || 0) >= SOLD_GRACE_MS));
+const listingsChanged = listings.listings.length !== beforeCount;
+if (listingsChanged) console.log(`auto-removed sold listings: ${beforeCount}->${listings.listings.length}`);
+
 const byId = Object.fromEntries(listings.listings.map(l => [l.id, l]));
 
 const tg = (m, body) => fetch(`${API}/bot${TOKEN}/${m}`, {
@@ -87,12 +98,14 @@ for (const s of subs.subs) {
 /* ---- persist ---- */
 if (!DRY) {
   fs.writeFileSync('data/subs.json', JSON.stringify(subs, null, 2) + '\n');
+  if (listingsChanged) fs.writeFileSync('data/listings.json', JSON.stringify({ listings: listings.listings }, null, 2) + '\n');
   try {
-    if (execSync('git status --porcelain data/subs.json').toString().trim()) {
+    const paths = listingsChanged ? 'data/subs.json data/listings.json' : 'data/subs.json';
+    if (execSync(`git status --porcelain ${paths}`).toString().trim()) {
       execSync('git config user.name "savdo-notifier"');
       execSync('git config user.email "savdo-notifier@users.noreply.github.com"');
-      execSync('git add data/subs.json');
-      execSync('git commit -m "chore: reminder sweep"');
+      execSync(`git add ${paths}`);
+      execSync('git commit -m "chore: reminder sweep' + (listingsChanged ? ' + auto-remove sold listings' : '') + '"');
       execSync('git pull --rebase -X theirs');
       execSync('git push');
       console.log('state committed');
