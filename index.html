@@ -111,6 +111,12 @@ a{color:var(--accent); text-decoration:none;}
 .feat-card:active{transform:scale(.98);}
 .feat-hero{aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative;}
 .feat-hero .uname{font-weight:700; font-size:24px; letter-spacing:-0.02em; color:#20212b;}
+#syncBanner{position:fixed; left:12px; right:12px; bottom:76px; z-index:60; display:none;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,.45);}
+#syncBanner.show{display:block;}
+#syncBanner .sb-title{font-size:13px; font-weight:700;}
+#syncBanner .sb-sub{font-size:11px; color:var(--text-2); line-height:1.5; margin-top:4px;}
 .fav-btn{position:absolute; top:10px; right:10px; width:32px;height:32px; border-radius:50%;
   background:rgba(255,255,255,.85); display:flex; align-items:center; justify-content:center; z-index:2;}
 .fav-btn .icon{color:#20212b; width:17px;height:17px;}
@@ -369,7 +375,15 @@ a{color:var(--accent); text-decoration:none;}
 <div id="app"></div>
 <div class="bottom-nav" id="bottomNav"></div>
 <div class="sheet-overlay" id="sheetOverlay"><div class="sheet" id="sheetContent"></div></div>
-<div class="toast" id="toast"></div>
+<div id="syncBanner">
+    <div class="sb-title">🔔 <b></b></div>
+    <div class="sb-sub"></div>
+    <div style="display:flex; gap:8px; margin-top:10px">
+      <button class="btn btn-primary sb-yes" style="flex:2; padding:11px; font-size:12px" onclick="syncFavs()"></button>
+      <button class="btn sb-no" style="flex:1; padding:11px; font-size:12px" onclick="hideSyncBanner()"></button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
 <script>
 /* =====================================================================
    SAVDO — Instagram Marketplace (Telegram Mini App, GitHub Pages only)
@@ -431,6 +445,7 @@ const I18N = {
   priceLbl:'Price', currency:'Currency', minOffer:'Minimum offer (optional)',
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
+    notifyTitle:'Уведомления бота', notifyHint:'Бот следит за избранным: напоминает до 3 раз в день, пока лоты доступны. Если лот продадут — напоминания прекратятся. Через 2 дня без визита — напомню проверить каталог.', syncBtn:'🔔 Синхронизировать с ботом', syncedLbl:'Синхронизировано', syncToast:'Синхронизирую с ботом…', syncErr:'Открой мини-апп из Telegram', later:'Позже',
   sum:'сум', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  },
@@ -466,6 +481,7 @@ const I18N = {
   priceLbl:'Narx', currency:'Valyuta', minOffer:'Minimal taklif (ixtiyoriy)',
   saveLocal:'Saqlash', saved:'Saqlandi — chiqarish uchun Publish bosing',
   cancel:'Bekor qilish', confirm:'Tasdiqlash', deleteL:'O‘chirish', editAction:'Tahrirlash',
+    notifyTitle:'Bot xabarnomalar', notifyHint:'Bot sevimlilarni kuzatadi: lotlar mavjud bo‘lguncha kuniga 3 martagacha eslatadi. Lot sotilsa — eslatmalar to‘xtaydi. 2 kun kirmasang — katalogni tekshirishni eslatadi.', syncBtn:'🔔 Bot bilan sinxronlash', syncedLbl:'Sinxronlandi', syncToast:'Bot bilan sinxronlanmoqda…', syncErr:'Mini-apni Telegramdan oching', later:'Keyinroq',
   sum:'so‘m', loading:'Yuklanmoqda…', reload:'Qayta yuklash', added:'Listing qo‘shildi',
   deleted:'O‘chirildi', userId:'Telegram ID', about:'Loyiha haqida'
  },
@@ -501,6 +517,7 @@ const I18N = {
   priceLbl:'Price', currency:'Currency', minOffer:'Minimum offer (optional)',
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
+    notifyTitle:'Bot notifications', notifyHint:'The bot tracks your favorites: up to 3 reminders a day while listings are available. If one sells, reminders stop. After 2 days without a visit you get a check-the-catalog ping.', syncBtn:'🔔 Sync with bot', syncedLbl:'Synced', syncToast:'Syncing with the bot…', syncErr:'Open the mini app from Telegram', later:'Later',
   sum:'UZS', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  }
@@ -731,10 +748,31 @@ function listRowHTML(l){
 function thumbHTML(l){
   return `<div class="list-thumb" style="background:${catGrad(l.category)}"><span style="font-size:13px;font-weight:700;color:#20212b;word-break:break-word;text-align:center;padding:4px">${l.username.replace('@','')}</span></div>`;
 }
+let SYNCED_AT = store.get('savdo_synced_at', 0);
 function toggleFav(id){
   if(FAVS.includes(id)){ FAVS=FAVS.filter(f=>f!==id); }
-  else { FAVS.push(id); haptic('medium'); }
+  else { FAVS.push(id); haptic('medium'); syncBannerMaybe(); }
   saveFavs(); render();
+}
+function syncBannerMaybe(){
+  if(!(tg && tg.initData)) return;
+  if(Date.now() - SYNCED_AT < 6*3600e3) return;
+  if(sessionStorage.getItem('savdo_sb')==='1') return;
+  const el = document.getElementById('syncBanner'); if(!el) return;
+  el.querySelector('.sb-sub').textContent = t('notifyHint');
+  el.querySelector('.sb-yes').textContent = t('syncBtn');
+  el.querySelector('.sb-no').textContent = t('later');
+  el.querySelector('.sb-title b').textContent = t('notifyTitle');
+  el.classList.add('show');
+  sessionStorage.setItem('savdo_sb','1');
+}
+function hideSyncBanner(){ const el=document.getElementById('syncBanner'); if(el) el.classList.remove('show'); }
+function syncFavs(){
+  if(!(tg && tg.initData)){ toast(t('syncErr')); return; }
+  SYNCED_AT = Date.now(); store.set('savdo_synced_at', SYNCED_AT);
+  saveFavs(); hideSyncBanner();
+  toast(t('syncToast'));
+  setTimeout(()=>{ try{ tg.sendData(JSON.stringify({v:1, favs: FAVS})); }catch(e){} }, 400);
 }
 
 /* ---------------- HOME ---------------- */
@@ -1067,7 +1105,14 @@ function renderProfile(){
   </div>`;
 }
 function settingsHTML(){
+  const on = Date.now() - SYNCED_AT < 24*3600e3;
   return `<div class="settings-list">
+    <div class="sect-label" style="padding:8px 0 0">🔔 ${t('notifyTitle')}</div>
+    <div class="srow" style="flex-direction:column; align-items:stretch; gap:6px">
+      <div style="font-size:11px; color:var(--text-2); line-height:1.5">${t('notifyHint')}</div>
+      <div style="font-size:11px; ${on?'color:var(--ok)':'color:var(--text-2)'}">${on ? '✓ '+t('syncedLbl') : ''}</div>
+      <button class="btn btn-primary" style="width:100%; padding:11px" onclick="syncFavs()">${t('syncBtn')}</button>
+    </div>
     <div class="sect-label" style="padding:8px 0 0">App</div>
     <div class="srow"><div class="left"><i data-lucide="moon" class="icon"></i>${t('theme')}</div>
       <div class="switch ${THEME==='dark'?'on':''}" onclick="toggleTheme()"><i></i></div></div>
