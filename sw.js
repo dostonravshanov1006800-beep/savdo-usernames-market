@@ -1,8 +1,8 @@
-const CACHE = 'savdo-v1';
+const CACHE = 'savdo-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
+const NEVER_CACHE = ['/data/listings.json'];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(()=>{}));
   self.skipWaiting();
 });
 
@@ -15,16 +15,23 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (url.origin !== self.location.origin) return; // let CDN/fonts pass through
+  // listings data: always fresh from network, offline fallback to last copy
+  if (NEVER_CACHE.some((p) => url.pathname.includes(p))) {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match(e.request))
+    );
+    return;
+  }
+  // app shell: network-first (users always get the latest build), offline fallback
   e.respondWith(
-    caches.match(e.request).then((cached) => {
-      const network = fetch(e.request).then((res) => {
-        if (res && res.status === 200 && e.request.url.startsWith(self.location.origin)) {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, copy));
-        }
-        return res;
-      }).catch(() => cached);
-      return cached || network;
-    })
+    fetch(e.request).then((res) => {
+      if (res && res.status === 200) {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(()=>{});
+      }
+      return res;
+    }).catch(() => caches.match(e.request))
   );
 });
