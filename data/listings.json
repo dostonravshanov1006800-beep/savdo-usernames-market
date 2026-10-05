@@ -1,1 +1,31 @@
-{"listings": []}
+{
+  "listings": [
+    {
+      "id": "l1791227525650",
+      "username": "@p2puzb",
+      "displayName": "p2puzb",
+      "category": "account",
+      "description": "User sotiladi 🔥",
+      "followers": 3000,
+      "following": 999,
+      "posts": 2,
+      "engagement": 50,
+      "accountAge": 50,
+      "niche": "ИИ контент",
+      "country": "Uzbekistan",
+      "language": "Uzbek",
+      "price": 300,
+      "currency": "USD",
+      "minOffer": 280,
+      "sellerHandle": "@dostonxoja",
+      "tags": [
+        "Top"
+      ],
+      "featured": true,
+      "status": "active",
+      "curated": true,
+      "createdAt": 0,
+      "updatedAt": 0
+    }
+  ]
+}
