@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<title>Savdo — Instagram Usernames Marketplace</title>
-<meta name="description" content="Маркетплейс Instagram-юзернеймов. Покупай, продавай, торгуйся — безопасно.">
+<title>Savdo — Instagram Marketplace</title>
+<meta name="description" content="Маркетплейс Instagram-аккаунтов и юзернеймов. Покупай, продавай, предлагай цену — безопасно.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#F4F5F7">
 <link rel="icon" href="https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0b5eee824_generated_image.png">
@@ -43,39 +43,56 @@ a{color:var(--accent); text-decoration:none;}
 .topbar{display:flex; align-items:center; justify-content:space-between; padding:16px 16px 8px;}
 .topbar .right{display:flex; align-items:center; gap:12px;}
 .icon-btn{width:40px;height:40px; display:flex; align-items:center; justify-content:center;
-  border-radius:999px; background:var(--surface-2);}
+  border-radius:999px; background:var(--surface-2); position:relative;}
 .icon-btn .icon{color:var(--text);}
-.badge-dot{position:absolute; top:-2px; right:-2px; width:9px;height:9px; border-radius:50%;
-  background:var(--danger); border:2px solid var(--bg);}
+.badge-dot{position:absolute; top:-2px; right:-2px; min-width:16px; height:16px; border-radius:999px;
+  background:var(--danger); border:2px solid var(--bg); color:#fff; font-size:9px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; padding:0 3px;}
 
 /* search */
-.search-wrap{padding:4px 16px 8px; display:flex; gap:8px;}
+.search-wrap{padding:4px 16px 8px; display:flex; gap:8px; position:relative;}
 .search-box{flex:1; background:var(--surface-2); border-radius:var(--r-input); display:flex;
   align-items:center; gap:8px; padding:0 12px; height:44px;}
 .search-box input{border:none; background:none; color:var(--text); font-size:14px; width:100%; outline:none;}
 .search-box .icon{color:var(--text-2);}
+.clear-btn{width:22px;height:22px;border-radius:50%; background:var(--border); display:flex; align-items:center; justify-content:center;}
+.clear-btn .icon{width:13px;height:13px;color:var(--text-2);}
 .sq-btn{width:44px;height:44px; border-radius:var(--r-input); background:var(--surface-2);
   display:flex; align-items:center; justify-content:center;}
 .sq-btn .icon{color:var(--text-2);}
+.sq-btn.active{background:var(--text);}
+.sq-btn.active .icon{color:var(--bg);}
+/* suggestions dropdown */
+.suggest{position:absolute; top:52px; left:16px; right:16px; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-card); box-shadow:var(--shadow-lg); z-index:30; overflow:hidden;}
+.suggest-item{display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:13px; cursor:pointer;}
+.suggest-item:active{background:var(--surface-2);}
+.suggest-item .icon{width:15px;height:15px;color:var(--text-2);}
+.recent-row{display:flex; gap:8px; overflow-x:auto; padding:0 16px 6px;}
+.recent-row::-webkit-scrollbar{display:none;}
+.recent-chip{flex:0 0 auto; display:flex; align-items:center; gap:5px; padding:6px 12px; border-radius:var(--r-chip);
+  background:var(--surface-2); font-size:12px; font-weight:600; color:var(--text-2);}
+.recent-chip .icon{width:12px;height:12px;}
 
 /* section header */
 .section{padding:12px 16px 0;}
-.section-head{display:flex; align-items:center; justify-content:between; justify-content:space-between; margin-bottom:10px;}
+.section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
 .section-head h3{font-size:16px; font-weight:600; margin:0;}
 .see-all{font-size:13px; font-weight:600; color:var(--accent);}
+.count-note{font-size:12px; color:var(--text-2); font-weight:500;}
 
 /* categories */
 .cat-row{display:flex; gap:10px; overflow-x:auto; padding:2px 16px 4px; scroll-snap-type:x proximity;}
 .cat-row::-webkit-scrollbar{display:none;}
 .cat-tile{flex:0 0 auto; scroll-snap-align:start; background:var(--surface); border:1px solid var(--border);
   border-radius:var(--r-tile); padding:10px 16px; font-size:13px; font-weight:600; white-space:nowrap;
-  box-shadow:var(--shadow-sm); display:flex; align-items:center; gap:6px; transition:transform .2s;}
+  box-shadow:var(--shadow-sm); transition:transform .2s;}
 .cat-tile:active{transform:scale(.96);}
 .cat-tile.active{background:var(--text); color:var(--bg);}
 
 /* banner carousel */
 .banner-wrap{padding:14px 16px 4px; position:relative;}
-.banner-track{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; border-radius:18px; scroll-behavior:smooth;}
+.banner-track{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; border-radius:18px;}
 .banner-track::-webkit-scrollbar{display:none;}
 .banner-slide{flex:0 0 100%; scroll-snap-align:start; border-radius:18px; overflow:hidden; position:relative; aspect-ratio:16/8.2;}
 .banner-slide img{width:100%; height:100%; object-fit:cover;}
@@ -85,35 +102,78 @@ a{color:var(--accent); text-decoration:none;}
 .dot{width:6px;height:6px;border-radius:50%; background:var(--border); transition:all .25s;}
 .dot.active{width:16px; background:var(--text);}
 
-/* listings grid */
-.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px;}
-.chips-row{display:flex; gap:8px; overflow-x:auto; padding:0 16px 10px;}
-.chips-row::-webkit-scrollbar{display:none;}
-.chip{flex:0 0 auto; padding:7px 14px; border-radius:var(--r-chip); font-size:13px; font-weight:600;
-  background:var(--surface-2); color:var(--text-2); white-space:nowrap;}
-.chip.active{background:var(--accent); color:#fff;}
-
-.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
-  box-shadow:var(--shadow-sm); overflow:hidden; cursor:pointer; transition:transform .15s; position:relative;}
-.card:active{transform:scale(.98);}
-.card-preview{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative; padding:14px;}
-.card-preview .at{font-weight:700; letter-spacing:-0.02em; font-size:22px; color:#20212b; text-align:center;
-  word-break:break-word; line-height:1.1;}
+/* featured carousel */
+.feat-track{display:flex; gap:12px; overflow-x:auto; padding:2px 16px 6px; scroll-snap-type:x mandatory;}
+.feat-track::-webkit-scrollbar{display:none;}
+.feat-card{flex:0 0 78%; scroll-snap-align:start; background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; box-shadow:var(--shadow-sm); overflow:hidden; cursor:pointer; transition:transform .15s;}
+.feat-card:active{transform:scale(.98);}
+.feat-hero{aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative;}
+.feat-hero .uname{font-weight:700; font-size:24px; letter-spacing:-0.02em; color:#20212b;}
 .fav-btn{position:absolute; top:10px; right:10px; width:32px;height:32px; border-radius:50%;
   background:rgba(255,255,255,.85); display:flex; align-items:center; justify-content:center; z-index:2;}
 .fav-btn .icon{color:#20212b; width:17px;height:17px;}
 .fav-btn.active .icon{color:var(--danger); fill:var(--danger);}
-.card-badges{position:absolute; top:10px; left:10px; display:flex; gap:4px; z-index:2;}
-.pill{font-size:10px; font-weight:700; padding:3px 7px; border-radius:999px; color:#fff; display:flex; align-items:center; gap:3px;}
+.feat-body{padding:12px 14px 14px;}
+.feat-body .nm{font-size:15px; font-weight:700; display:flex; align-items:center; gap:5px;}
+.feat-body .meta{font-size:12px; color:var(--text-2); margin-top:4px; display:flex; gap:10px; flex-wrap:wrap;}
+.feat-body .price-row{display:flex; justify-content:space-between; align-items:center; margin-top:10px;}
+.feat-body .price{font-size:16px; font-weight:700;}
+
+/* pills / badges */
+.pill{font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px; display:inline-flex; align-items:center; gap:3px; color:#fff;}
 .pill.hot{background:linear-gradient(135deg,#F58529,#DD2A7B);}
 .pill.verified{background:var(--success);}
-.pill.auction{background:var(--warn); color:#1a1a1a;}
+.pill.type{background:var(--surface-2); color:var(--text-2);}
+.status-chip{font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;}
+.status-available{background:color-mix(in srgb, var(--success) 15%, transparent); color:var(--success);}
+.status-reserved{background:color-mix(in srgb, var(--warn) 18%, transparent); color:var(--warn);}
+.status-sold{background:var(--surface-2); color:var(--text-2);}
+.status-pending{background:color-mix(in srgb, var(--accent) 15%, transparent); color:var(--accent);}
+.status-draft{background:var(--surface-2); color:var(--text-2);}
+.status-archived{background:var(--surface-2); color:var(--text-2);}
+
+/* listings grid */
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px;}
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
+  box-shadow:var(--shadow-sm); overflow:hidden; cursor:pointer; transition:transform .15s; position:relative;}
+.card:active{transform:scale(.98);}
+.card-preview{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative; padding:14px;}
+.card-preview .at{font-weight:700; letter-spacing:-0.02em; font-size:20px; color:#20212b; text-align:center;
+  word-break:break-word; line-height:1.1; max-width:100%;}
+.card-badges{position:absolute; top:10px; left:10px; display:flex; gap:4px; z-index:2;}
+.sold-overlay{position:absolute; inset:0; background:rgba(255,255,255,.62); display:flex; align-items:center; justify-content:center; z-index:3;}
+.sold-overlay span{background:#1a1a1a; color:#fff; font-size:12px; font-weight:700; padding:6px 14px; border-radius:999px;}
 .card-body{padding:10px 12px 12px;}
-.card-body .name{font-size:13px; font-weight:700; margin:0 0 2px;}
-.card-body .price{font-size:13px; color:var(--text-2); font-weight:600;}
-.rarity-dots{display:flex; gap:3px; justify-content:center; margin-top:8px;}
-.rarity-dots span{width:5px;height:5px;border-radius:50%; background:var(--border);}
-.rarity-dots span.on{background:var(--success);}
+.card-body .name{font-size:13px; font-weight:700; margin:0 0 2px; display:flex; align-items:center; gap:4px;}
+.card-body .price{font-size:13px; font-weight:700;}
+.card-body .sub{font-size:11px; color:var(--text-2); margin-top:2px;}
+.card-foot{display:flex; align-items:center; justify-content:space-between; margin-top:6px;}
+
+/* list mode rows */
+.list-row{display:flex; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
+  padding:12px; box-shadow:var(--shadow-sm); cursor:pointer; transition:transform .15s; position:relative;}
+.list-row:active{transform:scale(.98);}
+.list-thumb{width:74px; height:74px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:15px; color:#20212b; position:relative; flex-shrink:0; word-break:break-all; text-align:center; padding:6px;}
+.list-info{flex:1; min-width:0;}
+.list-info .nm{font-size:14px; font-weight:700; display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.list-info .meta{font-size:11px; color:var(--text-2); margin-top:3px; display:flex; gap:8px; flex-wrap:wrap;}
+.list-info .pr{font-size:14px; font-weight:700; margin-top:6px;}
+.list-side{display:flex; flex-direction:column; align-items:flex-end; justify-content:space-between;}
+.view-toggle{display:flex; background:var(--surface-2); border-radius:999px; padding:3px;}
+.view-toggle button{width:34px;height:30px; border-radius:999px; display:flex; align-items:center; justify-content:center;}
+.view-toggle button.active{background:var(--surface); box-shadow:var(--shadow-sm);}
+.view-toggle .icon{width:16px;height:16px; color:var(--text-2);}
+.view-toggle button.active .icon{color:var(--text);}
+
+/* chips row */
+.chips-row{display:flex; gap:8px; overflow-x:auto; padding:0 16px 10px; align-items:center;}
+.chips-row::-webkit-scrollbar{display:none;}
+.chip{flex:0 0 auto; padding:7px 14px; border-radius:var(--r-chip); font-size:13px; font-weight:600;
+  background:var(--surface-2); color:var(--text-2); white-space:nowrap;}
+.chip.active{background:var(--accent); color:#fff;}
+.chip.danger{color:var(--danger);}
 
 /* bottom nav */
 .bottom-nav{position:fixed; bottom:0; left:0; right:0; max-width:430px; margin:0 auto; height:64px;
@@ -128,8 +188,6 @@ a{color:var(--accent); text-decoration:none;}
 .nav-item.active::before{content:''; position:absolute; top:-1px; left:30%; right:30%; height:2px; background:var(--text); border-radius:2px;}
 .nav-item .lbl{font-size:10px; font-weight:600; color:var(--text-2);}
 .nav-item.active .lbl{color:var(--text);}
-.nav-item .nbadge{position:absolute; top:0; right:22%; min-width:15px; height:15px; border-radius:999px; background:var(--danger);
-  color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; padding:0 3px;}
 
 /* views */
 .view{animation:fadeIn .25s ease-out;}
@@ -140,27 +198,25 @@ a{color:var(--accent); text-decoration:none;}
 .avatar-wrap{position:relative;}
 .avatar{width:72px;height:72px; border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));
   display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:26px;}
-.plus-btn{position:absolute; bottom:-2px; right:-2px; width:24px;height:24px; border-radius:50%; background:var(--success);
-  border:3px solid var(--bg); display:flex; align-items:center; justify-content:center;}
-.plus-btn .icon{width:12px;height:12px; color:#fff;}
-.profile-stats{display:flex; gap:16px; margin-top:6px;}
-.profile-stats div{font-size:12px; color:var(--text-2);}
-.profile-stats b{color:var(--text); font-size:14px; display:block;}
-.stories-row{display:flex; gap:14px; padding:4px 16px 16px; overflow-x:auto;}
-.story{display:flex; flex-direction:column; align-items:center; gap:5px; flex:0 0 auto;}
-.story .ring{width:58px;height:58px; border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));
-  display:flex; align-items:center; justify-content:center; padding:2px;}
-.story .ring div{width:100%;height:100%; border-radius:50%; background:var(--surface); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;}
-.story span{font-size:10px; color:var(--text-2);}
-.ptabs{display:flex; border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
-.ptab{flex:1; display:flex; justify-content:center; padding:10px 0; position:relative;}
-.ptab.active::after{content:''; position:absolute; bottom:-1px; left:30%; right:30%; height:2px; background:var(--text);}
-.ptab .icon{color:var(--text-2);}
-.ptab.active .icon{color:var(--text);}
-.settings-list{padding:16px;}
-.srow{display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); font-size:14px;}
+.profile-top .meta{flex:1; min-width:0;}
+.profile-top .nm{font-weight:700; font-size:16px; display:flex; align-items:center; gap:5px;}
+.profile-top .sub{font-size:12px; color:var(--text-2); margin-top:2px;}
+.profile-btns{display:flex; gap:8px; padding:0 16px 14px;}
+.profile-btns .btn{height:38px; font-size:13px;}
+.stat-cards{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:0 16px;}
+.stat-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-tile); padding:12px 8px; text-align:center;}
+.stat-card b{font-size:17px; display:block;}
+.stat-card span{font-size:10px; color:var(--text-2);}
+.ptabs{display:flex; margin-top:14px; border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+.ptab{flex:1; display:flex; justify-content:center; align-items:center; gap:6px; padding:11px 0; position:relative; font-size:12px; font-weight:600; color:var(--text-2);}
+.ptab .icon{width:16px;height:16px;}
+.ptab.active{color:var(--text);}
+.ptab.active::after{content:''; position:absolute; bottom:-1px; left:20%; right:20%; height:2px; background:var(--text);}
+.settings-list{padding:8px 16px;}
+.srow{display:flex; align-items:center; justify-content:space-between; padding:13px 0; border-bottom:1px solid var(--border); font-size:14px;}
 .srow .left{display:flex; align-items:center; gap:10px;}
 .srow .icon{color:var(--text-2);}
+.srow .end{font-size:12px; color:var(--text-2); display:flex; align-items:center; gap:6px;}
 .switch{width:44px;height:26px; border-radius:999px; background:var(--surface-2); position:relative; transition:.2s;}
 .switch.on{background:var(--success);}
 .switch i{position:absolute; top:3px; left:3px; width:20px;height:20px; border-radius:50%; background:#fff; transition:.2s; box-shadow:var(--shadow-sm);}
@@ -170,51 +226,67 @@ a{color:var(--accent); text-decoration:none;}
 .lang-pick button.active{background:var(--accent); color:#fff;}
 .admin-entry{margin:16px; padding:14px; border-radius:var(--r-card); background:linear-gradient(135deg,#1a1a1a,#333); color:#fff;
   display:flex; align-items:center; justify-content:space-between;}
+.sect-label{padding:16px 16px 6px; font-size:11px; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:.04em;}
+
+/* offers / notifications */
+.offer-row{display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid var(--border);}
+.offer-row .th{width:46px;height:46px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#20212b; flex-shrink:0; text-align:center; word-break:break-all; padding:4px;}
+.offer-row .info{flex:1; min-width:0;}
+.offer-row .info .l1{font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.offer-row .info .l2{font-size:11px; color:var(--text-2); margin-top:2px;}
+.notif-row{display:flex; gap:12px; padding:13px 16px; border-bottom:1px solid var(--border); align-items:flex-start;}
+.notif-row.unread{background:color-mix(in srgb, var(--accent) 6%, transparent);}
+.notif-ic{width:36px;height:36px;border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.notif-ic .icon{width:16px;height:16px; color:var(--text-2);}
+.notif-body{flex:1;}
+.notif-body .t{font-size:13px; font-weight:600;}
+.notif-body .d{font-size:12px; color:var(--text-2); margin-top:1px;}
+.notif-body .tm{font-size:10px; color:var(--text-2); margin-top:3px;}
+.mini-actions{display:flex; gap:6px; margin-top:6px;}
+.mini-actions .chip{padding:5px 12px; font-size:12px;}
+.mini-actions .chip.accept{background:var(--success); color:#fff;}
+.mini-actions .chip.reject{background:var(--surface-2); color:var(--danger);}
 
 /* buttons */
 .btn{height:48px; border-radius:var(--r-btn); font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; gap:6px; width:100%;}
+.btn-sm{height:34px; font-size:12px; padding:0 14px; width:auto; border-radius:999px;}
 .btn-primary{background:var(--text); color:var(--bg);}
 .btn-outline{background:var(--surface); border:1px solid var(--border); color:var(--text);}
 .btn-ghost{background:var(--surface-2); color:var(--text);}
 .btn:active{transform:scale(.98);}
+.btn:disabled{opacity:.45; pointer-events:none;}
 
-/* listing detail */
-.detail-hero{aspect-ratio:1/0.8; display:flex; align-items:center; justify-content:center; position:relative; margin:0 16px; border-radius:20px;}
-.detail-hero .at{font-weight:700; font-size:40px; letter-spacing:-0.02em; color:#20212b; text-align:center; padding:0 20px;}
+/* detail */
+.detail-hero{aspect-ratio:1/0.82; display:flex; align-items:center; justify-content:center; position:relative; margin:0 16px; border-radius:20px; flex-direction:column; gap:10px;}
+.detail-hero .at{font-weight:700; font-size:34px; letter-spacing:-0.02em; color:#20212b; text-align:center; padding:0 20px; word-break:break-all;}
+.detail-hero .av-ring{width:64px;height:64px;border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4)); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:#fff;}
 .back-fab{position:absolute; top:16px; left:16px; width:40px;height:40px; border-radius:50%; background:rgba(255,255,255,.85);
   display:flex; align-items:center; justify-content:center; z-index:5;}
-.rarity-ring-wrap{display:flex; align-items:center; gap:14px; padding:16px;}
 .price-row{display:flex; align-items:baseline; justify-content:space-between; padding:0 16px;}
 .price-row .amt{font-size:26px; font-weight:700;}
 .price-row .label{font-size:12px; color:var(--text-2);}
 .seller-row{display:flex; align-items:center; gap:10px; padding:14px 16px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin:14px 0;}
-.seller-row .av{width:40px;height:40px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-weight:700;}
-.seller-row .meta{flex:1;}
+.seller-row .av{width:44px;height:44px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-weight:700;}
+.seller-row .meta{flex:1; min-width:0;}
 .seller-row .meta .nm{font-size:14px; font-weight:600; display:flex; align-items:center; gap:4px;}
 .seller-row .meta .st{font-size:12px; color:var(--text-2);}
 .verified-chip{display:inline-flex; align-items:center; gap:3px; background:color-mix(in srgb, var(--success) 15%, transparent); color:var(--success); font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px;}
-.escrow-steps{display:flex; flex-direction:column; gap:0; padding:0 16px;}
-.estep{display:flex; gap:12px; padding-bottom:18px; position:relative;}
-.estep .dot{width:22px;height:22px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; z-index:1;}
-.estep.done .dot{background:var(--success); color:#fff;}
-.estep:not(:last-child)::before{content:''; position:absolute; left:10px; top:22px; bottom:0; width:2px; background:var(--border);}
-.estep .txt b{display:block; font-size:13px;}
-.estep .txt span{font-size:12px; color:var(--text-2);}
-.sparkline{padding:16px;}
-.chat-box{margin:0 16px; border:1px solid var(--border); border-radius:16px; overflow:hidden;}
-.chat-msgs{max-height:220px; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px;}
-.msg{max-width:75%; padding:8px 12px; border-radius:14px; font-size:13px;}
-.msg.in{background:var(--surface-2); align-self:flex-start;}
-.msg.out{background:var(--accent); color:#fff; align-self:flex-end;}
-.chat-input{display:flex; gap:8px; padding:10px; border-top:1px solid var(--border);}
-.chat-input input{flex:1; border:none; background:var(--surface-2); border-radius:999px; padding:0 14px; height:38px; font-size:13px; color:var(--text);}
-.review{padding:12px 16px; border-bottom:1px solid var(--border);}
-.review .top{display:flex; justify-content:space-between; font-size:13px; font-weight:600;}
-.stars{color:var(--warn); font-size:12px;}
+.verified-chip .icon{width:10px;height:10px;}
+.stats-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px;}
+.stat-tile{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-tile); padding:12px 8px; text-align:center;}
+.stat-tile b{font-size:15px; display:block;}
+.stat-tile span{font-size:10px; color:var(--text-2);}
+.safety-block{display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px;}
+.safe-item{display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--text-2);}
+.safe-item .icon{width:16px;height:16px; color:var(--success); margin-top:1px;}
+.tag-row{display:flex; gap:6px; flex-wrap:wrap; padding:0 16px;}
+.tag{font-size:11px; font-weight:600; background:var(--surface-2); color:var(--text-2); padding:4px 10px; border-radius:999px;}
+.desc-block{padding:0 16px; font-size:13px; line-height:1.55; color:var(--text);}
+.dates-row{padding:0 16px; font-size:11px; color:var(--text-2); display:flex; gap:14px;}
 .action-bar{position:fixed; bottom:64px; left:0; right:0; max-width:430px; margin:0 auto; background:var(--surface);
   border-top:1px solid var(--border); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); display:flex; gap:10px; z-index:40;}
 
-/* modal */
+/* sheet */
 .sheet-overlay{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:100; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity .2s;}
 .sheet-overlay.show{opacity:1; pointer-events:auto;}
 .sheet{width:100%; max-width:430px; margin:0 auto; background:var(--surface); border-radius:20px 20px 0 0; padding:18px 16px calc(18px + env(safe-area-inset-bottom));
@@ -225,17 +297,67 @@ a{color:var(--accent); text-decoration:none;}
 .sheet label{font-size:12px; color:var(--text-2); display:block; margin-bottom:5px;}
 .sheet input, .sheet select, .sheet textarea{width:100%; height:46px; border-radius:var(--r-input); border:1px solid var(--border); background:var(--surface-2); padding:0 12px; font-size:14px; color:var(--text); font-family:inherit;}
 .sheet textarea{height:80px; padding:10px 12px;}
-.toast{position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:#1a1a1a; color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600; z-index:200; opacity:0; transition:opacity .25s, transform .25s; pointer-events:none;}
+.sheet-actions{display:flex; gap:10px; margin-top:16px;}
+.err{color:var(--danger); font-size:11px; margin-top:4px; display:none;}
+.err.show{display:block;}
+.radio-row{display:flex; flex-direction:column; gap:8px;}
+.radio-opt{display:flex; align-items:center; gap:10px; padding:12px; border:1px solid var(--border); border-radius:12px; font-size:14px; cursor:pointer;}
+.radio-opt.sel{border-color:var(--accent); background:color-mix(in srgb, var(--accent) 8%, transparent);}
+.sort-opt{display:flex; align-items:center; justify-content:space-between; padding:13px 4px; border-bottom:1px solid var(--border); font-size:14px; cursor:pointer;}
+.toast{position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:#1a1a1a; color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600; z-index:200; opacity:0; transition:opacity .25s, transform .25s; pointer-events:none; max-width:85vw; text-align:center;}
 .toast.show{opacity:1;}
+
+/* sell wizard */
+.hero-sell{padding:20px 16px 8px; text-align:center;}
+.hero-sell h2{font-size:22px; margin:0 0 6px;}
+.hero-sell p{font-size:13px; color:var(--text-2); margin:0 0 16px;}
+.benefits{display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px 16px;}
+.benefit{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-tile); padding:12px; display:flex; gap:8px; align-items:flex-start; text-align:left;}
+.benefit .icon{color:var(--accent); width:18px;height:18px; margin-top:1px;}
+.benefit b{font-size:12px; display:block;}
+.benefit span{font-size:11px; color:var(--text-2);}
+.warn-banner{margin:0 16px 12px; padding:10px 12px; border-radius:12px; background:color-mix(in srgb, var(--warn) 12%, transparent);
+  display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--text);}
+.warn-banner .icon{color:var(--warn); width:16px;height:16px; margin-top:1px;}
+.wiz{padding:0 16px 16px;}
+.wiz-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+.wiz-head .step-no{font-size:12px; color:var(--text-2); font-weight:600;}
+.progress{height:4px; background:var(--surface-2); border-radius:999px; overflow:hidden; margin-bottom:16px;}
+.progress i{display:block; height:100%; background:var(--text); border-radius:999px; transition:width .25s;}
+.type-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.type-card{border:1px solid var(--border); border-radius:var(--r-tile); padding:14px; display:flex; flex-direction:column; gap:8px; cursor:pointer; background:var(--surface);}
+.type-card .icon{color:var(--text-2);}
+.type-card b{font-size:13px;}
+.type-card span{font-size:11px; color:var(--text-2);}
+.type-card.sel{border-color:var(--accent); background:color-mix(in srgb, var(--accent) 8%, transparent);}
+.type-card.sel .icon{color:var(--accent);}
+.wiz-nav{display:flex; gap:10px; margin-top:18px;}
+.fee-line{display:flex; justify-content:space-between; font-size:13px; padding:6px 0; color:var(--text-2);}
+.fee-line b{color:var(--text);}
+.success-view{text-align:center; padding:48px 24px;}
+.success-ic{width:76px;height:76px; border-radius:50%; background:var(--success); color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;}
+.success-ic .icon{width:36px;height:36px;}
+.my-tabs{display:flex; gap:8px; overflow-x:auto; padding:0 16px 10px;}
+.my-tabs::-webkit-scrollbar{display:none;}
+.mgmt-row{display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--border);}
+.mgmt-row .th{width:52px;height:52px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#20212b; flex-shrink:0; word-break:break-all; text-align:center; padding:4px; position:relative;}
+.mgmt-row .info{flex:1; min-width:0;}
+.mgmt-row .info .l1{font-size:13px; font-weight:700; display:flex; gap:6px; align-items:center;}
+.mgmt-row .info .l2{font-size:11px; color:var(--text-2); margin-top:2px;}
+.mgmt-actions{display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;}
+.mgmt-actions .chip{padding:4px 10px; font-size:11px;}
+
+/* skeleton */
 .skel{background:linear-gradient(90deg,var(--surface-2) 25%, var(--border) 37%, var(--surface-2) 63%); background-size:400% 100%; animation:sk 1.4s ease infinite; border-radius:var(--r-card);}
 @keyframes sk{0%{background-position:100% 50%}100%{background-position:0 50%}}
-.empty-state{text-align:center; padding:60px 24px; color:var(--text-2);}
+.skel-banner{height:150px; border-radius:18px; margin:14px 16px 4px;}
+.skel-row{height:64px; margin:0 16px 10px;}
+.skel-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px;}
+.skel-card{height:210px;}
+.empty-state{text-align:center; padding:50px 24px; color:var(--text-2);}
 .empty-state .icon{width:44px;height:44px; margin:0 auto 10px; color:var(--border);}
 .disclaimer{padding:20px 16px 10px; font-size:11px; color:var(--text-2); text-align:center; line-height:1.5;}
 @media (prefers-reduced-motion: reduce){*{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}}
-.timer-pill{background:var(--surface-2); color:var(--text); font-size:11px; font-weight:700; padding:4px 9px; border-radius:999px; display:flex; align-items:center; gap:4px;}
-.timer-pill.danger{background:var(--danger); color:#fff;}
-.hero-tag{display:flex; justify-content:center; margin-top:10px;}
 </style>
 </head>
 <body>
@@ -245,546 +367,1230 @@ a{color:var(--accent); text-decoration:none;}
 <div class="toast" id="toast"></div>
 
 <script>
-/* ============== CONFIG & I18N ============== */
+/* =====================================================================
+   SAVDO — Instagram Marketplace (Telegram Mini App)
+   Visual design: unchanged. Internals rebuilt per master prompt pack
+   (Parts 1–4): data layer (Listing/Seller/Offer/Notification models),
+   real search/filter/sort, Grid|List, multi-step Sell wizard, offers,
+   notifications, profile dashboard. Static GitHub Pages app: data lives
+   in localStorage via the `api` layer below — swap api.* internals with a
+   real backend later without touching the UI.
+   ===================================================================== */
+
 const ADMIN_ID = 8396883978;
+const FEE_PCT = 0.05;
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 if(tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
 const urlUid = new URLSearchParams(location.search).get('uid');
-const CURRENT_UID = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || (urlUid ? Number(urlUid) : 777001);
-const CURRENT_UNAME = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || 'Siz';
+const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || null;
+const CURRENT_UID = Number((tgUser && tgUser.id) || (urlUid ? urlUid : 777001));
+const CURRENT_UNAME = (tgUser && (tgUser.username || tgUser.first_name)) || 'user';
 function isAdmin(){ return Number(CURRENT_UID) === ADMIN_ID; }
-function haptic(style){ try{ tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(style||'light'); }catch(e){} }
+function haptic(s){ try{ tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(s||'light'); }catch(e){} }
 
+/* ---------------- i18n ---------------- */
 const I18N = {
-  ru:{ home:'Главная', feed:'Лента', my:'Мои лоты', profile:'Профиль', search:'Поиск по юзернейму', searchOwner:'Поиск по владельцу',
-    categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All', buyNow:'Купить сейчас', makeOffer:'Предложить цену',
-    bid:'Сделать ставку', verified:'Проверен', topSeller:'Топ-продавец', hot:'Hot', auctionEnds:'До конца', rarity:'Индекс редкости',
-    priceHistory:'История цены', similar:'Похожие продажи', fairPrice:'Справедливая цена', escrow:'Безопасная сделка (эскроу)',
-    reviews:'Отзывы', chat:'Чат с продавцом', boost:'Продвинуть лот (Boost)', report:'Пожаловаться', myListings:'Мои лоты',
-    addListing:'Добавить лот', empty:'Пока пусто', emptyFav:'Нет избранных лотов', theme:'Тёмная тема', language:'Язык',
-    admin:'Админ-панель', loginAs:'Вы вошли как', referral:'Реферальная программа', copyLink:'Скопировать ссылку',
-    about:'О проекте', disclaimer:'Сервис не связан с Instagram и Meta Platforms, Inc. Названия и бренды — собственность их владельцев.',
-    sum:'сум', send:'Отправить', cancel:'Отмена', confirm:'Подтвердить', username:'Юзернейм', category:'Категория', price:'Цена (сум)',
-    saleType:'Способ продажи', description:'Описание', create:'Создать лот', step1:'Оплата заморожена', step2:'Продавец передаёт доступ',
-    step3:'Покупатель подтверждает', step4:'Деньги переведены продавцу', favAdded:'Добавлено в избранное', favRemoved:'Убрано из избранного',
-    offerSent:'Предложение отправлено', bidPlaced:'Ставка принята', listingCreated:'Лот создан', deals:'сделок', rating:'рейтинг',
-    adminTitle:'Админ-панель', adminStats:'Статистика', adminListings:'Управление лотами', adminUsers:'Пользователи', feature:'В Featured',
-    unfeature:'Убрать из Featured', delete:'Удалить', verify:'Верифицировать', denied:'Доступ только для администратора',
-    all:'Все', auction:'Аукцион', offer:'Оффер', buy:'Фикс. цена', notifyMe:'Подписка на поиск', saved:'Фильтр сохранён', newMsg:'Написать сообщение...',
-    maskedWarn:'Контакты и ссылки скрыты для безопасности сделки'
-  },
-  uz:{ home:'Bosh sahifa', feed:'Lenta', my:'Lotlarim', profile:'Profil', search:'Username bo‘yicha qidirish', searchOwner:'Egasi bo‘yicha qidirish',
-    categories:'Marketplace categories', featured:'Tanlangan lotlar', seeAll:'Barchasi', buyNow:'Hoziroq sotib olish', makeOffer:'Narx taklif qilish',
-    bid:'Stavka qo‘yish', verified:'Tasdiqlangan', topSeller:'Top sotuvchi', hot:'Hot', auctionEnds:'Tugashiga', rarity:'Noyoblik indeksi',
-    priceHistory:'Narx tarixi', similar:'O‘xshash savdolar', fairPrice:'Adolatli narx', escrow:'Xavfsiz bitim (eskrou)',
-    reviews:'Sharhlar', chat:'Sotuvchi bilan chat', boost:'Lotni ko‘tarish (Boost)', report:'Shikoyat qilish', myListings:'Lotlarim',
-    addListing:'Lot qo‘shish', empty:'Hozircha bo‘sh', emptyFav:'Sevimli lotlar yo‘q', theme:'Tungi rejim', language:'Til',
-    admin:'Admin panel', loginAs:'Siz quyidagi sifatida kirdingiz', referral:'Referal dasturi', copyLink:'Havolani nusxalash',
-    about:'Loyiha haqida', disclaimer:'Xizmat Instagram va Meta Platforms, Inc. bilan bog‘liq emas. Nomlar va brendlar egalariga tegishli.',
-    sum:'so‘m', send:'Yuborish', cancel:'Bekor qilish', confirm:'Tasdiqlash', username:'Username', category:'Kategoriya', price:'Narx (so‘m)',
-    saleType:'Sotish usuli', description:'Tavsif', create:'Lot yaratish', step1:'To‘lov bloklandi', step2:'Sotuvchi huquqni topshiradi',
-    step3:'Xaridor tasdiqlaydi', step4:'Pul sotuvchiga o‘tkazildi', favAdded:'Sevimlilarga qo‘shildi', favRemoved:'Sevimlilardan olib tashlandi',
-    offerSent:'Taklif yuborildi', bidPlaced:'Stavka qabul qilindi', listingCreated:'Lot yaratildi', deals:'bitim', rating:'reyting',
-    adminTitle:'Admin panel', adminStats:'Statistika', adminListings:'Lotlarni boshqarish', adminUsers:'Foydalanuvchilar', feature:'Featuredga',
-    unfeature:'Featureddan olish', delete:'O‘chirish', verify:'Tasdiqlash', denied:'Faqat administrator uchun',
-    all:'Barchasi', auction:'Auksion', offer:'Taklif', buy:'Fiks narx', notifyMe:'Qidiruvga obuna', saved:'Filtr saqlandi', newMsg:'Xabar yozing...',
-    maskedWarn:'Aloqalar va havolalar bitim xavfsizligi uchun yashirilgan'
-  },
-  en:{ home:'Home', feed:'Feed', my:'My listings', profile:'Profile', search:'Search for usernames', searchOwner:'Search by owner',
-    categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All', buyNow:'Buy now', makeOffer:'Make offer',
-    bid:'Place bid', verified:'Verified', topSeller:'Top seller', hot:'Hot', auctionEnds:'Ends in', rarity:'Rarity score',
-    priceHistory:'Price history', similar:'Similar sales', fairPrice:'Fair price', escrow:'Secure deal (escrow)',
-    reviews:'Reviews', chat:'Chat with seller', boost:'Boost listing', report:'Report', myListings:'My listings',
-    addListing:'Add listing', empty:'Nothing here yet', emptyFav:'No favorites yet', theme:'Dark theme', language:'Language',
-    admin:'Admin panel', loginAs:'Signed in as', referral:'Referral program', copyLink:'Copy link',
-    about:'About', disclaimer:'This service is not affiliated with Instagram or Meta Platforms, Inc. Names and brands belong to their owners.',
-    sum:'UZS', send:'Send', cancel:'Cancel', confirm:'Confirm', username:'Username', category:'Category', price:'Price (UZS)',
-    saleType:'Sale type', description:'Description', create:'Create listing', step1:'Payment held', step2:'Seller transfers access',
-    step3:'Buyer confirms', step4:'Funds released to seller', favAdded:'Added to favorites', favRemoved:'Removed from favorites',
-    offerSent:'Offer sent', bidPlaced:'Bid placed', listingCreated:'Listing created', deals:'deals', rating:'rating',
-    adminTitle:'Admin panel', adminStats:'Stats', adminListings:'Manage listings', adminUsers:'Users', feature:'Feature',
-    unfeature:'Unfeature', delete:'Delete', verify:'Verify', denied:'Admin access only',
-    all:'All', auction:'Auction', offer:'Offer', buy:'Fixed price', notifyMe:'Save search', saved:'Filter saved', newMsg:'Type a message...',
-    maskedWarn:'Contacts and links are masked for deal safety'
-  }
+ ru:{ home:'Home', market:'Marketplace', sell:'Sell', profile:'Profile',
+  greeting:'Savdo Marketplace', search:'Search username, category…', recent:'Recent',
+  categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All',
+  recommended:'Recommended', sortNewest:'Newest', sortPrice:'Price', sortPopular:'Popular',
+  listingsFound:'listings found', gridList:'Grid', filters:'Filters', sort:'Sort by',
+  recommended_:'Recommended', newest:'Newest', priceLow:'Lowest price', priceHigh:'Highest price',
+  mostFollowers:'Most followers', highEngagement:'Highest engagement', bestRated:'Best rated seller',
+  priceRange:'Price range', followers:'Followers', engagement:'Engagement', following:'Following',
+  posts:'Posts', accountAge:'Account age', niche:'Niche', country:'Country', language:'Language',
+  verifiedSeller:'Verified seller only', availability:'Availability', any:'Any',
+  reset:'Reset', showResults:'Show results',
+  available:'Available', reserved:'Reserved', sold:'Sold', pending:'Pending review', draft:'Draft', archived:'Archived',
+  buyNow:'Buy now', makeOffer:'Make an offer', viewSeller:'View seller', share:'Share', report:'Report',
+  seller:'Seller', deals:'deals', respTime:'response', memberSince:'member since',
+  safety:'Safe deal', payProtect:'Payment protection', noPass:'No password sharing', secureTransfer:'Secure transfer',
+  dispute:'Dispute support', stats:'Statistics', description:'Description', tags:'Tags',
+  created:'Listed', updated:'Updated', offerPrice:'Offer price', message:'Message (optional)',
+  expiration:'Expiration', hrs24:'24 hours', hrs48:'48 hours', days7:'7 days', submitOffer:'Send offer',
+  offerSent:'Offer sent', reportTitle:'Report listing', reasons:['Scam','Misleading information','Duplicate','Inappropriate','Other'],
+  sellTitle:'Sell on Marketplace', sellDesc:'Create a listing and reach buyers.',
+  fastListing:'Fast listing', fastListingD:'Publish in 5 quick steps', secureProc:'Secure process',
+  secureProcD:'Protected escrow flow', sellerProfile:'Seller profile', sellerProfileD:'Rating and reviews',
+  buyerProt:'Buyer protection', buyerProtD:'Money-back guarantee',
+  createListing:'Create listing', myListings:'My listings', active:'Active', drafts:'Drafts',
+  soldTab:'Sold', neverShare:'Never share your Instagram password or security codes.',
+  step:'Step', of:'of', type:'Listing type', basicInfo:'Basic information', statistics:'Statistics',
+  priceStep:'Price', preview:'Preview', publish:'Publish', edit:'Edit', back:'Back', next:'Next',
+  username:'Username', displayName:'Display name', category:'Category', countryLbl:'Country',
+  langLbl:'Language', usernameErr:'3–30 chars: letters, numbers, dot, underscore',
+  requiredErr:'This field is required', tooLong:'Too long', invalidNumber:'Invalid number',
+  priceLbl:'Price', currency:'Currency', minOffer:'Minimum offer (optional)',
+  marketplaceFee:'Marketplace fee (5%)', sellerReceives:'You receive', buyerPays:'Buyer pays',
+  yourListingLive:'Your listing is live', viewListing:'View listing', goToMy:'My listings',
+  editAction:'Edit', pause:'Pause', resume:'Resume', duplicate:'Duplicate', archive:'Archive',
+  markSold:'Mark as sold', deleteL:'Delete',
+  offers:'Offers', received:'Received', sent:'Sent', accepted:'Accepted', rejected:'Rejected',
+  expired:'Expired', accept:'Accept', decline:'Decline', from:'from', to:'to',
+  notifications:'Notifications', markRead:'All read', notifNewOffer:'New offer',
+  notifAccepted:'Offer accepted', notifSold:'Listing sold', notifPrice:'Price changed',
+  settings:'Settings', account:'Account', marketplace:'Marketplace', security:'Security', legal:'Legal',
+  editProfile:'Edit profile', delAccount:'Delete account', defCurrency:'Default currency',
+  notifPrefs:'Notifications', privacy:'Privacy', sessions:'Sessions', signOut:'Sign out',
+  terms:'Terms', privacyPol:'Privacy policy', rules:'Marketplace rules', reportIssue:'Report issue',
+  listings:'Listings', favorites:'Favorites', rating:'Rating', theme:'Dark theme', languageLbl:'Language',
+  admin:'Admin panel', denied:'Admin access only', removeFav:'Remove',
+  emptySearch:'No listings found', emptyOffers:'No offers yet', emptyNotif:'No notifications',
+  emptyFav:'No favorites yet', sum:'сум', cancel:'Cancel', confirm:'Confirm', copyLink:'Copy link',
+  linkCopied:'Link copied', demoSoon:'Coming soon'
+ },
+ uz:{ home:'Home', market:'Marketplace', sell:'Sell', profile:'Profile',
+  greeting:'Savdo Marketplace', search:'Username, kategoriya bo‘yicha qidir…', recent:'Yaqinda',
+  categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All',
+  recommended:'Recommended', sortNewest:'Newest', sortPrice:'Price', sortPopular:'Popular',
+  listingsFound:'listing topildi', gridList:'List', filters:'Filtrlar', sort:'Saralash',
+  recommended_:'Tavsiya etilgan', newest:'Eng yangi', priceLow:'Arzon narx', priceHigh:'Qimmat narx',
+  mostFollowers:'Obunachilar ko‘p', highEngagement:'Eng faol', bestRated:'Eng yaxshi sotuvchi',
+  priceRange:'Narx orali‘i', followers:'Obunachi', engagement:'Faollik', following:'Obuna',
+  posts:'Post', accountAge:'Hisob yoshi', niche:'Nisha', country:'Mamlakat', language:'Til',
+  verifiedSeller:'Faqat tasdiqlangan', availability:'Holat', any:'Barchasi',
+  reset:'Tozalash', showResults:'Natijalarni ko‘rsatish',
+  available:'Mavjud', reserved:'Band', sold:'Sotilgan', pending:'Tekshirilmoqda', draft:'Qoralama', archived:'Arxiv',
+  buyNow:'Hoziroq sotib olish', makeOffer:'Narx taklif qilish', viewSeller:'Sotuvchini ko‘rish', share:'Ulashish', report:'Shikoyat',
+  seller:'Sotuvchi', deals:'bitim', respTime:'javob', memberSince:'a’zo',
+  safety:'Xavfsiz bitim', payProtect:'To‘lov himoyasi', noPass:'Parol ulashilmaydi', secureTransfer:'Xavfsiz o‘tkazma',
+  dispute:'Nizolarni yechish', stats:'Statistika', description:'Tavsif', tags:'Teglar',
+  created:'E’lon qilingan', updated:'Yangilangan', offerPrice:'Taklif narxi', message:'Xabar (ixtiyoriy)',
+  expiration:'Muddat', hrs24:'24 soat', hrs48:'48 soat', days7:'7 kun', submitOffer:'Taklif yuborish',
+  offerSent:'Taklif yuborildi', reportTitle:'E’londan shikoyat', reasons:['Firibgarlik','Noto‘g‘ri ma’lumot','Nusxa','Nomuvofiq','Boshqa'],
+  sellTitle:'Sell on Marketplace', sellDesc:'E’lon yarating va xaridorlarga yetib boring.',
+  fastListing:'Tez e’lon', fastListingD:'5 qadamda chop eting', secureProc:'Xavfsiz jarayon',
+  secureProcD:'Himoyalangan eskrou', sellerProfile:'Sotuvchi profili', sellerProfileD:'Reyting va sharhlar',
+  buyerProt:'Xaridor himoyasi', buyerProtD:'Kafolat bilan qaytish',
+  createListing:'Create listing', myListings:'E’lonlarim', active:'Aktiv', drafts:'Qoralamalar',
+  soldTab:'Sotilgan', neverShare:'Instagram parolingizni va kodlaringizni hech kimga bermang.',
+  step:'Qadam', of:'/“', type:'E’lon turi', basicInfo:'Asosiy ma’lumot', statistics:'Statistika',
+  priceStep:'Narx', preview:'Ko‘rish', publish:'Chop etish', edit:'Tahrirlash', back:'Orqaga', next:'Keyingi',
+  username:'Username', displayName:'Ko‘rinadigan nom', category:'Kategoriya', countryLbl:'Mamlakat',
+  langLbl:'Til', usernameErr:'3–30 belgi: harf, raqam, nuqta, pastki chiziq',
+  requiredErr:'Majburiy maydon', tooLong:'Juda uzun', invalidNumber:'Noto‘g‘ri raqam',
+  priceLbl:'Narx', currency:'Valyuta', minOffer:'Minimal taklif (ixtiyoriy)',
+  marketplaceFee:'Marketplace komissiya (5%)', sellerReceives:'Siz olasiz', buyerPays:'Xaridor to‘laydi',
+  yourListingLive:'E’longiz chiqdi', viewListing:'E’lonni ko‘rish', goToMy:'E’lonlarim',
+  editAction:'Tahrirlash', pause:'To‘xtatish', resume:'Davom etish', duplicate:'Nusxalash', archive:'Arxivlash',
+  markSold:'Sotilgan deb belgilash', deleteL:'O‘chirish',
+  offers:'Takliflar', received:'Kelgan', sent:'Yuborilgan', accepted:'Qabul qilindi', rejected:'Rad etildi',
+  expired:'Muddati tugadi', accept:'Qabul', decline:'Rad', from:'dan', to:'ga',
+  notifications:'Bildirishnomalar', markRead:'Barchasi o‘qildi', notifNewOffer:'Yangi taklif',
+  notifAccepted:'Taklif qabul qilindi', notifSold:'E’lon sotildi', notifPrice:'Narx o‘zgardi',
+  settings:'Sozlamalar', account:'Hisob', marketplace:'Marketplace', security:'Xavfsizlik', legal:'Qonun',
+  editProfile:'Profilni tahrirlash', delAccount:'Hisobni o‘chirish', defCurrency:'Standart valyuta',
+  notifPrefs:'Bildirishnomalar', privacy:'Maxfiylik', sessions:'Sessiyalar', signOut:'Chiqish',
+  terms:'Shartlar', privacyPol:'Maxfiylik siyosati', rules:'Qoidalar', reportIssue:'Muammo haqida xabar',
+  listings:'E’lonlar', favorites:'Sevimlilar', rating:'Reyting', theme:'Tungi rejim', languageLbl:'Til',
+  admin:'Admin panel', denied:'Faqat administrator uchun', removeFav:'Olib tashlash',
+  emptySearch:'Hech narsa topilmadi', emptyOffers:'Hozircha taklif yo‘q', emptyNotif:'Bildirishnomalar yo‘q',
+  emptyFav:'Sevimlilar yo‘q', sum:'so‘m', cancel:'Bekor qilish', confirm:'Tasdiqlash', copyLink:'Havolani nusxalash',
+  linkCopied:'Havola nusxalandi', demoSoon:'Tez orada'
+ },
+ en:{ home:'Home', market:'Marketplace', sell:'Sell', profile:'Profile',
+  greeting:'Savdo Marketplace', search:'Search username, category…', recent:'Recent',
+  categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All',
+  recommended:'Recommended', sortNewest:'Newest', sortPrice:'Price', sortPopular:'Popular',
+  listingsFound:'listings found', gridList:'List', filters:'Filters', sort:'Sort by',
+  recommended_:'Recommended', newest:'Newest', priceLow:'Lowest price', priceHigh:'Highest price',
+  mostFollowers:'Most followers', highEngagement:'Highest engagement', bestRated:'Best rated seller',
+  priceRange:'Price range', followers:'Followers', engagement:'Engagement', following:'Following',
+  posts:'Posts', accountAge:'Account age', niche:'Niche', country:'Country', language:'Language',
+  verifiedSeller:'Verified seller only', availability:'Availability', any:'Any',
+  reset:'Reset', showResults:'Show results',
+  available:'Available', reserved:'Reserved', sold:'Sold', pending:'Pending review', draft:'Draft', archived:'Archived',
+  buyNow:'Buy now', makeOffer:'Make an offer', viewSeller:'View seller', share:'Share', report:'Report',
+  seller:'Seller', deals:'deals', respTime:'response', memberSince:'member since',
+  safety:'Safe deal', payProtect:'Payment protection', noPass:'No password sharing', secureTransfer:'Secure transfer',
+  dispute:'Dispute support', stats:'Statistics', description:'Description', tags:'Tags',
+  created:'Listed', updated:'Updated', offerPrice:'Offer price', message:'Message (optional)',
+  expiration:'Expiration', hrs24:'24 hours', hrs48:'48 hours', days7:'7 days', submitOffer:'Send offer',
+  offerSent:'Offer sent', reportTitle:'Report listing', reasons:['Scam','Misleading information','Duplicate','Inappropriate','Other'],
+  sellTitle:'Sell on Marketplace', sellDesc:'Create a listing and reach buyers.',
+  fastListing:'Fast listing', fastListingD:'Publish in 5 quick steps', secureProc:'Secure process',
+  secureProcD:'Protected escrow flow', sellerProfile:'Seller profile', sellerProfileD:'Rating and reviews',
+  buyerProt:'Buyer protection', buyerProtD:'Money-back guarantee',
+  createListing:'Create listing', myListings:'My listings', active:'Active', drafts:'Drafts',
+  soldTab:'Sold', neverShare:'Never share your Instagram password or security codes.',
+  step:'Step', of:'of', type:'Listing type', basicInfo:'Basic information', statistics:'Statistics',
+  priceStep:'Price', preview:'Preview', publish:'Publish', edit:'Edit', back:'Back', next:'Next',
+  username:'Username', displayName:'Display name', category:'Category', countryLbl:'Country',
+  langLbl:'Language', usernameErr:'3–30 chars: letters, numbers, dot, underscore',
+  requiredErr:'This field is required', tooLong:'Too long', invalidNumber:'Invalid number',
+  priceLbl:'Price', currency:'Currency', minOffer:'Minimum offer (optional)',
+  marketplaceFee:'Marketplace fee (5%)', sellerReceives:'You receive', buyerPays:'Buyer pays',
+  yourListingLive:'Your listing is live', viewListing:'View listing', goToMy:'My listings',
+  editAction:'Edit', pause:'Pause', resume:'Resume', duplicate:'Duplicate', archive:'Archive',
+  markSold:'Mark as sold', deleteL:'Delete',
+  offers:'Offers', received:'Received', sent:'Sent', accepted:'Accepted', rejected:'Rejected',
+  expired:'Expired', accept:'Accept', decline:'Decline', from:'from', to:'to',
+  notifications:'Notifications', markRead:'All read', notifNewOffer:'New offer',
+  notifAccepted:'Offer accepted', notifSold:'Listing sold', notifPrice:'Price changed',
+  settings:'Settings', account:'Account', marketplace:'Marketplace', security:'Security', legal:'Legal',
+  editProfile:'Edit profile', delAccount:'Delete account', defCurrency:'Default currency',
+  notifPrefs:'Notifications', privacy:'Privacy', sessions:'Sessions', signOut:'Sign out',
+  terms:'Terms', privacyPol:'Privacy policy', rules:'Marketplace rules', reportIssue:'Report issue',
+  listings:'Listings', favorites:'Favorites', rating:'Rating', theme:'Dark theme', languageLbl:'Language',
+  admin:'Admin panel', denied:'Admin access only', removeFav:'Remove',
+  emptySearch:'No listings found', emptyOffers:'No offers yet', emptyNotif:'No notifications',
+  emptyFav:'No favorites yet', sum:'UZS', cancel:'Cancel', confirm:'Confirm', copyLink:'Copy link',
+  linkCopied:'Link copied', demoSoon:'Coming soon'
+ }
 };
 let LANG = localStorage.getItem('savdo_lang') || 'ru';
 let THEME = localStorage.getItem('savdo_theme') || 'light';
 document.documentElement.setAttribute('data-theme', THEME);
-function t(k){ return (I18N[LANG] && I18N[LANG][k]) || I18N.ru[k] || k; }
+function t(k){ const v=(I18N[LANG]&&I18N[LANG][k])||I18N.en[k]||k; return v; }
 
-/* ============== DATA ============== */
+/* ---------------- catalog constants ---------------- */
 const CATS = [
-  {id:'short', name:{ru:'Короткие',uz:'Qisqa',en:'Short'}, g:['#E9ECFF','#F6F0FF']},
-  {id:'digits', name:{ru:'Цифры',uz:'Raqamli',en:'Digits'}, g:['#E6F6F1','#F1F9FF']},
-  {id:'words', name:{ru:'Слова',uz:'So‘zlar',en:'Words'}, g:['#FFF1E6','#FFF8F0']},
-  {id:'brands', name:{ru:'Бренды',uz:'Brendlar',en:'Brands'}, g:['#F0F0F3','#E8EAF0']},
-  {id:'names', name:{ru:'Имена',uz:'Ismlar',en:'Names'}, g:['#FDE9F1','#F5ECFF']},
-  {id:'niche', name:{ru:'Ниши',uz:'Niша',en:'Niche'}, g:['#E7F4FF','#EAFBF1']},
-  {id:'premium', name:{ru:'Premium',uz:'Premium',en:'Premium'}, g:['#FFF4D6','#FFE8EE']},
+  {id:'username', name:{ru:'Username',uz:'Username',en:'Username'}, g:['#E9ECFF','#F6F0FF']},
+  {id:'account', name:{ru:'Instagram Account',uz:'Instagram Account',en:'Instagram Account'}, g:['#E6F6F1','#F1F9FF']},
+  {id:'brand', name:{ru:'Brand Account',uz:'Brend akkaunt',en:'Brand Account'}, g:['#FFF1E6','#FFF8F0']},
+  {id:'theme', name:{ru:'Theme Page',uz:'Theme sahifa',en:'Theme Page'}, g:['#F0F0F3','#E8EAF0']},
+  {id:'creator', name:{ru:'Creator',uz:'Kreator',en:'Creator'}, g:['#FDE9F1','#F5ECFF']},
+  {id:'business', name:{ru:'Business',uz:'Biznes',en:'Business'}, g:['#E7F4FF','#EAFBF1']},
+  {id:'other', name:{ru:'Other',uz:'Boshqa',en:'Other'}, g:['#FFF4D6','#FFE8EE']},
 ];
-function catName(id){ const c = CATS.find(c=>c.id===id); return c ? c.name[LANG] : id; }
-function catGrad(id){ const c = CATS.find(c=>c.id===id) || CATS[0]; return `linear-gradient(135deg, ${c.g[0]}, ${c.g[1]})`; }
-
+const TYPES = CATS.filter(c=>c.id!=='other');
+const COUNTRIES = ['Uzbekistan','Kazakhstan','Russia','USA','UAE','Turkey','Other'];
+const LANGS_LIST = ['Russian','Uzbek','English','Mixed'];
+const CURRENCIES = ['UZS','USD'];
 const BANNERS = [
   'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/2392e14a0_generated_image.png',
   'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0034c3e8f_generated_image.png',
   'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/fbe620e43_generated_image.png',
 ];
-
-function rarityScore(u){
-  let s = 0;
-  const name = u.replace('@','');
-  if(name.length<=3) s+=40; else if(name.length<=5) s+=28; else if(name.length<=7) s+=16; else s+=6;
-  if(/^[a-z]+$/.test(name)) s+=15;
-  if(/\d/.test(name)) s += /^\d+$/.test(name) ? 20 : 5;
-  if(new Set(name).size < name.length*0.6) s+=10;
-  s += Math.floor(Math.random()*10);
-  return Math.min(99, s);
+function catName(id){ const c=CATS.find(c=>c.id===id); return c?c.name[LANG==='uz'?'uz':LANG==='en'?'en':'ru']:id; }
+function catGrad(id){ const c=(CATS.find(c=>c.id===id)||CATS[0]); return `linear-gradient(135deg, ${c.g[0]}, ${c.g[1]})`; }
+function fmtPrice(n, cur){
+  cur = cur || 'UZS';
+  if(cur==='USD') return '$'+Number(n).toLocaleString('en-US');
+  return Number(n).toLocaleString('ru-RU').replace(/,/g,' ')+' '+t('sum');
 }
-function fmtPrice(n){ return n.toLocaleString('ru-RU').replace(/,/g,' ') + ' ' + t('sum'); }
-function timeLeft(ts){
-  let d = ts - Date.now();
-  if(d<=0) return {done:true,label:'00:00:00'};
-  const h = Math.floor(d/3600000), m = Math.floor((d%3600000)/60000), s = Math.floor((d%60000)/1000);
-  return {done:false, danger: d<60000, label:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`};
+function fmtNum(n){ if(n>=1000000) return (n/1000000).toFixed(1)+'M'; if(n>=1000) return Math.round(n/1000)+'K'; return String(n); }
+function timeAgo(ts){
+  const d = Date.now()-ts;
+  if(d<60000) return 'just now';
+  if(d<3600000) return Math.floor(d/60000)+'m';
+  if(d<86400000) return Math.floor(d/3600000)+'h';
+  return Math.floor(d/86400000)+'d';
+}
+function statusLabel(s){ return t(s==='active'?'available':s==='pendingReview'?'pending':s) || s; }
+function statusChip(s){
+  const map={active:'status-available', reserved:'status-reserved', sold:'status-sold', pendingReview:'status-pending', draft:'status-draft', archived:'status-archived'};
+  return `<span class="status-chip ${map[s]||'status-draft'}">${statusLabel(s)}</span>`;
 }
 
-const SEED_NAMES = ['flow','nova','kyra','zent','pulse','orbit','vibe','aura','venus','dusk','mira','echo','sumo','blaze','nino','opal','ritz','teva','luno','kaia','zeta','nura','fayz','jaz','x7','ai99','1love','007vip','elite_','iqra','sardor','malika','gold','prime','studio','agency','market','travel','coffee_','fashion','007','1920','rich','vip7'];
-function genListings(){
-  let arr = [];
-  SEED_NAMES.forEach((n,i)=>{
-    const cat = CATS[i % CATS.length].id;
-    const types = ['buy','offer','auction'];
-    const saleType = types[i % 3];
-    const base = 150000 + (i*53217 % 4200000);
-    const rarity = rarityScore(n);
-    const hist = Array.from({length:7}, (_,k)=> Math.round(base*(0.75+0.05*k) ));
+/* ---------------- DATA LAYER (swap for real backend) ---------------- */
+const store = {
+  get(k, def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+};
+
+const SEED_USER = { id:CURRENT_UID, username:CURRENT_UNAME, displayName:(tgUser&&tgUser.first_name)||'You',
+  rating:4.9, completedDeals:12, responseTime:'~1h', verified:isAdmin(), memberSince:'2025-03' };
+
+const SEED_SELLERS = [
+  {id:9001, username:'aziz.uz', rating:4.8, completedDeals:57, responseTime:'~15m', verified:true, memberSince:'2024-06'},
+  {id:9002, username:'dilnoza', rating:4.9, completedDeals:84, responseTime:'~30m', verified:true, memberSince:'2024-01'},
+  {id:9003, username:'jasur_m', rating:4.6, completedDeals:31, responseTime:'~2h', verified:false, memberSince:'2025-02'},
+  {id:9004, username:'shahzod', rating:5.0, completedDeals:12, responseTime:'~10m', verified:true, memberSince:'2025-08'},
+  {id:9005, username:'kamola', rating:4.7, completedDeals:44, responseTime:'~1h', verified:true, memberSince:'2024-11'},
+];
+function sellerById(id){ if(id===CURRENT_UID) return {...SEED_USER, username:CURRENT_UNAME};
+  return SEED_SELLERS.find(s=>s.id===id) || SEED_SELLERS[0]; }
+
+const SEED_HANDLES = ['flow','nova.gold','kyra','zent','pulse','orbit','vibe','aura','venus','dusk','mira','echo',
+  'sumo','blaze','nino','opal','ritz','teva','luno','kaia','zeta','nura','fayz','jaz.x7','ai99','1love','007vip',
+  'elite.store','iqra','travel.uz','coffee.club','fashion.daily'];
+function seedListings(){
+  const arr=[];
+  SEED_HANDLES.forEach((n,i)=>{
+    const cat = TYPES[i % TYPES.length].id;
+    const isAccount = cat!=='username';
+    const price = (cat==='username'? 150000 : 800000) + (i*137000 % 4200000);
+    const statuses=['active','active','active','active','reserved','sold'];
+    const status = i<4 ? 'active' : statuses[i%statuses.length];
     arr.push({
-      id:'l'+i, username:'@'+n, category:cat, saleType, price:base, rarity,
-      verified: i%3===0, topSeller: i%4===0, hot: rarity>70,
-      auctionEnd: saleType==='auction' ? Date.now() + (3600000* (1+(i%6)) ) : null,
-      currentBid: saleType==='auction' ? Math.round(base*0.82) : null,
-      seller:{ id: 900+i, name: ['Aziz','Dilnoza','Jasur','Shahzod','Nilufar','Botir','Kamola'][i%7], rating:(3.8+ (i%12)/10).toFixed(1), deals: 4+ (i%40) },
-      ownerId: i<4 ? CURRENT_UID : 900+i,
-      favorited: false, views: 80 + i*17, priceHistory: hist, created: Date.now() - i*86400000,
-      desc: {ru:'Чистый, активный аккаунт. Готов передать через безопасную сделку сразу после оплаты.',
-             uz:'Toza, faol username. To‘lovdan so‘ng xavfsiz bitim orqali darhol topshiriladi.',
-             en:'Clean, active handle. Transferred via secure escrow right after payment.'}
+      id:'l'+i, type:cat, username:'@'+n, displayName:n.split('.')[0].toUpperCase(),
+      price, currency:'UZS', category:cat,
+      description:'Clean active '+(isAccount?'account':'username')+'. Verified owner, fast secure transfer via escrow. No bans or strikes.',
+      followers:isAccount? 3500 + (i*41731 % 480000) : 0,
+      following:isAccount? 120 + (i%900) : 0,
+      posts:isAccount? 40 + (i%800) : 0,
+      engagement:isAccount? (1.5 + (i%70)/10).toFixed(1) : 0,
+      accountAge:isAccount? 3 + (i%72) : 0,
+      niche:isAccount? ['lifestyle','travel','fashion','fitness','food','tech'][i%6] : '',
+      country:COUNTRIES[i%COUNTRIES.length], language:LANGS_LIST[i%LANGS_LIST.length],
+      sellerId: SEED_SELLERS[i%SEED_SELLERS.length].id,
+      status, createdAt: Date.now() - i*86400000*3, updatedAt: Date.now() - i*43200000,
+      featured: i%5===0 && status==='active',
+      views: 80 + i*31, favorites: i%17,
+      tags:['clean','fast transfer', isAccount?'active':'rare'],
+      minOffer: null
     });
   });
+  // owner's own listings for the dashboard
+  arr.push({ id:'mine1', type:'username', username:'@mybrand', displayName:'MYBRAND', price:2500000, currency:'UZS',
+    category:'username', description:'My premium username.', followers:0, following:0, posts:0, engagement:0,
+    accountAge:0, niche:'', country:'Uzbekistan', language:'Russian', sellerId:CURRENT_UID, status:'active',
+    createdAt:Date.now()-86400000*2, updatedAt:Date.now()-86400000, featured:false, views:214, favorites:9,
+    tags:['clean'], minOffer:null });
+  arr.push({ id:'mine2', type:'theme', username:'@dailymotivation', displayName:'DAILY MOTIVATION', price:7800000, currency:'UZS',
+    category:'theme', description:'Theme page, 120K followers.', followers:120400, following:80, posts:640,
+    engagement:'4.2', accountAge:36, niche:'motivation', country:'Uzbekistan', language:'Mixed',
+    sellerId:CURRENT_UID, status:'pendingReview', createdAt:Date.now()-3600000*5, updatedAt:Date.now()-3600000,
+    featured:false, views:12, favorites:0, tags:['theme page'], minOffer:null });
+  arr.push({ id:'mine3', type:'username', username:'@tashkent', displayName:'TASHKENT', price:15000000, currency:'UZS',
+    category:'username', description:'City username.', followers:0, following:0, posts:0, engagement:0,
+    accountAge:0, niche:'', country:'Uzbekistan', language:'Uzbek', sellerId:CURRENT_UID, status:'sold',
+    createdAt:Date.now()-86400000*20, updatedAt:Date.now()-86400000*6, featured:false, views:1203, favorites:57,
+    tags:['city'], minOffer:null });
   return arr;
 }
-let LISTINGS = JSON.parse(localStorage.getItem('savdo_listings')||'null') || genListings();
-function saveListings(){ localStorage.setItem('savdo_listings', JSON.stringify(LISTINGS)); }
-let FAVS = JSON.parse(localStorage.getItem('savdo_favs')||'[]');
-function saveFavs(){ localStorage.setItem('savdo_favs', JSON.stringify(FAVS)); }
 
-/* ============== ROUTER ============== */
-let STATE = { tab:'home', detailId:null, catFilter:'all', myFilter:'all' };
+/* api — replace internals with fetch() when a backend appears; UI stays identical */
+const api = {
+  listings: store.get('savdo_listings', null) || seedListings(),
+  offers: store.get('savdo_offers', null) || [
+    {id:'o1', listingId:'l1', fromUserId:9002, toUserId:CURRENT_UID, amount:120000, message:'Can you do 120K?', status:'pending', createdAt:Date.now()-3600000, expiresAt:Date.now()+86400000},
+    {id:'o2', listingId:'l3', fromUserId:9001, toUserId:CURRENT_UID, amount:330000, message:'', status:'pending', createdAt:Date.now()-7200000, expiresAt:Date.now()+172800000},
+    {id:'o3', listingId:'l5', fromUserId:CURRENT_UID, toUserId:9004, amount:250000, message:'Cash, today', status:'accepted', createdAt:Date.now()-86400000*2, expiresAt:Date.now()+86400000},
+    {id:'o4', listingId:'l8', fromUserId:CURRENT_UID, toUserId:9003, amount:90000, message:'', status:'expired', createdAt:Date.now()-86400000*9, expiresAt:Date.now()-3600000},
+  ],
+  notifications: store.get('savdo_notifications', null) || [
+    {id:'n1', type:'offer', title:'New offer', text:'dilnoza offered 120 000 сум for @flow', read:false, createdAt:Date.now()-3600000},
+    {id:'n2', type:'sold', title:'Listing sold', text:'@tashkent has been sold', read:false, createdAt:Date.now()-86400000*6},
+    {id:'n3', type:'price', title:'Price changed', text:'@venus price dropped to 1 200 000 сум', read:true, createdAt:Date.now()-86400000*3},
+    {id:'n4', type:'accepted', title:'Offer accepted', text:'shahzod accepted your offer for @pulse', read:true, createdAt:Date.now()-86400000*2},
+  ],
+  save(){ store.set('savdo_listings', this.listings); store.set('savdo_offers', this.offers); store.set('savdo_notifications', this.notifications); },
+  getListings(){ return this.listings; },
+  getListing(id){ return this.listings.find(l=>l.id===id); },
+  createListing(data){ const l={...data, id:'u'+Date.now(), createdAt:Date.now(), updatedAt:Date.now(),
+    status:'active', views:0, favorites:0, sellerId:CURRENT_UID, featured:false};
+    this.listings.unshift(l); this.save(); return l; },
+  updateListing(id, patch){ const l=this.getListing(id); if(!l) return; Object.assign(l, patch, {updatedAt:Date.now()}); this.save(); return l; },
+  deleteListing(id){ this.listings=this.listings.filter(l=>l.id!==id); this.save(); },
+  addOffer(o){ const off={...o, id:'o'+Date.now(), createdAt:Date.now(), status:'pending'}; this.offers.unshift(off); this.save(); return off; },
+  updateOffer(id, status){ const o=this.offers.find(x=>x.id===id); if(o){ o.status=status; this.save(); } },
+  notify(n){ this.notifications.unshift({id:'n'+Date.now()+Math.floor(Math.random()*999), read:false, createdAt:Date.now(), ...n}); this.save(); },
+  unreadCount(){ return this.notifications.filter(n=>!n.read).length; },
+  markAllRead(){ this.notifications.forEach(n=>n.read=true); this.save(); }
+};
+let FAVS = store.get('savdo_favs', []);
+function saveFavs(){ store.set('savdo_favs', FAVS); }
+let RECENT = store.get('savdo_recent', []);
+function pushRecent(q){ RECENT=[q, ...RECENT.filter(r=>r!==q)].slice(0,6); store.set('savdo_recent', RECENT); }
 
+/* ---------------- STATE ---------------- */
+const DEFAULT_MARKET = { view:'grid', sort:'recommended', q:'', cat:'all',
+  priceMin:'', priceMax:'', folMin:'', engMin:'', country:'all', language:'all',
+  verified:false, availability:'all' };
+let STATE = {
+  tab:'home', detailId:null,
+  market: Object.assign({}, DEFAULT_MARKET, store.get('savdo_market', {})),
+  homeSort:'newest',
+  sell: { screen:'hero', step:1, draft: store.get('savdo_draft', null), publishedId:null },
+  profile: { tab:'listings', listingTab:'active', offerTab:'received' },
+  skeleton:false
+};
+
+/* ---------------- QUERY ENGINE ---------------- */
+function applyFilters(list){
+  const f = STATE.market;
+  let out = list.slice();
+  if(f.q){ const q=f.q.toLowerCase(); out=out.filter(l=> l.username.toLowerCase().includes(q)
+    || (l.displayName||'').toLowerCase().includes(q) || catName(l.category).toLowerCase().includes(q)
+    || (l.niche||'').toLowerCase().includes(q)); }
+  if(f.cat && f.cat!=='all') out=out.filter(l=>l.category===f.cat);
+  if(f.priceMin!=='' && f.priceMin!=null) out=out.filter(l=>l.price>=Number(f.priceMin));
+  if(f.priceMax!=='' && f.priceMax!=null) out=out.filter(l=>l.price<=Number(f.priceMax));
+  if(f.folMin!=='' && f.folMin!=null) out=out.filter(l=>l.followers>=Number(f.folMin));
+  if(f.engMin!=='' && f.engMin!=null) out=out.filter(l=>Number(l.engagement)>=Number(f.engMin));
+  if(f.country!=='all') out=out.filter(l=>l.country===f.country);
+  if(f.language!=='all') out=out.filter(l=>l.language===f.language);
+  if(f.verified) out=out.filter(l=>sellerById(l.sellerId).verified);
+  if(f.availability==='available') out=out.filter(l=>l.status==='active');
+  else if(f.availability!=='all') out=out.filter(l=>l.status===f.availability);
+  return out;
+}
+function sortList(list, mode){
+  const s = mode || 'recommended';
+  const arr = list.slice();
+  if(s==='newest') arr.sort((a,b)=>b.createdAt-a.createdAt);
+  else if(s==='priceLow') arr.sort((a,b)=>a.price-b.price);
+  else if(s==='priceHigh') arr.sort((a,b)=>b.price-a.price);
+  else if(s==='followers') arr.sort((a,b)=>b.followers-a.followers);
+  else if(s==='engagement') arr.sort((a,b)=>Number(b.engagement)-Number(a.engagement));
+  else if(s==='rating') arr.sort((a,b)=>sellerById(b.sellerId).rating-sellerById(a.sellerId).rating);
+  else arr.sort((a,b)=> (b.featured-a.featured) || (b.createdAt-a.createdAt));
+  return arr;
+}
+function marketResults(){ return sortList(applyFilters(api.getListings().filter(l=>l.status!=='draft'&&l.status!=='archived')), STATE.market.sort); }
+
+/* ---------------- RENDER ---------------- */
 function render(){
   document.documentElement.setAttribute('data-theme', THEME);
   renderNav();
   const app = document.getElementById('app');
-  if(STATE.detailId){ app.innerHTML = renderDetail(STATE.detailId); }
+  if(STATE.skeleton){ app.innerHTML = skeletonHTML(); }
+  else if(STATE.detailId){ app.innerHTML = renderDetail(STATE.detailId); }
   else if(STATE.tab==='home') app.innerHTML = renderHome();
-  else if(STATE.tab==='feed') app.innerHTML = renderFeed();
-  else if(STATE.tab==='my') app.innerHTML = renderMy();
+  else if(STATE.tab==='market') app.innerHTML = renderMarket();
+  else if(STATE.tab==='sell') app.innerHTML = renderSell();
   else if(STATE.tab==='profile') app.innerHTML = renderProfile();
   else if(STATE.tab==='admin') app.innerHTML = renderAdmin();
-  requestAnimationFrame(()=>{ try{ lucide.createIcons(); }catch(e){} initTimers(); });
+  requestAnimationFrame(()=>{ try{ lucide.createIcons(); }catch(e){} initBanner(); });
 }
-function go(tab){ STATE = {...STATE, tab, detailId:null}; haptic('light'); render(); window.scrollTo(0,0); }
-function openDetail(id){ STATE.detailId = id; haptic('light'); render(); window.scrollTo(0,0); }
-function closeDetail(){ STATE.detailId = null; render(); }
+function go(tab){ STATE.tab=tab; STATE.detailId=null; haptic('light');
+  if(tab!=='admin'){ STATE.skeleton=true; render(); setTimeout(()=>{ STATE.skeleton=false; render(); }, 380); }
+  else render();
+  window.scrollTo(0,0); }
+function openDetail(id){ STATE.detailId=id; haptic('light'); render(); window.scrollTo(0,0); }
+function closeDetail(){ STATE.detailId=null; render(); }
 
 function renderNav(){
   const items = [
     {id:'home', icon:'home', lbl:t('home')},
-    {id:'feed', icon:'file-text', lbl:t('feed')},
-    {id:'my', icon:'tag', lbl:t('my')},
+    {id:'market', icon:'store', lbl:t('market')},
+    {id:'sell', icon:'plus-square', lbl:t('sell')},
     {id:'profile', icon:'user', lbl:t('profile')},
   ];
   document.getElementById('bottomNav').innerHTML = items.map(it=>`
-    <button class="nav-item ${STATE.tab===it.id && !STATE.detailId ? 'active':''}" onclick="go('${it.id}')">
+    <button class="nav-item ${STATE.tab===it.id && !STATE.detailId ? 'active':''}" onclick="go('${it.id}')" aria-label="${it.lbl}">
       <div class="pill-bg"></div>
       <i data-lucide="${it.icon}" class="icon"></i>
       <span class="lbl">${it.lbl}</span>
     </button>`).join('');
 }
 
-/* ---------- CARD ---------- */
-function cardHTML(l){
+function skeletonHTML(){
+  return `<div class="view">
+    <div class="topbar"><div class="skel" style="width:140px;height:26px;border-radius:8px"></div><div class="skel" style="width:40px;height:40px;border-radius:50%"></div></div>
+    <div class="skel skel-banner"></div>
+    <div class="skel skel-row" style="margin-top:16px"></div>
+    <div class="skel skel-row"></div>
+    <div class="skel-grid"><div class="skel skel-card"></div><div class="skel skel-card"></div><div class="skel skel-card"></div><div class="skel skel-card"></div></div>
+  </div>`;
+}
+function topbarHTML(){
+  const unread = api.unreadCount();
+  return `<div class="topbar">
+    <div class="wordmark">savdo <span style="font-family:Inter;font-weight:700;font-size:14px;vertical-align:middle">Marketplace</span></div>
+    <div class="right">
+      <button class="icon-btn" onclick="openNotifications()" aria-label="notifications">
+        <i data-lucide="bell" class="icon"></i>
+        ${unread?`<span class="badge-dot">${unread}</span>`:''}
+      </button>
+    </div>
+  </div>`;
+}
+function openNotifications(){ STATE.tab='profile'; STATE.profile.tab='notifications'; go('profile'); }
+
+/* ---------------- CARDS ---------------- */
+function thumbHTML(l, cls){
+  return `<div class="${cls}" style="background:${catGrad(l.category)}"><span style="font-size:${cls==='list-thumb'?'13px':'18px'};font-weight:700;color:#20212b;word-break:break-word;text-align:center;padding:4px">${l.username.replace('@','')}</span></div>`;
+}
+function gridCardHTML(l){
   const favd = FAVS.includes(l.id);
+  const seller = sellerById(l.sellerId);
   return `<div class="card" onclick="openDetail('${l.id}')">
     <div class="card-preview" style="background:${catGrad(l.category)}">
+      ${l.status==='sold' ? `<div class="sold-overlay"><span>${t('sold').toUpperCase()}</span></div>`:''}
       <div class="card-badges">
-        ${l.hot?`<span class="pill hot"><i data-lucide="flame" style="width:9px;height:9px"></i>${t('hot')}</span>`:''}
-        ${l.verified?`<span class="pill verified"><i data-lucide="badge-check" style="width:9px;height:9px"></i></span>`:''}
+        ${l.featured&&l.status==='active'?`<span class="pill hot"><i data-lucide="flame" style="width:9px;height:9px"></i>Hot</span>`:''}
+        ${seller.verified?`<span class="pill verified"><i data-lucide="badge-check" style="width:9px;height:9px"></i></span>`:''}
       </div>
-      <button class="fav-btn ${favd?'active':''}" onclick="event.stopPropagation(); toggleFav('${l.id}')">
+      <button class="fav-btn ${favd?'active':''}" onclick="event.stopPropagation(); toggleFav('${l.id}')" aria-label="favorite">
         <i data-lucide="heart" class="icon" ${favd?'style="fill:currentColor"':''}></i>
       </button>
       <div class="at">${l.username}</div>
     </div>
     <div class="card-body">
-      <div class="name">${l.username}</div>
-      <div class="price">${l.saleType==='auction' ? fmtPrice(l.currentBid) : fmtPrice(l.price)}</div>
-      <div class="rarity-dots">${[0,1,2].map(i=> `<span class="${ (l.rarity>=((i+1)*33)) ?'on':''}"></span>`).join('')}</div>
+      <div class="name">${l.username} ${seller.verified?'<i data-lucide="badge-check" class="icon" style="width:12px;height:12px;color:var(--success)"></i>':''}</div>
+      <div class="price">${fmtPrice(l.price, l.currency)}</div>
+      ${l.followers?`<div class="sub">${fmtNum(l.followers)} ${t('followers').toLowerCase()} · ER ${l.engagement}%</div>`:`<div class="sub">${catName(l.category)}</div>`}
+      <div class="card-foot">
+        <span style="font-size:11px;color:var(--text-2)">★ ${seller.rating}</span>
+        ${statusChip(l.status)}
+      </div>
+    </div>
+  </div>`;
+}
+function listRowHTML(l){
+  const favd = FAVS.includes(l.id);
+  const seller = sellerById(l.sellerId);
+  return `<div class="list-row" onclick="openDetail('${l.id}')">
+    <div style="position:relative">
+      ${thumbHTML(l,'list-thumb')}
+      ${l.status==='sold'?`<div class="sold-overlay" style="border-radius:12px"><span style="font-size:9px">${t('sold').toUpperCase()}</span></div>`:''}
+    </div>
+    <div class="list-info">
+      <div class="nm">${l.username} ${seller.verified?'<i data-lucide="badge-check" class="icon" style="width:12px;height:12px;color:var(--success)"></i>':''}</div>
+      <div class="meta"><span class="pill type">${catName(l.category)}</span></div>
+      ${l.followers?`<div class="meta"><span>${fmtNum(l.followers)} ${t('followers').toLowerCase()}</span><span>ER ${l.engagement}%</span></div>`:''}
+      <div class="pr">${fmtPrice(l.price, l.currency)}</div>
+    </div>
+    <div class="list-side">
+      <button class="fav-btn ${favd?'active':''}" style="position:static;background:var(--surface-2)" onclick="event.stopPropagation(); toggleFav('${l.id}')">
+        <i data-lucide="heart" class="icon" ${favd?'style="fill:currentColor"':''}></i>
+      </button>
+      <div style="text-align:right"><span style="font-size:11px;color:var(--text-2)">★ ${seller.rating}</span><div style="margin-top:4px">${statusChip(l.status)}</div></div>
     </div>
   </div>`;
 }
 function toggleFav(id){
-  if(FAVS.includes(id)){ FAVS = FAVS.filter(f=>f!==id); toast(t('favRemoved')); }
-  else { FAVS.push(id); toast(t('favAdded')); haptic('medium'); }
+  if(FAVS.includes(id)){ FAVS=FAVS.filter(f=>f!==id); }
+  else { FAVS.push(id); haptic('medium'); }
   saveFavs(); render();
 }
 
-/* ---------- HOME ---------- */
+/* ---------------- HOME ---------------- */
 function renderHome(){
-  const featured = LISTINGS.slice().sort((a,b)=> b.rarity-a.rarity).slice(0,8);
+  const featured = api.getListings().filter(l=>l.featured && l.status==='active');
+  let latest = api.getListings().filter(l=>l.status!=='draft' && l.status!=='archived' && !l.featured);
+  latest = sortList(latest, STATE.homeSort==='newest'?'newest':STATE.homeSort==='price'?'priceLow':'recommended').slice(0,8);
   return `<div class="view">
     ${topbarHTML()}
-    ${searchHTML()}
-    <div class="section">
-      <div class="section-head"><h3>${t('categories')}</h3></div>
-    </div>
+    ${searchHTML(true)}
+    <div class="section"><div class="section-head"><h3>${t('categories')}</h3></div></div>
     <div class="cat-row">
-      ${CATS.map(c=>`<div class="cat-tile ${STATE.catFilter===c.id?'active':''}" onclick="STATE.catFilter='${c.id}'; go('feed')">${c.name[LANG]}</div>`).join('')}
+      ${CATS.map(c=>`<div class="cat-tile" onclick="STATE.market.cat='${c.id}'; STATE.market.q=''; saveMarket(); go('market')">${c.name[LANG==='uz'?'uz':LANG==='en'?'en':'ru']}</div>`).join('')}
     </div>
     <div class="banner-wrap">
       <div class="banner-track" id="bannerTrack">
-        ${BANNERS.map((b,i)=>`<div class="banner-slide"><img src="${b}" loading="lazy"><div class="banner-cap">Savdo Premium</div></div>`).join('')}
+        ${BANNERS.map(b=>`<div class="banner-slide"><img src="${b}" loading="lazy" alt=""><div class="banner-cap">Savdo Premium</div></div>`).join('')}
       </div>
       <div class="dots" id="bannerDots">${BANNERS.map((_,i)=>`<div class="dot ${i===0?'active':''}"></div>`).join('')}</div>
     </div>
-    <div class="section">
-      <div class="section-head"><h3>${t('featured')}</h3><span class="see-all" onclick="go('feed')">${t('seeAll')}</span></div>
+    <div class="section"><div class="section-head"><h3>${t('featured')}</h3><span class="see-all" onclick="go('market')">${t('seeAll')}</span></div></div>
+    <div class="feat-track">
+      ${featured.map(l=>featCardHTML(l)).join('')}
     </div>
-    <div class="grid-2">${featured.map(cardHTML).join('')}</div>
-    ${disclaimerHTML()}
-  </div>`;
-}
-
-function topbarHTML(){
-  return `<div class="topbar">
-    <div class="wordmark">savdo <span style="font-family:Inter;font-weight:700;font-size:14px;vertical-align:middle">Usernames</span></div>
-    <div class="right">
-      <button class="icon-btn" onclick="openMenu()"><i data-lucide="menu" class="icon"></i></button>
-    </div>
-  </div>`;
-}
-function searchHTML(){
-  return `<div class="search-wrap">
-    <div class="search-box"><i data-lucide="search" class="icon"></i><input placeholder="${t('search')}" oninput="doSearch(this.value)"></div>
-  </div>
-  <div class="search-wrap">
-    <div class="search-box"><i data-lucide="sliders-horizontal" class="icon"></i><input placeholder="${t('searchOwner')}"></div>
-    <div class="sq-btn" onclick="toast(t('saved'))"><i data-lucide="user" class="icon"></i></div>
-  </div>`;
-}
-let searchQuery = '';
-function doSearch(v){ searchQuery = v.toLowerCase(); if(STATE.tab!=='feed'){ go('feed'); } else render(); }
-
-/* ---------- FEED ---------- */
-function renderFeed(){
-  let items = LISTINGS.slice().sort((a,b)=>b.created-a.created);
-  if(searchQuery) items = items.filter(l=>l.username.toLowerCase().includes(searchQuery));
-  if(STATE.catFilter && STATE.catFilter!=='all') items = items.filter(l=>l.category===STATE.catFilter);
-  const chips = [{id:'all',lbl:t('all')}, ...CATS.map(c=>({id:c.id,lbl:c.name[LANG]}))];
-  return `<div class="view">
-    ${topbarHTML()}
-    ${searchHTML()}
-    <div class="section"><div class="section-head"><h3>${t('feed')}</h3></div></div>
-    <div class="chips-row">${chips.map(c=>`<div class="chip ${STATE.catFilter===c.id?'active':''}" onclick="STATE.catFilter='${c.id}'; render()">${c.lbl}</div>`).join('')}</div>
-    ${items.length? `<div class="grid-2" style="margin-top:10px">${items.map(cardHTML).join('')}</div>` : emptyState()}
-    ${disclaimerHTML()}
-  </div>`;
-}
-
-/* ---------- MY LISTINGS ---------- */
-function renderMy(){
-  const mine = LISTINGS.filter(l=>l.ownerId===CURRENT_UID);
-  const favItems = LISTINGS.filter(l=>FAVS.includes(l.id));
-  const filt = STATE.myFilter||'mine';
-  const items = filt==='mine' ? mine : favItems;
-  return `<div class="view">
-    ${topbarHTML()}
-    <div class="section"><div class="section-head"><h3>${t('myListings')}</h3>
-      <span class="see-all" onclick="openCreateSheet()"><i data-lucide="plus" class="icon" style="width:16px;height:16px;vertical-align:middle"></i></span>
+    <div class="section"><div class="section-head"><h3>${t('recommended')}</h3>
+      <span class="see-all" onclick="STATE.homeSort = STATE.homeSort==='newest'?'price':STATE.homeSort==='price'?'popular':'newest'; render()">${t('sortNewest')} / ${t('sortPrice')} / ${t('sortPopular')} ▾</span>
     </div></div>
+    <div class="grid-2">${latest.map(gridCardHTML).join('')}</div>
+    ${disclaimerHTML()}
+  </div>`;
+}
+function featCardHTML(l){
+  const favd = FAVS.includes(l.id);
+  const seller = sellerById(l.sellerId);
+  return `<div class="feat-card" onclick="openDetail('${l.id}')">
+    <div class="feat-hero" style="background:${catGrad(l.category)}">
+      <button class="fav-btn ${favd?'active':''}" onclick="event.stopPropagation(); toggleFav('${l.id}')">
+        <i data-lucide="heart" class="icon" ${favd?'style="fill:currentColor"':''}></i>
+      </button>
+      <div class="uname">${l.username}</div>
+    </div>
+    <div class="feat-body">
+      <div class="nm">${l.username} ${seller.verified?'<i data-lucide="badge-check" class="icon" style="width:13px;height:13px;color:var(--success)"></i>':''}</div>
+      <div class="meta">
+        <span>${catName(l.category)}</span>
+        ${l.followers?`<span>${fmtNum(l.followers)} ${t('followers').toLowerCase()}</span><span>ER ${l.engagement}%</span>`:''}
+        <span>★ ${seller.rating}</span>
+      </div>
+      <div class="price-row"><span class="price">${fmtPrice(l.price,l.currency)}</span>
+        <i data-lucide="chevron-right" class="icon" style="color:var(--text-2)"></i></div>
+    </div>
+  </div>`;
+}
+let searchTimer=null;
+function searchHTML(withSuggest){
+  const q = STATE.market.q;
+  const sugg = (withSuggest && q) ? applyFilters(api.getListings()).slice(0,5) : [];
+  const showRecent = withSuggest && !q && RECENT.length;
+  return `<div class="search-wrap">
+    <div class="search-box">
+      <i data-lucide="search" class="icon"></i>
+      <input id="searchInput" placeholder="${t('search')}" value="${q.replace(/"/g,'&quot;')}"
+        oninput="onSearch(this.value)" onkeydown="if(event.key==='Enter')submitSearch()" enterkeyhint="search">
+      ${q?`<button class="clear-btn" onclick="STATE.market.q=''; saveMarket(); render()"><i data-lucide="x" class="icon"></i></button>`:''}
+    </div>
+    <button class="sq-btn" onclick="openFilterSheet()" aria-label="${t('filters')}"><i data-lucide="sliders-horizontal" class="icon"></i></button>
+  </div>
+  ${sugg.length?`<div class="suggest">${sugg.map(l=>`
+    <div class="suggest-item" onclick="pushRecent('${l.username}'); openDetail('${l.id}')">
+      <i data-lucide="at-sign" class="icon"></i><b>${l.username}</b>
+      <span style="color:var(--text-2);font-size:12px">${catName(l.category)}</span>
+    </div>`).join('')}
+    <div class="suggest-item" onclick="submitSearch()"><i data-lucide="arrow-right" class="icon"></i><span style="font-size:12px">${t('seeAll')}</span></div>
+  </div>`:''}
+  ${showRecent?`<div style="padding:0 16px"><div class="count-note" style="margin:6px 0 6px">${t('recent')}</div></div>
+    <div class="recent-row">${RECENT.map(r=>`<span class="recent-chip" onclick="STATE.market.q='${r}'; saveMarket(); go('market')"><i data-lucide="clock" class="icon"></i>${r}</span>`).join('')}</div>`:''}`;
+}
+function onSearch(v){
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{ STATE.market.q=v; render(); restoreFocus(); }, 300);
+}
+function restoreFocus(){
+  const inp = document.getElementById('searchInput');
+  if(inp){ inp.focus(); try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(e){} }
+}
+function submitSearch(){
+  const v = (document.getElementById('searchInput')||{}).value || STATE.market.q;
+  if(v) pushRecent(v.trim());
+  go('market');
+}
+function saveMarket(){ store.set('savdo_market', STATE.market); }
+
+/* ---------------- MARKET ---------------- */
+function renderMarket(){
+  const res = marketResults();
+  const f = STATE.market;
+  const activeFilters = (f.cat!=='all')+(f.priceMin!=='')+(f.priceMax!=='')+(f.folMin!=='')+(f.engMin!=='')+(f.country!=='all')+(f.language!=='all')+f.verified+(f.availability!=='all');
+  return `<div class="view">
+    ${topbarHTML()}
+    ${searchHTML(false)}
     <div class="chips-row">
-      <div class="chip ${filt==='mine'?'active':''}" onclick="STATE.myFilter='mine'; render()">${t('my')} (${mine.length})</div>
-      <div class="chip ${filt==='fav'?'active':''}" onclick="STATE.myFilter='fav'; render()">♥ ${FAVS.length}</div>
-    </div>
-    ${items.length? `<div class="grid-2" style="margin-top:10px">${items.map(cardHTML).join('')}</div>` : emptyState(filt==='fav'?t('emptyFav'):t('empty'))}
-    <div style="padding:16px"><button class="btn btn-primary" onclick="openCreateSheet()"><i data-lucide="plus" class="icon"></i>${t('addListing')}</button></div>
-    ${disclaimerHTML()}
-  </div>`;
-}
-function openCreateSheet(){
-  openSheet(`<h3>${t('addListing')}</h3>
-    <div class="field"><label>${t('username')}</label><input id="cf_name" placeholder="@username"></div>
-    <div class="field"><label>${t('category')}</label><select id="cf_cat">${CATS.map(c=>`<option value="${c.id}">${c.name[LANG]}</option>`).join('')}</select></div>
-    <div class="field"><label>${t('saleType')}</label><select id="cf_type"><option value="buy">${t('buy')}</option><option value="offer">${t('offer')}</option><option value="auction">${t('auction')}</option></select></div>
-    <div class="field"><label>${t('price')}</label><input id="cf_price" type="number" placeholder="1000000"></div>
-    <div class="field"><label>${t('description')}</label><textarea id="cf_desc"></textarea></div>
-    <button class="btn btn-primary" onclick="submitCreate()">${t('create')}</button>`);
-}
-function submitCreate(){
-  const name = document.getElementById('cf_name').value.trim();
-  if(!name){ toast('@username?'); return; }
-  const price = Number(document.getElementById('cf_price').value) || 500000;
-  const cat = document.getElementById('cf_cat').value;
-  const stype = document.getElementById('cf_type').value;
-  const id = 'u'+Date.now();
-  LISTINGS.unshift({ id, username: name.startsWith('@')?name:'@'+name, category:cat, saleType:stype, price,
-    rarity: rarityScore(name), verified:false, topSeller:false, hot:false,
-    auctionEnd: stype==='auction'? Date.now()+86400000*2 : null, currentBid: stype==='auction'? Math.round(price*0.6):null,
-    seller:{id:CURRENT_UID, name:CURRENT_UNAME, rating:'5.0', deals:0}, ownerId:CURRENT_UID, favorited:false, views:0,
-    priceHistory:[price], created:Date.now(), desc:{ru:document.getElementById('cf_desc').value||'',uz:'',en:''} });
-  saveListings(); closeSheet(); toast(t('listingCreated')); go('my');
-}
-
-/* ---------- PROFILE ---------- */
-function renderProfile(){
-  const mine = LISTINGS.filter(l=>l.ownerId===CURRENT_UID);
-  const admin = isAdmin();
-  return `<div class="view">
-    ${topbarHTML()}
-    <div class="profile-top">
-      <div class="avatar-wrap">
-        <div class="avatar">${(CURRENT_UNAME||'S')[0].toUpperCase()}</div>
-        <button class="plus-btn" onclick="toast('Demo: upload avatar')"><i data-lucide="plus" class="icon"></i></button>
+      <div class="view-toggle">
+        <button class="${f.view==='grid'?'active':''}" onclick="STATE.market.view='grid'; saveMarket(); render()" aria-label="grid"><i data-lucide="layout-grid" class="icon"></i></button>
+        <button class="${f.view==='list'?'active':''}" onclick="STATE.market.view='list'; saveMarket(); render()" aria-label="list"><i data-lucide="rows-3" class="icon"></i></button>
       </div>
-      <div>
-        <div style="font-weight:700; font-size:16px">${CURRENT_UNAME}</div>
-        <div class="profile-stats">
-          <div><b>${mine.length}</b>${t('my')}</div>
-          <div><b>${12}</b>${t('deals')}</div>
-          <div><b>4.9</b>${t('rating')}</div>
-        </div>
-      </div>
+      <span class="chip" onclick="openSortSheet()"><i data-lucide="arrow-up-down" class="icon" style="width:13px;height:13px;vertical-align:-2px"></i> ${t(f.sort==='recommended'?'recommended_':f.sort==='priceLow'?'priceLow':f.sort==='priceHigh'?'priceHigh':f.sort==='followers'?'mostFollowers':f.sort==='engagement'?'highEngagement':f.sort==='rating'?'bestRated':'newest')}</span>
+      <span class="chip ${activeFilters?'active':''}" onclick="openFilterSheet()"><i data-lucide="sliders-horizontal" class="icon" style="width:13px;height:13px;vertical-align:-2px"></i> ${t('filters')}${activeFilters?` (${activeFilters})`:''}</span>
     </div>
-    <div class="stories-row">
-      ${['Короткие','VIP','Избранное','Сделки','Отзывы'].map((s,i)=>`
-        <div class="story"><div class="ring"><div>${s[0]}</div></div><span>${s}</span></div>`).join('')}
+    <div class="chips-row">
+      <span class="chip ${f.cat==='all'?'active':''}" onclick="STATE.market.cat='all'; saveMarket(); render()">${t('any')}</span>
+      ${CATS.map(c=>`<span class="chip ${f.cat===c.id?'active':''}" onclick="STATE.market.cat='${c.id}'; saveMarket(); render()">${c.name[LANG==='uz'?'uz':LANG==='en'?'en':'ru']}</span>`).join('')}
     </div>
-    <div class="ptabs">
-      <div class="ptab active"><i data-lucide="layout-grid" class="icon"></i></div>
-      <div class="ptab"><i data-lucide="gavel" class="icon"></i></div>
-      <div class="ptab"><i data-lucide="star" class="icon"></i></div>
-    </div>
-    <div class="settings-list">
-      <div class="srow"><div class="left"><i data-lucide="moon" class="icon"></i>${t('theme')}</div>
-        <div class="switch ${THEME==='dark'?'on':''}" onclick="toggleTheme()"><i></i></div></div>
-      <div class="srow"><div class="left"><i data-lucide="globe" class="icon"></i>${t('language')}</div>
-        <div class="lang-pick">
-          <button class="${LANG==='ru'?'active':''}" onclick="setLang('ru')">RU</button>
-          <button class="${LANG==='uz'?'active':''}" onclick="setLang('uz')">UZ</button>
-          <button class="${LANG==='en'?'active':''}" onclick="setLang('en')">EN</button>
-        </div></div>
-      <div class="srow" onclick="toast('t.me/savdouser_bot?start=ref_'+${CURRENT_UID}); copyRef()" style="cursor:pointer">
-        <div class="left"><i data-lucide="share-2" class="icon"></i>${t('referral')}</div>
-        <div style="color:var(--accent); font-weight:600; font-size:13px">${t('copyLink')}</div></div>
-      <div class="srow" style="border-bottom:none"><div class="left"><i data-lucide="shield-check" class="icon"></i>${t('about')}</div></div>
-    </div>
-    ${admin ? `<div class="admin-entry" onclick="go('admin')">
-      <div style="display:flex; align-items:center; gap:10px"><i data-lucide="lock" class="icon"></i><b>${t('admin')}</b></div>
-      <i data-lucide="chevron-right" class="icon"></i></div>` : ''}
+    <div style="padding:0 16px 8px"><span class="count-note"><b>${res.length}</b> ${t('listingsFound')}</span></div>
+    ${res.length ? (
+      f.view==='list'
+      ? `<div style="display:flex;flex-direction:column;gap:10px;padding:0 16px">${res.map(listRowHTML).join('')}</div>`
+      : `<div class="grid-2">${res.map(gridCardHTML).join('')}</div>`
+    ) : `<div class="empty-state"><i data-lucide="search-x" class="icon"></i><div>${t('emptySearch')}</div>
+      <button class="btn btn-ghost" style="margin:16px auto 0; width:auto" onclick="resetFilters()">${t('reset')}</button></div>`}
     ${disclaimerHTML()}
   </div>`;
 }
-function toggleTheme(){ THEME = THEME==='dark'?'light':'dark'; localStorage.setItem('savdo_theme',THEME); render(); }
-function setLang(l){ LANG=l; localStorage.setItem('savdo_lang',LANG); render(); }
-function copyRef(){ const link = `https://t.me/savdouser_bot?start=ref_${CURRENT_UID}`; navigator.clipboard && navigator.clipboard.writeText(link).catch(()=>{}); }
+function resetFilters(){ STATE.market=Object.assign({}, DEFAULT_MARKET); saveMarket(); render(); }
 
-/* ---------- ADMIN ---------- */
-function renderAdmin(){
-  if(!isAdmin()){
-    return `<div class="view">${topbarHTML()}<div class="empty-state"><i data-lucide="lock" class="icon"></i><div>${t('denied')}</div>
-      <button class="btn btn-outline" style="margin-top:16px" onclick="go('profile')">${t('profile')}</button></div></div>`;
-  }
-  const totalVol = LISTINGS.reduce((s,l)=>s+l.price,0);
-  return `<div class="view">
-    ${topbarHTML()}
-    <div class="section"><div class="section-head"><h3>${t('adminTitle')}</h3></div></div>
-    <div class="section" style="display:flex; gap:10px">
-      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">Lots</div><div style="font-size:20px;font-weight:700">${LISTINGS.length}</div></div>
-      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">GMV</div><div style="font-size:20px;font-weight:700">${fmtPrice(totalVol)}</div></div>
-    </div>
-    <div class="section"><div class="section-head"><h3>${t('adminListings')}</h3></div></div>
-    <div style="padding:0 16px">
-      ${LISTINGS.slice(0,30).map(l=>`
-        <div class="srow">
-          <div class="left"><span style="font-weight:600">${l.username}</span><span style="color:var(--text-2); font-size:12px">· ${fmtPrice(l.price)}</span></div>
-          <div style="display:flex; gap:6px">
-            <button class="chip" onclick="adminToggleHot('${l.id}')">${l.hot?t('unfeature'):t('feature')}</button>
-            <button class="chip" style="color:var(--danger)" onclick="adminDelete('${l.id}')">${t('delete')}</button>
-          </div>
-        </div>`).join('')}
-    </div>
-    ${disclaimerHTML()}
-  </div>`;
+function openFilterSheet(){
+  const f = STATE.market;
+  openSheet(`<h3>${t('filters')}</h3>
+    <div class="field"><label>${t('priceRange')} (UZS)</label>
+      <div style="display:flex;gap:8px">
+        <input id="f_pmin" type="number" inputmode="numeric" placeholder="min" value="${f.priceMin}">
+        <input id="f_pmax" type="number" inputmode="numeric" placeholder="max" value="${f.priceMax}">
+      </div></div>
+    <div class="field"><label>${t('followers')} ≥</label><input id="f_fol" type="number" inputmode="numeric" placeholder="0" value="${f.folMin}"></div>
+    <div class="field"><label>${t('engagement')} ≥ %</label><input id="f_eng" type="number" inputmode="decimal" placeholder="0" value="${f.engMin}"></div>
+    <div class="field"><label>${t('category')}</label><select id="f_cat">
+      <option value="all">${t('any')}</option>
+      ${CATS.map(c=>`<option value="${c.id}" ${f.cat===c.id?'selected':''}>${c.name.ru}</option>`).join('')}</select></div>
+    <div class="field"><label>${t('country')}</label><select id="f_country">
+      <option value="all">${t('any')}</option>
+      ${COUNTRIES.map(c=>`<option value="${c}" ${f.country===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="field"><label>${t('language')}</label><select id="f_lang">
+      <option value="all">${t('any')}</option>
+      ${LANGS_LIST.map(c=>`<option value="${c}" ${f.language===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="srow" style="border:none;padding:6px 0"><div class="left"><i data-lucide="badge-check" class="icon" style="color:var(--success)"></i>${t('verifiedSeller')}</div>
+      <div class="switch ${f.verified?'on':''}" id="f_ver" onclick="this.classList.toggle('on')"><i></i></div></div>
+    <div class="field"><label>${t('availability')}</label><select id="f_avail">
+      <option value="all">${t('any')}</option>
+      <option value="available" ${f.availability==='available'?'selected':''}>${t('available')}</option>
+      <option value="reserved" ${f.availability==='reserved'?'selected':''}>${t('reserved')}</option>
+      <option value="sold" ${f.availability==='sold'?'selected':''}>${t('sold')}</option></select></div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" onclick="resetFilters(); closeSheet()">${t('reset')}</button>
+      <button class="btn btn-primary" onclick="applyFilterSheet()">${t('showResults')}</button>
+    </div>`);
 }
-function adminToggleHot(id){ const l=LISTINGS.find(x=>x.id===id); if(l){ l.hot=!l.hot; saveListings(); render(); } }
-function adminDelete(id){ LISTINGS = LISTINGS.filter(x=>x.id!==id); saveListings(); render(); }
+function applyFilterSheet(){
+  const f = STATE.market;
+  f.priceMin = document.getElementById('f_pmin').value;
+  f.priceMax = document.getElementById('f_pmax').value;
+  f.folMin = document.getElementById('f_fol').value;
+  f.engMin = document.getElementById('f_eng').value;
+  f.cat = document.getElementById('f_cat').value;
+  f.country = document.getElementById('f_country').value;
+  f.language = document.getElementById('f_lang').value;
+  f.verified = document.getElementById('f_ver').classList.contains('on');
+  f.availability = document.getElementById('f_avail').value;
+  saveMarket(); closeSheet(); render();
+}
+function openSortSheet(){
+  const opts = [['recommended','recommended_'],['newest','newest'],['priceLow','priceLow'],['priceHigh','priceHigh'],
+    ['followers','mostFollowers'],['engagement','highEngagement'],['rating','bestRated']];
+  openSheet(`<h3>${t('sort')}</h3>
+    ${opts.map(([v,k])=>`<div class="sort-opt" onclick="STATE.market.sort='${v}'; saveMarket(); closeSheet(); render()">
+      <span>${t(k)}</span>${STATE.market.sort===v?'<i data-lucide="check" class="icon" style="color:var(--accent)"></i>':''}
+    </div>`).join('')}`);
+}
 
-/* ---------- DETAIL ---------- */
+/* ---------------- LISTING DETAIL ---------------- */
 function renderDetail(id){
-  const l = LISTINGS.find(x=>x.id===id);
+  const l = api.getListing(id);
   if(!l) return renderHome();
-  const seller = l.seller;
-  const circumference = 2*Math.PI*26;
-  const dash = circumference * (l.rarity/100);
-  const chatMsgs = [
-    {in:true, text: LANG==='ru'?'Здравствуйте! Аккаунт активен?':'Salom! Hisob faol-mi?'},
-    {in:false, text: LANG==='ru'?'Да, передам сразу после оплаты через эскроу.':'Ha, eskrou orqali to‘lovdan so‘ng darhol topshiraman.'},
-    {in:true, text: `[${t('maskedWarn')}]`}
-  ];
-  const reviews = [
-    {name:'Dilshod', stars:5, text: LANG==='ru'?'Всё быстро и честно, рекомендую':'Hammasi tez va halol'},
-    {name:'Amira', stars:4, text: LANG==='ru'?'Хороший продавец, чуть долго ждал передачу':'Yaxshi sotuvchi'}
-  ];
-  const similar = LISTINGS.filter(x=>x.category===l.category && x.id!==l.id).slice(0,4);
+  const s = sellerById(l.sellerId);
+  const favd = FAVS.includes(l.id);
+  const isAccount = l.followers>0;
+  const sold = l.status==='sold', reserved = l.status==='reserved';
   return `<div class="view">
     <div style="position:relative">
       <div class="detail-hero" style="background:${catGrad(l.category)}">
-        <button class="back-fab" onclick="closeDetail()"><i data-lucide="chevron-left" class="icon"></i></button>
+        <button class="back-fab" onclick="closeDetail()" aria-label="back"><i data-lucide="chevron-left" class="icon"></i></button>
+        <div class="av-ring">${(l.displayName||l.username.replace('@',''))[0].toUpperCase()}</div>
         <div class="at">${l.username}</div>
+        ${sold?`<div class="sold-overlay" style="border-radius:20px"><span>${t('sold').toUpperCase()}</span></div>`:''}
       </div>
     </div>
-    <div class="card-badges" style="position:static; display:flex; gap:6px; padding:12px 16px 0">
-      ${l.verified?`<span class="pill verified"><i data-lucide="badge-check" style="width:10px;height:10px"></i>${t('verified')}</span>`:''}
-      ${l.topSeller?`<span class="pill" style="background:#1a1a1a"><i data-lucide="star" style="width:10px;height:10px"></i>${t('topSeller')}</span>`:''}
-      ${l.hot?`<span class="pill hot"><i data-lucide="flame" style="width:10px;height:10px"></i>${t('hot')}</span>`:''}
+    <div style="display:flex; gap:6px; padding:12px 16px 0; flex-wrap:wrap">
+      <span class="pill type">${catName(l.category)}</span>
+      ${s.verified?`<span class="pill verified"><i data-lucide="badge-check" style="width:10px;height:10px"></i>${t('verified').length?'Verified':''}</span>`:''}
+      ${l.featured?`<span class="pill hot"><i data-lucide="flame" style="width:10px;height:10px"></i>Hot</span>`:''}
+      ${statusChip(l.status)}
     </div>
     <div class="price-row" style="margin-top:10px">
-      <div><div class="label">${l.saleType==='auction'? t('bid') : t('price')}</div><div class="amt">${fmtPrice(l.saleType==='auction'?l.currentBid:l.price)}</div></div>
-      <button class="fav-btn" style="position:static; background:var(--surface-2)" onclick="toggleFav('${l.id}')"><i data-lucide="heart" class="icon" style="color:${FAVS.includes(l.id)?'var(--danger)':'var(--text)'}"></i></button>
+      <div><div class="label">${t('priceLbl')}</div><div class="amt">${fmtPrice(l.price, l.currency)}</div></div>
+      <div style="display:flex; gap:8px">
+        <button class="icon-btn" onclick="toggleFav('${l.id}')" aria-label="favorite"><i data-lucide="heart" class="icon" style="color:${favd?'var(--danger)':'var(--text)'}" ${favd?'fill="currentColor"':''}></i></button>
+        <button class="icon-btn" onclick="shareListing('${l.id}')" aria-label="share"><i data-lucide="share-2" class="icon"></i></button>
+        <button class="icon-btn" onclick="openReportSheet('${l.id}')" aria-label="report"><i data-lucide="flag" class="icon"></i></button>
+      </div>
     </div>
-    ${l.saleType==='auction' ? `<div style="padding:10px 16px"><span class="timer-pill" id="timer_${l.id}" data-end="${l.auctionEnd}">⏱ ${t('auctionEnds')}: --:--:--</span></div>` : ''}
-
-    <div class="rarity-ring-wrap">
-      <svg width="60" height="60" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="26" fill="none" stroke="var(--border)" stroke-width="5"/>
-        <circle cx="30" cy="30" r="26" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="${dash} ${circumference}" stroke-linecap="round" transform="rotate(-90 30 30)"/>
-        <text x="30" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">${l.rarity}</text>
-      </svg>
-      <div><div style="font-weight:600; font-size:13px">${t('rarity')}</div><div style="font-size:12px; color:var(--text-2)">0–100, ${LANG==='ru'?'авторасчёт по длине и редкости':LANG==='uz'?'uzunlik va noyoblik bo‘yicha':'auto by length & rarity'}</div></div>
+    ${isAccount?`
+    <div class="section"><div class="section-head"><h3>${t('stats')}</h3></div></div>
+    <div class="stats-grid">
+      <div class="stat-tile"><b>${fmtNum(l.followers)}</b><span>${t('followers')}</span></div>
+      <div class="stat-tile"><b>${fmtNum(l.following)}</b><span>${t('following')}</span></div>
+      <div class="stat-tile"><b>${fmtNum(l.posts)}</b><span>${t('posts')}</span></div>
+      <div class="stat-tile"><b>${l.engagement}%</b><span>${t('engagement')}</span></div>
+      <div class="stat-tile"><b>${l.accountAge} ${LANG==='ru'?'мес':LANG==='uz'?'oy':'mo'}</b><span>${t('accountAge')}</span></div>
+      <div class="stat-tile"><b>${l.niche||'—'}</b><span>${t('niche')}</span></div>
+    </div>`:''}
+    <div class="section"><div class="section-head"><h3>${t('description')}</h3></div></div>
+    <div class="desc-block">${l.description||'—'}</div>
+    <div style="height:12px"></div>
+    <div class="tag-row">${(l.tags||[]).map(x=>`<span class="tag">#${x}</span>`).join('')}</div>
+    <div class="dates-row" style="margin-top:12px">
+      <span>${t('created')}: ${new Date(l.createdAt).toLocaleDateString()}</span>
+      <span>${t('updated')}: ${new Date(l.updatedAt).toLocaleDateString()}</span>
     </div>
 
     <div class="seller-row">
-      <div class="av">${seller.name[0]}</div>
-      <div class="meta"><div class="nm">${seller.name} ${l.verified?'<i data-lucide="badge-check" class="icon" style="width:13px;height:13px;color:var(--success)"></i>':''}</div>
-      <div class="st">★ ${seller.rating} · ${seller.deals} ${t('deals')}</div></div>
-      <button class="icon-btn" onclick="toast(t('report'))"><i data-lucide="flag" class="icon"></i></button>
+      <div class="av">${s.username[0].toUpperCase()}</div>
+      <div class="meta">
+        <div class="nm">@${s.username} ${s.verified?'<span class="verified-chip"><i data-lucide="badge-check" class="icon"></i>Verified</span>':''}</div>
+        <div class="st">★ ${s.rating} · ${s.completedDeals} ${t('deals')} · ${s.responseTime} ${t('respTime')}<br>${t('memberSince')} ${s.memberSince}</div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="toast(t('demoSoon'))">${t('viewSeller')}</button>
     </div>
 
-    <div class="section"><div class="section-head"><h3>${t('escrow')}</h3></div></div>
-    <div class="escrow-steps">
-      <div class="estep done"><div class="dot"><i data-lucide="check" style="width:12px;height:12px"></i></div><div class="txt"><b>${t('step1')}</b><span>${t('escrow')}</span></div></div>
-      <div class="estep"><div class="dot"><i data-lucide="clock" style="width:12px;height:12px; color:var(--text-2)"></i></div><div class="txt"><b>${t('step2')}</b></div></div>
-      <div class="estep"><div class="dot"></div><div class="txt"><b>${t('step3')}</b></div></div>
-      <div class="estep"><div class="dot"></div><div class="txt"><b>${t('step4')}</b></div></div>
+    <div class="section"><div class="section-head"><h3>${t('safety')}</h3></div></div>
+    <div class="safety-block" style="margin-bottom:16px">
+      <div class="safe-item"><i data-lucide="shield-check" class="icon"></i><span>${t('payProtect')}</span></div>
+      <div class="safe-item"><i data-lucide="lock" class="icon"></i><span>${t('noPass')}</span></div>
+      <div class="safe-item"><i data-lucide="refresh-ccw" class="icon"></i><span>${t('secureTransfer')}</span></div>
+      <div class="safe-item"><i data-lucide="message-square-warning" class="icon"></i><span>${t('dispute')}</span></div>
     </div>
-
-    <div class="section"><div class="section-head"><h3>${t('priceHistory')}</h3></div></div>
-    <div class="sparkline"><svg width="100%" height="60" viewBox="0 0 300 60" preserveAspectRatio="none">
-      <polyline fill="none" stroke="var(--accent)" stroke-width="2.5" points="${l.priceHistory.map((p,i)=>`${(i/(l.priceHistory.length-1))*300},${60 - ( (p-Math.min(...l.priceHistory)) / (Math.max(...l.priceHistory)-Math.min(...l.priceHistory)+1) )*50 - 5}`).join(' ')}"/>
-    </svg><div style="font-size:12px; color:var(--text-2); margin-top:6px">${t('fairPrice')}: ${fmtPrice(Math.round(l.priceHistory.reduce((a,b)=>a+b,0)/l.priceHistory.length))}</div></div>
-
-    ${similar.length? `<div class="section"><div class="section-head"><h3>${t('similar')}</h3></div></div>
-    <div class="grid-2">${similar.map(cardHTML).join('')}</div>` : ''}
-
-    <div class="section"><div class="section-head"><h3>${t('chat')}</h3></div></div>
-    <div class="chat-box">
-      <div class="chat-msgs" id="chatMsgs">${chatMsgs.map(m=>`<div class="msg ${m.in?'in':'out'}">${m.text}</div>`).join('')}</div>
-      <div class="chat-input"><input id="chatInput" placeholder="${t('newMsg')}" onkeydown="if(event.key==='Enter')sendChat('${l.id}')"><button class="icon-btn" onclick="sendChat('${l.id}')"><i data-lucide="send" class="icon"></i></button></div>
-    </div>
-
-    <div class="section"><div class="section-head"><h3>${t('reviews')}</h3></div></div>
-    ${reviews.map(r=>`<div class="review"><div class="top"><span>${r.name}</span><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span></div><div style="font-size:12px; color:var(--text-2); margin-top:4px">${r.text}</div></div>`).join('')}
-
-    <div style="padding:16px"><button class="btn btn-ghost" onclick="boostListing('${l.id}')"><i data-lucide="sparkles" class="icon"></i>${t('boost')}</button></div>
-    <div style="height:90px"></div>
+    <div style="height:88px"></div>
     ${disclaimerHTML()}
   </div>
   <div class="action-bar">
-    ${l.saleType==='buy' ? `<button class="btn btn-outline" onclick="openOfferSheet('${l.id}')">${t('makeOffer')}</button><button class="btn btn-primary" onclick="buyNow('${l.id}')">${t('buyNow')}</button>` : ''}
-    ${l.saleType==='offer' ? `<button class="btn btn-primary" onclick="openOfferSheet('${l.id}')">${t('makeOffer')}</button>` : ''}
-    ${l.saleType==='auction' ? `<button class="btn btn-primary" onclick="openBidSheet('${l.id}')">${t('bid')}</button>` : ''}
+    ${sold ? `<button class="btn btn-ghost" disabled>${t('sold')}</button>` :
+      reserved ? `<button class="btn btn-ghost" disabled>${t('reserved')}</button>` :
+      `<button class="btn btn-outline" onclick="toast(t('demoSoon'))">${t('buyNow')}</button>
+       <button class="btn btn-primary" onclick="openOfferSheet('${l.id}')">${t('makeOffer')}</button>`}
   </div>`;
 }
-function sendChat(id){
-  const inp = document.getElementById('chatInput');
-  if(!inp || !inp.value.trim()) return;
-  let v = inp.value.trim();
-  v = v.replace(/@?\w{3,}\.\w{2,}|\+?\d[\d\s\-]{6,}\d|https?:\/\/\S+/gi, '•••masked•••');
-  const box = document.getElementById('chatMsgs');
-  box.insertAdjacentHTML('beforeend', `<div class="msg out">${v}</div>`);
-  box.scrollTop = box.scrollHeight; inp.value='';
+function shareListing(id){
+  const l = api.getListing(id);
+  const url = 'https://t.me/savdouser_bot?start=listing_'+id;
+  const text = `${l.username} — ${fmtPrice(l.price,l.currency)} · Savdo Marketplace`;
+  if(navigator.share){ navigator.share({title:'Savdo', text, url}).catch(()=>{}); }
+  else { navigator.clipboard && navigator.clipboard.writeText(text+' '+url); toast(t('linkCopied')); }
 }
-function buyNow(id){ openSheet(`<h3>${t('confirm')}</h3><p style="font-size:13px; color:var(--text-2)">${t('escrow')}: ${t('step1')} → ${t('step2')} → ${t('step3')} → ${t('step4')}.</p>
-  <button class="btn btn-primary" onclick="closeSheet(); toast('✅ ${t('step1')}')">${t('confirm')}</button>`); }
-function openOfferSheet(id){ openSheet(`<h3>${t('makeOffer')}</h3><div class="field"><label>${t('price')}</label><input id="offerAmt" type="number"></div>
-  <button class="btn btn-primary" onclick="closeSheet(); toast(t('offerSent'))">${t('send')}</button>`); }
-function openBidSheet(id){ const l=LISTINGS.find(x=>x.id===id); openSheet(`<h3>${t('bid')}</h3><div class="field"><label>${t('price')}</label><input id="bidAmt" type="number" value="${Math.round(l.currentBid*1.1)}"></div>
-  <button class="btn btn-primary" onclick="placeBid('${id}')">${t('confirm')}</button>`); }
-function placeBid(id){
-  const l = LISTINGS.find(x=>x.id===id);
-  const amt = Number(document.getElementById('bidAmt').value)||l.currentBid;
-  l.currentBid = amt;
-  if(l.auctionEnd - Date.now() < 120000) l.auctionEnd += 120000; // anti-snipe +2min
-  saveListings(); closeSheet(); toast(t('bidPlaced')); render();
+function openReportSheet(id){
+  const reasons = t('reasons');
+  window._reportSel = reasons[0];
+  openSheet(`<h3>${t('reportTitle')}</h3>
+    <div class="radio-row">${reasons.map((r,i)=>`
+      <div class="radio-opt ${i===0?'sel':''}" onclick="window._reportSel='${r}'; document.querySelectorAll('.radio-opt').forEach(e=>e.classList.remove('sel')); this.classList.add('sel')">
+        <span>${r}</span></div>`).join('')}
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" onclick="closeSheet()">${t('cancel')}</button>
+      <button class="btn btn-primary" onclick="closeSheet(); toast('✓ ${t('report')}')">${t('confirm')}</button>
+    </div>`);
 }
-function boostListing(id){ const l=LISTINGS.find(x=>x.id===id); l.hot=true; saveListings(); toast('🚀 Boost'); render(); }
+function openOfferSheet(id){
+  const l = api.getListing(id);
+  openSheet(`<h3>${t('makeOffer')}</h3>
+    <div class="field"><label>${t('offerPrice')} (${l.currency})</label>
+      <input id="off_amt" type="number" inputmode="numeric" value="${Math.round(l.price*0.9)}"></div>
+    <div class="field"><label>${t('message')}</label><textarea id="off_msg"></textarea></div>
+    <div class="field"><label>${t('expiration')}</label><select id="off_exp">
+      <option value="86400000">${t('hrs24')}</option>
+      <option value="172800000" selected>${t('hrs48')}</option>
+      <option value="604800000">${t('days7')}</option></select></div>
+    <button class="btn btn-primary" onclick="submitOffer('${l.id}')">${t('submitOffer')}</button>`);
+}
+function submitOffer(id){
+  const l = api.getListing(id);
+  const amt = Number(document.getElementById('off_amt').value);
+  const msg = document.getElementById('off_msg').value;
+  const exp = Number(document.getElementById('off_exp').value);
+  if(!amt || amt<=0){ toast(t('invalidNumber')); return; }
+  api.addOffer({ listingId:id, fromUserId:CURRENT_UID, toUserId:l.sellerId, amount:amt, message:msg, expiresAt:Date.now()+exp });
+  if(l.sellerId===CURRENT_UID){} // self offer unlikely
+  api.notify({ type:'offer', title:t('notifNewOffer'), text:`${CURRENT_UNAME} → ${fmtPrice(amt,l.currency)} for ${l.username}` });
+  closeSheet(); toast(t('offerSent')); haptic('medium');
+}
 
-/* ---------- helpers ---------- */
-function emptyState(msg){ return `<div class="empty-state"><i data-lucide="search" class="icon"></i><div>${msg||t('empty')}</div></div>`; }
-function disclaimerHTML(){ return `<div class="disclaimer">${t('disclaimer')}</div>`; }
-function openMenu(){ openSheet(`<h3>Savdo</h3>
-  <div class="srow" onclick="closeSheet(); go('profile')"><div class="left"><i data-lucide="user" class="icon"></i>${t('profile')}</div></div>
-  <div class="srow" onclick="closeSheet(); go('my')"><div class="left"><i data-lucide="tag" class="icon"></i>${t('myListings')}</div></div>
-  <div class="srow" style="border-bottom:none"><div class="left"><i data-lucide="shield-check" class="icon"></i>${t('about')}</div></div>
-  <p style="font-size:12px; color:var(--text-2); margin-top:10px">${t('disclaimer')}</p>`); }
+/* ---------------- SELL ---------------- */
+function renderSell(){
+  if(STATE.sell.publishedId){
+    const l = api.getListing(STATE.sell.publishedId);
+    return successHTML(l);
+  }
+  if(STATE.sell.screen==='wizard') return wizardHTML();
+  return sellHomeHTML();
+}
+function sellHomeHTML(){
+  const tabs = [['active','active'],['drafts','drafts'],['pendingReview','pending'],['sold','soldTab'],['archived','archived']];
+  const cur = STATE.sell.tab || 'active';
+  const mine = api.getListings().filter(l=>l.sellerId===CURRENT_UID && l.status===cur);
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="hero-sell"><h2>${t('sellTitle')}</h2><p>${t('sellDesc')}</p></div>
+    <div class="benefits">
+      <div class="benefit"><i data-lucide="zap" class="icon"></i><div><b>${t('fastListing')}</b><span>${t('fastListingD')}</span></div></div>
+      <div class="benefit"><i data-lucide="shield-check" class="icon"></i><div><b>${t('secureProc')}</b><span>${t('secureProcD')}</span></div></div>
+      <div class="benefit"><i data-lucide="star" class="icon"></i><div><b>${t('sellerProfile')}</b><span>${t('sellerProfileD')}</span></div></div>
+      <div class="benefit"><i data-lucide="badge-check" class="icon"></i><div><b>${t('buyerProt')}</b><span>${t('buyerProtD')}</span></div></div>
+    </div>
+    <div style="padding:0 16px 8px"><button class="btn btn-primary" onclick="startWizard()"><i data-lucide="plus" class="icon"></i>${t('createListing')}</button></div>
+    <div class="warn-banner"><i data-lucide="shield-alert" class="icon"></i><span>${t('neverShare')}</span></div>
+    <div class="section"><div class="section-head"><h3>${t('myListings')}</h3><span class="count-note">${api.getListings().filter(l=>l.sellerId===CURRENT_UID).length}</span></div></div>
+    <div class="my-tabs">
+      ${tabs.map(([k,lbl])=>`<span class="chip ${cur===k?'active':''}" onclick="STATE.sell.tab='${k}'; render()">${t(lbl)}</span>`).join('')}
+    </div>
+    ${mine.length ? mine.map(mgmtRowHTML).join('') : `<div class="empty-state"><i data-lucide="tag" class="icon"></i><div>${t('empty')}</div></div>`}
+    ${disclaimerHTML()}
+  </div>`;
+}
+function mgmtRowHTML(l){
+  const draft = l.status==='draft';
+  return `<div class="mgmt-row">
+    ${thumbHTML(l,'th')}
+    <div class="info">
+      <div class="l1">${l.username} ${statusChip(l.status)}</div>
+      <div class="l2">${fmtPrice(l.price,l.currency)} · ${l.views} 👁 · ${l.favorites} ♥ · ${timeAgo(l.createdAt)}</div>
+      <div class="mgmt-actions">
+        ${draft||l.status==='active'?`<span class="chip" onclick="editDraft('${l.id}')">${t('editAction')}</span>`:''}
+        ${l.status==='active'?`<span class="chip" onclick="api.updateListing('${l.id}',{status:'archived'}); render()">${t('pause')}</span>`:''}
+        ${l.status==='archived'?`<span class="chip" onclick="api.updateListing('${l.id}',{status:'active'}); render()">${t('resume')}</span>`:''}
+        <span class="chip" onclick="duplicateListing('${l.id}')">${t('duplicate')}</span>
+        ${l.status==='active'?`<span class="chip" onclick="markSold('${l.id}')">${t('markSold')}</span>`:''}
+        <span class="chip danger" onclick="api.deleteListing('${l.id}'); render()">${t('deleteL')}</span>
+      </div>
+    </div>
+  </div>`;
+}
+function duplicateListing(id){
+  const l = api.getListing(id);
+  if(!l) return;
+  const copy = {...l, id:'u'+Date.now(), status:'draft', createdAt:Date.now(), views:0, favorites:0};
+  api.listings.unshift(copy); api.save(); render();
+}
+function markSold(id){
+  api.updateListing(id, {status:'sold'});
+  api.notify({type:'sold', title:t('notifSold'), text: api.getListing(id).username+' → '+t('sold')});
+  render();
+}
+function startWizard(){
+  if(!STATE.sell.draft){
+    STATE.sell.draft = { type:'', username:'', displayName:'', category:'', description:'', country:'Uzbekistan', language:'Russian',
+      followers:'', following:'', posts:'', engagement:'', accountAge:'', niche:'', price:'', currency:'UZS', minOffer:'' };
+  }
+  STATE.sell.screen='wizard'; STATE.sell.step=1; STATE.sell.publishedId=null; render();
+}
+function editDraft(id){
+  const l = api.getListing(id);
+  if(!l) return;
+  STATE.sell.draft = {...l};
+  store.set('savdo_draft', STATE.sell.draft);
+  STATE.sell.screen='wizard'; STATE.sell.step=1; render();
+}
+function saveDraft(){ if(STATE.sell.draft){ store.set('savdo_draft', STATE.sell.draft); } }
+function wizardHTML(){
+  const d = STATE.sell.draft;
+  const step = STATE.sell.step;
+  const steps = [t('type'), t('basicInfo'), t('statistics'), t('priceStep'), t('preview')];
+  let body='';
+  if(step===1){
+    body = `<div class="type-grid">${TYPES.map(c=>`
+      <div class="type-card ${d.type===c.id?'sel':''}" onclick="STATE.sell.draft.type='${c.id}'; saveDraft(); render()">
+        <i data-lucide="${({username:'at-sign',account:'instagram',brand:'award',theme:'image',creator:'camera',business:'briefcase'})[c.id]}" class="icon"></i>
+        <b>${c.name[LANG==='uz'?'uz':LANG==='en'?'en':'ru']}</b>
+      </div>`).join('')}</div>`;
+  } else if(step===2){
+    body = `<div class="field"><label>${t('username')}</label><input id="w_user" value="${d.username}" placeholder="@username" maxlength="31">
+      <div class="err" id="e_user">${t('usernameErr')}</div></div>
+      <div class="field"><label>${t('displayName')}</label><input id="w_disp" value="${d.displayName}" maxlength="30">
+      <div class="err" id="e_disp">${t('requiredErr')}</div></div>
+      <div class="field"><label>${t('category')}</label><select id="w_cat">
+        ${CATS.map(c=>`<option value="${c.id}" ${d.category===c.id?'selected':''}>${c.name.ru}</option>`).join('')}</select></div>
+      <div class="field"><label>${t('description')}</label><textarea id="w_desc" maxlength="500">${d.description||''}</textarea>
+      <div class="err" id="e_desc">${t('requiredErr')}</div></div>
+      <div class="field"><label>${t('countryLbl')}</label><select id="w_country">
+        ${COUNTRIES.map(c=>`<option ${d.country===c?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="field"><label>${t('langLbl')}</label><select id="w_lang">
+        ${LANGS_LIST.map(c=>`<option ${d.language===c?'selected':''}>${c}</option>`).join('')}</select></div>`;
+  } else if(step===3){
+    if(d.type==='username'){
+      body = `<div class="empty-state"><i data-lucide="at-sign" class="icon"></i><div>${catName('username')} — ${LANG==='ru'?'статистика не требуется':'no stats needed'}</div></div>`;
+    } else {
+      body = `<div class="field"><label>${t('followers')}</label><input id="w_fol" type="number" inputmode="numeric" min="0" value="${d.followers}">
+        <div class="err" id="e_fol">${t('invalidNumber')}</div></div>
+      <div class="field"><label>${t('following')}</label><input id="w_folw" type="number" inputmode="numeric" min="0" value="${d.following}"></div>
+      <div class="field"><label>${t('posts')}</label><input id="w_posts" type="number" inputmode="numeric" min="0" value="${d.posts}"></div>
+      <div class="field"><label>${t('engagement')} %</label><input id="w_eng" type="number" inputmode="decimal" min="0" max="100" value="${d.engagement}">
+        <div class="err" id="e_eng">0–100</div></div>
+      <div class="field"><label>${t('accountAge')} (${LANG==='ru'?'мес':'months'})</label><input id="w_age" type="number" inputmode="numeric" min="0" value="${d.accountAge}"></div>
+      <div class="field"><label>${t('niche')}</label><input id="w_niche" value="${d.niche||''}" maxlength="30"></div>`;
+    }
+  } else if(step===4){
+    const price = Number(d.price)||0;
+    const fee = Math.round(price*FEE_PCT);
+    body = `<div class="field"><label>${t('priceLbl')}</label><input id="w_price" type="number" inputmode="numeric" min="0" value="${d.price}">
+      <div class="err" id="e_price">${t('invalidNumber')}</div></div>
+    <div class="field"><label>${t('currency')}</label><select id="w_cur" onchange="STATE.sell.draft.currency=this.value; feeRecalc()">
+      ${CURRENCIES.map(c=>`<option ${d.currency===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="field"><label>${t('minOffer')}</label><input id="w_minoff" type="number" inputmode="numeric" min="0" value="${d.minOffer||''}"></div>
+    <div style="border-top:1px solid var(--border); margin-top:8px; padding-top:8px">
+      <div class="fee-line">${t('marketplaceFee')} <span id="fee_fee">−${fmtPrice(fee, d.currency)}</span></div>
+      <div class="fee-line"><b>${t('sellerReceives')}</b> <b id="fee_get">${fmtPrice(price-fee, d.currency)}</b></div>
+      <div class="fee-line">${t('buyerPays')} <span id="fee_total">${fmtPrice(price, d.currency)}</span></div>
+    </div>`;
+  } else {
+    const preview = { id:'preview', type:d.type, username:d.username.startsWith('@')?d.username:'@'+d.username,
+      displayName:d.displayName, price:Number(d.price)||0, currency:d.currency, category:d.category||d.type,
+      followers:Number(d.followers)||0, following:Number(d.following)||0, posts:Number(d.posts)||0,
+      engagement:d.engagement||0, status:'active', sellerId:CURRENT_UID, featured:false,
+      description:d.description, tags:['clean'] };
+    body = `<div style="max-width:280px;margin:0 auto">${gridCardHTML(preview)}</div>`;
+  }
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="wiz">
+      <div class="wiz-head"><button class="icon-btn" style="width:32px;height:32px" onclick="wizBack()"><i data-lucide="chevron-left" class="icon" style="width:16px;height:16px"></i></button>
+        <span class="step-no">${t('step')} ${step} ${t('of')} 5 — ${steps[step-1]}</span></div>
+      <div class="progress"><i style="width:${step*20}%"></i></div>
+      ${body}
+      <div class="wiz-nav">
+        ${step>1?`<button class="btn btn-ghost" onclick="wizPrev()">${t('back')}</button>`:''}
+        <button class="btn btn-primary" onclick="wizNext()">${step===5?t('publish'):t('next')}</button>
+      </div>
+    </div>
+    <div class="warn-banner"><i data-lucide="shield-alert" class="icon"></i><span>${t('neverShare')}</span></div>
+    ${disclaimerHTML()}
+  </div>`;
+}
+function wizBack(){ STATE.sell.screen='hero'; STATE.sell.publishedId=null; render(); }
+function wizPrev(){ if(STATE.sell.step>1){ collectWizard(); STATE.sell.step--; render(); } }
+function feeRecalc(){
+  const d=STATE.sell.draft;
+  const p=Number(document.getElementById('w_price').value)||0;
+  const cur=document.getElementById('w_cur').value;
+  const fee=Math.round(p*FEE_PCT);
+  document.getElementById('fee_fee').textContent='−'+fmtPrice(fee,cur);
+  document.getElementById('fee_get').textContent=fmtPrice(p-fee,cur);
+  document.getElementById('fee_total').textContent=fmtPrice(p,cur);
+}
+function collectWizard(){
+  const d=STATE.sell.draft, step=STATE.sell.step;
+  if(step===2){
+    d.username=document.getElementById('w_user').value.trim();
+    d.displayName=document.getElementById('w_disp').value.trim();
+    d.category=document.getElementById('w_cat').value;
+    d.description=document.getElementById('w_desc').value.trim();
+    d.country=document.getElementById('w_country').value;
+    d.language=document.getElementById('w_lang').value;
+  } else if(step===3 && d.type!=='username'){
+    d.followers=document.getElementById('w_fol').value; d.following=document.getElementById('w_folw').value;
+    d.posts=document.getElementById('w_posts').value; d.engagement=document.getElementById('w_eng').value;
+    d.accountAge=document.getElementById('w_age').value; d.niche=document.getElementById('w_niche').value;
+  } else if(step===4){
+    d.price=document.getElementById('w_price').value; d.currency=document.getElementById('w_cur').value;
+    d.minOffer=document.getElementById('w_minoff').value;
+  }
+  saveDraft();
+}
+function showErr(id){ const e=document.getElementById(id); if(e) e.classList.add('show'); return false; }
+function wizNext(){
+  const d=STATE.sell.draft, step=STATE.sell.step;
+  collectWizard();
+  if(step===1 && !d.type){ toast(t('type')); return; }
+  if(step===2){
+    document.querySelectorAll('.err').forEach(e=>e.classList.remove('show'));
+    let ok=true;
+    if(!/^@?[a-z0-9._]{3,30}$/i.test(d.username)) ok=showErr('e_user');
+    if(!d.displayName) ok=showErr('e_disp')&&ok;
+    if(!d.description) ok=showErr('e_desc')&&ok;
+    if(!ok) return;
+  }
+  if(step===3 && d.type!=='username'){
+    document.querySelectorAll('.err').forEach(e=>e.classList.remove('show'));
+    let ok=true;
+    ['followers'].forEach(()=>{});
+    if(Number(d.followers)<0||d.followers==='') ok=showErr('e_fol')&&ok;
+    if(Number(d.engagement)<0||Number(d.engagement)>100||d.engagement==='') ok=showErr('e_eng')&&ok;
+    if(!ok) return;
+  }
+  if(step===4){
+    document.querySelectorAll('.err').forEach(e=>e.classList.remove('show'));
+    if(!d.price || Number(d.price)<=0){ showErr('e_price'); return; }
+  }
+  if(step===5){ publishDraft(); return; }
+  STATE.sell.step++; saveDraft(); render();
+}
+function publishDraft(){
+  const d=STATE.sell.draft;
+  const l = api.createListing({ type:d.type, username:d.username.startsWith('@')?d.username:'@'+d.username,
+    displayName:d.displayName, price:Number(d.price), currency:d.currency, category:d.category||d.type,
+    description:d.description, followers:Number(d.followers)||0, following:Number(d.following)||0,
+    posts:Number(d.posts)||0, engagement:d.engagement||0, accountAge:Number(d.accountAge)||0,
+    niche:d.niche||'', country:d.country, language:d.language, tags:['clean'], minOffer:d.minOffer?Number(d.minOffer):null });
+  api.notify({type:'approved', title:t('yourListingLive'), text:l.username+' · '+fmtPrice(l.price,l.currency)});
+  localStorage.removeItem('savdo_draft');
+  STATE.sell.draft=null; STATE.sell.publishedId=l.id; render();
+}
+function successHTML(l){
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="success-view">
+      <div class="success-ic"><i data-lucide="check" class="icon"></i></div>
+      <h2 style="margin:0 0 6px">${t('yourListingLive')}</h2>
+      <p style="font-size:13px;color:var(--text-2);margin:0 0 20px">${l.username} · ${fmtPrice(l.price,l.currency)}</p>
+      <button class="btn btn-primary" onclick="STATE.sell.publishedId=null; STATE.sell.screen='hero'; openDetail('${l.id}')">${t('viewListing')}</button>
+      <div style="height:10px"></div>
+      <button class="btn btn-outline" onclick="STATE.sell.publishedId=null; STATE.sell.screen='hero'; STATE.sell.tab='active'; render()">${t('goToMy')}</button>
+    </div>
+    ${disclaimerHTML()}
+  </div>`;
+}
 
-function openSheet(html){ document.getElementById('sheetContent').innerHTML = html; const ov=document.getElementById('sheetOverlay'); ov.classList.add('show'); requestAnimationFrame(()=>{try{lucide.createIcons();}catch(e){}}); }
+/* ---------------- PROFILE ---------------- */
+function renderProfile(){
+  const u = SEED_USER;
+  const mine = api.getListings().filter(l=>l.sellerId===CURRENT_UID);
+  const p = STATE.profile;
+  const activeCnt = mine.filter(l=>l.status==='active').length;
+  const soldCnt = mine.filter(l=>l.status==='sold').length;
+  const tabs = [['listings','tag',t('myListings')],['favorites','heart',t('favorites')],['offers','gavel',t('offers')],['notifications','bell',t('notifications')],['settings','settings',t('settings')]];
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="profile-top">
+      <div class="avatar-wrap"><div class="avatar">${(u.displayName||'S')[0].toUpperCase()}</div></div>
+      <div class="meta">
+        <div class="nm">@${u.username} ${u.verified?'<span class="verified-chip"><i data-lucide="badge-check" class="icon"></i>Verified</span>':''}</div>
+        <div class="sub">${u.displayName} · ★ ${u.rating} · ${u.completedDeals} ${t('deals')}</div>
+        <div class="sub">${t('memberSince')} ${u.memberSince}</div>
+      </div>
+    </div>
+    <div class="profile-btns">
+      <button class="btn btn-outline" onclick="toast(t('demoSoon'))"><i data-lucide="pencil" class="icon" style="width:15px;height:15px"></i>${t('editProfile')}</button>
+      <button class="btn btn-ghost" onclick="STATE.profile.tab='settings'; render()"><i data-lucide="settings" class="icon" style="width:15px;height:15px"></i>${t('settings')}</button>
+    </div>
+    <div class="stat-cards">
+      <div class="stat-card"><b>${mine.length}</b><span>${t('listings')}</span></div>
+      <div class="stat-card"><b>${soldCnt}</b><span>${t('soldTab')}</span></div>
+      <div class="stat-card"><b>${FAVS.length}</b><span>${t('favorites')}</span></div>
+      <div class="stat-card"><b>${u.rating}</b><span>${t('rating')}</span></div>
+    </div>
+    <div class="ptabs">
+      ${tabs.map(([k,ic,lbl])=>`<div class="ptab ${p.tab===k?'active':''}" onclick="STATE.profile.tab='${k}'; render()">
+        <i data-lucide="${ic}" class="icon"></i><span>${lbl}</span></div>`).join('')}
+    </div>
+    ${p.tab==='listings'?profileListingsHTML():''}
+    ${p.tab==='favorites'?favoritesHTML():''}
+    ${p.tab==='offers'?offersHTML():''}
+    ${p.tab==='notifications'?notificationsHTML():''}
+    ${p.tab==='settings'?settingsHTML():''}
+    ${isAdmin()?`<div class="admin-entry" onclick="go('admin')">
+      <div style="display:flex; align-items:center; gap:10px"><i data-lucide="lock" class="icon"></i><b>${t('admin')}</b></div>
+      <i data-lucide="chevron-right" class="icon"></i></div>`:''}
+    ${disclaimerHTML()}
+  </div>`;
+}
+function profileListingsHTML(){
+  const tabs=[['active','active'],['pendingReview','pending'],['sold','soldTab'],['draft','drafts']];
+  const cur=STATE.profile.listingTab;
+  const mine=api.getListings().filter(l=>l.sellerId===CURRENT_UID && l.status===cur);
+  return `<div class="my-tabs" style="margin-top:12px">
+    ${tabs.map(([k,lbl])=>`<span class="chip ${cur===k?'active':''}" onclick="STATE.profile.listingTab='${k}'; render()">${t(lbl)}</span>`).join('')}
+  </div>
+  ${mine.length? mine.map(l=>`<div class="mgmt-row">
+    ${thumbHTML(l,'th')}
+    <div class="info">
+      <div class="l1">${l.username} ${statusChip(l.status)}</div>
+      <div class="l2">${fmtPrice(l.price,l.currency)} · ${l.views} 👁 · ${l.favorites} ♥ · ${timeAgo(l.createdAt)}</div>
+      <div class="mgmt-actions">
+        ${l.status==='active'||l.status==='draft'?`<span class="chip" onclick="go('sell'); editDraft('${l.id}')">${t('editAction')}</span>`:''}
+        <span class="chip" onclick="shareListing('${l.id}')">${t('share')}</span>
+        <span class="chip" onclick="api.updateListing('${l.id}',{status:'archived'}); render()">${t('archive')}</span>
+      </div>
+    </div>
+  </div>`).join('') : `<div class="empty-state"><i data-lucide="tag" class="icon"></i><div>${t('empty')}</div></div>`}`;
+}
+function favoritesHTML(){
+  const favs = api.getListings().filter(l=>FAVS.includes(l.id));
+  if(!favs.length) return `<div class="empty-state"><i data-lucide="heart" class="icon"></i><div>${t('emptyFav')}</div></div>`;
+  return favs.map(l=>`<div class="list-row" style="margin:10px 16px" onclick="openDetail('${l.id}')">
+    <div style="position:relative">${thumbHTML(l,'list-thumb')}
+      ${l.status==='sold'?`<div class="sold-overlay" style="border-radius:12px"><span style="font-size:9px">${t('sold').toUpperCase()}</span></div>`:''}</div>
+    <div class="list-info">
+      <div class="nm">${l.username}</div>
+      <div class="meta"><span>${fmtPrice(l.price,l.currency)}</span><span>@${sellerById(l.sellerId).username}</span>${statusChip(l.status)}</div>
+    </div>
+    <div class="list-side"><button class="icon-btn" onclick="event.stopPropagation(); toggleFav('${l.id}')" aria-label="${t('removeFav')}"><i data-lucide="trash-2" class="icon"></i></button></div>
+  </div>`).join('');
+}
+function offersHTML(){
+  const cur = STATE.profile.offerTab;
+  const list = api.offers.filter(o=> cur==='received'? o.toUserId===CURRENT_UID : o.fromUserId===CURRENT_UID);
+  return `<div class="my-tabs" style="margin-top:12px">
+    <span class="chip ${cur==='received'?'active':''}" onclick="STATE.profile.offerTab='received'; render()">${t('received')}</span>
+    <span class="chip ${cur==='sent'?'active':''}" onclick="STATE.profile.offerTab='sent'; render()">${t('sent')}</span>
+  </div>
+  ${list.length? list.map(o=>{
+    const l = api.getListing(o.listingId) || {username:'@—', currency:'UZS', category:'other'};
+    const other = sellerById(cur==='received'? o.fromUserId : o.toUserId);
+    const stMap={pending:'status-pending', accepted:'status-available', rejected:'status-sold', expired:'status-archived'};
+    return `<div class="offer-row">
+      ${thumbHTML(l,'th')}
+      <div class="info">
+        <div class="l1">${l.username} · ${fmtPrice(o.amount, l.currency)}</div>
+        <div class="l2">${cur==='received'?t('from'):t('to')} @${other.username} · ${timeAgo(o.createdAt)}</div>
+        <div style="margin-top:4px"><span class="status-chip ${stMap[o.status]}">${t(o.status)}</span></div>
+        ${cur==='received'&&o.status==='pending'?`<div class="mini-actions">
+          <button class="chip accept" onclick="respondOffer('${o.id}','accepted')">${t('accept')}</button>
+          <button class="chip reject" onclick="respondOffer('${o.id}','rejected')">${t('decline')}</button>
+        </div>`:''}
+      </div>
+    </div>`;
+  }).join('') : `<div class="empty-state"><i data-lucide="gavel" class="icon"></i><div>${t('emptyOffers')}</div></div>`}`;
+}
+function respondOffer(id, status){
+  const o = api.offers.find(x=>x.id===id);
+  api.updateOffer(id, status);
+  if(status==='accepted' && o){
+    api.notify({type:'accepted', title:t('notifAccepted'), text: api.getListing(o.listingId)?.username+' ✓'});
+  }
+  haptic('medium'); render();
+}
+function notificationsHTML(){
+  const list = api.notifications;
+  if(!list.length) return `<div class="empty-state"><i data-lucide="bell-off" class="icon"></i><div>${t('emptyNotif')}</div></div>`;
+  const icons = {offer:'gavel', accepted:'check-circle-2', sold:'tag', price:'tags', approved:'badge-check', rejected:'x-circle'};
+  return `<div style="display:flex;justify-content:flex-end;padding:8px 16px 0">
+      <span class="chip" onclick="api.markAllRead(); render()">${t('markRead')}</span></div>
+    ${list.map(n=>`<div class="notif-row ${n.read?'':'unread'}">
+      <div class="notif-ic"><i data-lucide="${icons[n.type]||'bell'}" class="icon"></i></div>
+      <div class="notif-body"><div class="t">${n.title}</div><div class="d">${n.text||''}</div><div class="tm">${timeAgo(n.createdAt)}</div></div>
+    </div>`).join('')}`;
+}
+function settingsHTML(){
+  return `<div class="settings-list">
+    <div class="sect-label" style="padding:8px 0 0">${t('account')}</div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="pencil" class="icon"></i>${t('editProfile')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="user" class="icon"></i>${t('username')}</div><span class="end">@${SEED_USER.username}</span></div>
+    <div class="srow" onclick="toast(t('demoSoon'))" style="color:var(--danger)"><div class="left"><i data-lucide="trash-2" class="icon"></i>${t('delAccount')}</div></div>
+    <div class="sect-label">${t('marketplace')}</div>
+    <div class="srow"><div class="left"><i data-lucide="coins" class="icon"></i>${t('defCurrency')}</div>
+      <div class="lang-pick"><button class="${(store.get('savdo_cur','UZS')==='UZS')?'active':''}" onclick="store.set('savdo_cur','UZS'); render()">UZS</button>
+      <button class="${(store.get('savdo_cur','UZS')==='USD')?'active':''}" onclick="store.set('savdo_cur','USD'); render()">USD</button></div></div>
+    <div class="srow"><div class="left"><i data-lucide="bell" class="icon"></i>${t('notifPrefs')}</div>
+      <div class="switch on" onclick="this.classList.toggle('on')"><i></i></div></div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="eye-off" class="icon"></i>${t('privacy')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="sect-label">${t('security')}</div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="laptop" class="icon"></i>${t('sessions')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="log-out" class="icon"></i>${t('signOut')}</div></div>
+    <div class="sect-label">${t('legal')}</div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="file-text" class="icon"></i>${t('terms')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="lock" class="icon"></i>${t('privacyPol')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="scale" class="icon"></i>${t('rules')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="srow" onclick="toast(t('demoSoon'))"><div class="left"><i data-lucide="flag" class="icon"></i>${t('reportIssue')}</div><i data-lucide="chevron-right" class="icon" style="width:16px;height:16px;color:var(--text-2)"></i></div>
+    <div class="sect-label">App</div>
+    <div class="srow"><div class="left"><i data-lucide="moon" class="icon"></i>${t('theme')}</div>
+      <div class="switch ${THEME==='dark'?'on':''}" onclick="toggleTheme()"><i></i></div></div>
+    <div class="srow" style="border-bottom:none"><div class="left"><i data-lucide="globe" class="icon"></i>${t('languageLbl')}</div>
+      <div class="lang-pick">
+        <button class="${LANG==='ru'?'active':''}" onclick="setLang('ru')">RU</button>
+        <button class="${LANG==='uz'?'active':''}" onclick="setLang('uz')">UZ</button>
+        <button class="${LANG==='en'?'active':''}" onclick="setLang('en')">EN</button>
+      </div></div>
+  </div>`;
+}
+function toggleTheme(){ THEME=THEME==='dark'?'light':'dark'; localStorage.setItem('savdo_theme',THEME); render(); }
+function setLang(l){ LANG=l; localStorage.setItem('savdo_lang',LANG); render(); }
+
+/* ---------------- ADMIN ---------------- */
+function renderAdmin(){
+  if(!isAdmin()){
+    return `<div class="view">${topbarHTML()}<div class="empty-state"><i data-lucide="lock" class="icon"></i><div>${t('denied')}</div>
+      <button class="btn btn-outline" style="margin:16px auto 0; width:auto" onclick="go('profile')">${t('profile')}</button></div>${disclaimerHTML()}</div>`;
+  }
+  const total = api.getListings().reduce((s,l)=>s+l.price,0);
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="section"><div class="section-head"><h3>${t('admin')}</h3></div></div>
+    <div class="section" style="display:flex; gap:10px">
+      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">${t('listings')}</div><div style="font-size:20px;font-weight:700">${api.getListings().length}</div></div>
+      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">GMV</div><div style="font-size:20px;font-weight:700">${fmtPrice(total)}</div></div>
+      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">${t('offers')}</div><div style="font-size:20px;font-weight:700">${api.offers.length}</div></div>
+    </div>
+    <div class="section"><div class="section-head"><h3>${t('myListings')}</h3></div></div>
+    <div style="padding:0 4px">
+      ${api.getListings().slice(0,40).map(l=>`<div class="mgmt-row">
+        <div class="info" style="flex:1">
+          <div class="l1">${l.username} ${statusChip(l.status)}</div>
+          <div class="l2">${fmtPrice(l.price,l.currency)} · @${sellerById(l.sellerId).username}</div>
+        </div>
+        <div class="mgmt-actions" style="margin:0">
+          <span class="chip" onclick="api.updateListing('${l.id}',{featured:${!l.featured}}); render()">${l.featured?'★':'☆'}</span>
+          <span class="chip" onclick="adminCycleStatus('${l.id}')">↻</span>
+          <span class="chip danger" onclick="api.deleteListing('${l.id}'); render()">${t('deleteL')}</span>
+        </div>
+      </div>`).join('').replace(/<\/div><div class="mgmt-row"/g,'</div><div class="mgmt-row"')}
+    </div>
+    ${disclaimerHTML()}
+  </div>`;
+}
+function adminCycleStatus(id){
+  const l=api.getListing(id); if(!l) return;
+  const chain=['active','reserved','sold','pendingReview','draft','archived'];
+  const next=chain[(chain.indexOf(l.status)+1)%chain.length];
+  api.updateListing(id,{status:next}); render();
+}
+
+/* ---------------- helpers ---------------- */
+function emptyMsg(m){ return m; }
+function disclaimerHTML(){ return `<div class="disclaimer">${LANG==='ru'?'Сервис не связан с Instagram и Meta Platforms, Inc. Названия и бренды — собственность их владельцев.':LANG==='uz'?'Xizmat Instagram va Meta Platforms, Inc. bilan bog‘liq emas. Nomlar va brendlar egalariga tegishli.':'This service is not affiliated with Instagram or Meta Platforms, Inc. Names and brands belong to their owners.'}</div>`; }
+function openSheet(html){ document.getElementById('sheetContent').innerHTML=html; document.getElementById('sheetOverlay').classList.add('show'); requestAnimationFrame(()=>{try{lucide.createIcons();}catch(e){}}); }
 function closeSheet(){ document.getElementById('sheetOverlay').classList.remove('show'); }
 document.getElementById('sheetOverlay').addEventListener('click', e=>{ if(e.target.id==='sheetOverlay') closeSheet(); });
-
 let toastTimer;
-function toast(msg){ const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>el.classList.remove('show'), 1800); }
+function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),1800); }
 
-/* banner autoplay + dots */
-let bannerIdx = 0, bannerInterval;
+/* banner autoplay */
+let bannerIdx=0, bannerInterval;
 function initBanner(){
-  const track = document.getElementById('bannerTrack'); if(!track) return;
+  const track=document.getElementById('bannerTrack'); if(!track) return;
   clearInterval(bannerInterval);
-  bannerInterval = setInterval(()=>{
-    bannerIdx = (bannerIdx+1) % BANNERS.length;
-    track.scrollTo({left: track.clientWidth*bannerIdx, behavior:'smooth'});
+  bannerInterval=setInterval(()=>{
+    bannerIdx=(bannerIdx+1)%BANNERS.length;
+    track.scrollTo({left:track.clientWidth*bannerIdx, behavior:'smooth'});
     document.querySelectorAll('#bannerDots .dot').forEach((d,i)=>d.classList.toggle('active', i===bannerIdx));
-  }, 5000);
+  },5000);
 }
-
-/* auction timers */
-let timerInterval;
-function initTimers(){
-  initBanner();
-  clearInterval(timerInterval);
-  timerInterval = setInterval(()=>{
-    document.querySelectorAll('[id^="timer_"]').forEach(el=>{
-      const end = Number(el.dataset.end);
-      const info = timeLeft(end);
-      el.textContent = `⏱ ${t('auctionEnds')}: ${info.label}`;
-      el.classList.toggle('danger', info.danger);
-    });
-  }, 1000);
-}
-
-/* register SW */
 if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
 
 render();
