@@ -1,11 +1,13 @@
-/* Savdo Marketplace — notification engine (runs in GitHub Actions every 10 min).
-   - Polls bot updates (getUpdates): collects synced favorites (web_app_data) and /start.
-   - For every user with saved favorites: sends reminders while the listing is still
-     available (max 3/day, quiet hours 08:00-22:00 local UTC+5).
-   - When a listing is sold or deleted: silently stops reminding it.
-   - Re-engagement: if a user with favorites hasn't been seen for 48h — one message
-     (max one per 48h).
-   All state lives in the repo: data/subs.json + data/bot-state.json. */
+/* Savdo Marketplace — reminder engine (runs in GitHub Actions every 10 min).
+   /start and favorites-sync are now handled INSTANTLY by the savdoBotWebhook
+   Telegram webhook (not this cron) — getUpdates polling was removed here
+   because Telegram rejects getUpdates with 409 Conflict once a webhook is set.
+   This script now only does the periodic sweep: send reminders for favorited
+   listings that are still available (max 3/day, quiet hours 08:00-22:00
+   local UTC+5), silently stop when sold/deleted, and re-engage users who
+   haven't opened the app in 48h (max once per 48h).
+   State lives in the repo: data/subs.json (favorites are written there by the
+   webhook function; this script only reads+updates reminder bookkeeping). */
 
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
@@ -30,7 +32,6 @@ const localHour = ts => local(ts).getUTCHours();
 
 const read = (p, d) => { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return structuredClone(d); } };
 const subs = read('data/subs.json', { subs: [] });
-const state = read('data/bot-state.json', { offset: 0 });
 const listings = read('data/listings.json', { listings: [] });
 const byId = Object.fromEntries(listings.listings.map(l => [l.id, l]));
 
@@ -57,83 +58,11 @@ async function send(id, text) {
   return res.ok;
 }
 
-const upsert = (id, name, uname) => {
-  let s = subs.subs.find(x => x.id === id);
-  if (!s) { s = { id, name: '', username: '', favs: [], last_seen: 0, last_rem: 0, last_re: 0, day: '', rem: 0, sent: 0, welcomed: false }; subs.subs.push(s); }
-  if (name) s.name = name;
-  if (uname) s.username = uname;
-  return s;
-};
-
-
-const WELCOME_PHOTO = 'https://dostonravshanov1006800-beep.github.io/savdo-usernames-market/welcome.jpg';
-const WELCOME_CAPTION =
-  '🛍 <b>Savdo Marketplace</b>\n' +
-  'Instagram username va akkauntlar bozori\n\n' +
-  '✅ Barcha lotlarni administrator tekshirib chiqaradi\n' +
-  '❤️ Yoqkan lotni sevimlilarga qo\u2018shing\n' +
-  '🔔 Bot lotlar mavjud bo\u2018lganda eslatib turadi\n' +
-  '⚡ Haqiqiy sotuvchilar, tekshirilgan lotlar\n\n' +
-  'Quydagi tugmani bosing va bozorga kiring 👇';
-const WELCOME_BTN = '🛍 Bozorga kirish';
-
-async function sendWelcome(id) {
-  if (DRY) { console.log(`DRY welcome -> ${id}`); return true; }
-  let res = await tg('sendPhoto', {
-    chat_id: id, photo: WELCOME_PHOTO, caption: WELCOME_CAPTION, parse_mode: 'HTML',
-    reply_markup: { inline_keyboard: [[{ text: WELCOME_BTN, web_app: { url: SITE } }]] }
-  });
-  if (!res.ok) {
-    console.log(`photo fail ${id}: ${res.description}`);
-    res = await tg('sendMessage', {
-      chat_id: id, text: WELCOME_CAPTION, parse_mode: 'HTML',
-      reply_markup: { inline_keyboard: [[{ text: WELCOME_BTN, web_app: { url: SITE } }]] }
-    });
-    if (!res.ok) console.log(`welcome fallback fail ${id}: ${res.description}`);
-  } else console.log(`welcome-photo ok ${id}`);
-  return res.ok;
-}
-
-if (process.env.PREVIEW_WELCOME) {
-  await sendWelcome(process.env.PREVIEW_WELCOME);
-  process.exit(0);
-}
-
 if (!DRY) {
   await tg('setChatMenuButton', { menu_button: { type: 'web_app', text: '🛍 Savdo', web_app: { url: SITE } } });
 }
 
-/* ---- 1) poll updates ---- */
-let offset = state.offset || 0;
-const upd = await tg('getUpdates', { offset, limit: 100, timeout: 0, allowed_updates: ['message'] });
-if (!upd.ok) { console.log('getUpdates fail:', upd.description); process.exit(0); }
-for (const u of upd.result) {
-  offset = Math.max(offset, u.update_id + 1);
-  const m = u.message, from = m && m.from;
-  if (!from) continue;
-  const s = upsert(from.id, from.first_name || '', from.username || '');
-  s.last_seen = now;
-  if (m.web_app_data && m.web_app_data.data) {
-    try {
-      const p = JSON.parse(m.web_app_data.data);
-      if (Array.isArray(p.favs)) {
-        s.favs = p.favs.filter(x => typeof x === 'string').slice(0, 50);
-        await send(s.id, s.favs.length
-          ? `✅ <b>Избранное синхронизировано</b> — ${s.favs.length} лот(а/ов).\n\n🔔 Буду присылать напоминания, пока лоты доступны (до 3 в день). Если лот продадут — напоминания о нём прекратятся.\n\nОдин в два дня: если не зайдёшь — напомню, что стоит проверить каталог.`
-          : `✅ <b>Готово.</b> Ты в списке. Добавь лоты в избранное (❤️) в каталоге и снова нажми «Синхронизировать» — буду следить за ними.`);
-        console.log(`sync user=${s.id} favs=${s.favs.length}`);
-      }
-    } catch (e) { console.log('bad web_app_data payload'); }
-  } else if ((m.text || '').startsWith('/start')) {
-    await sendWelcome(s.id);
-    s.welcomed = true;
-    console.log(`welcome user=${s.id}`);
-  } else {
-    console.log(`msg user=${s.id}`);
-  }
-}
-
-/* ---- 2) notification engine ---- */
+/* ---- notification engine ---- */
 const dk = dayKey(now);
 const awake = localHour(now) >= QUIET_START && localHour(now) < QUIET_END;
 for (const s of subs.subs) {
@@ -142,7 +71,7 @@ for (const s of subs.subs) {
   const before = s.favs.length;
   s.favs = s.favs.filter(id => { const l = byId[id]; return l && l.status !== 'sold'; });
   if (s.favs.length !== before) console.log(`pruned user=${s.id} ${before}->${s.favs.length}`);
-  if (!awake || DRY && !s.favs.length) continue;
+  if (!awake) continue;
   const act = s.favs.map(id => byId[id]).filter(l => l && l.status !== 'sold');
   if (act.length && s.rem < MAX_REM && now - (s.last_rem || 0) >= REM_GAP) {
     const lines = act.slice(0, 10).map((l, i) =>
@@ -155,17 +84,16 @@ for (const s of subs.subs) {
   }
 }
 
-/* ---- 3) persist ---- */
-state.offset = offset;
+/* ---- persist ---- */
 if (!DRY) {
   fs.writeFileSync('data/subs.json', JSON.stringify(subs, null, 2) + '\n');
-  fs.writeFileSync('data/bot-state.json', JSON.stringify(state, null, 2) + '\n');
   try {
-    if (execSync('git status --porcelain data/subs.json data/bot-state.json').toString().trim()) {
+    if (execSync('git status --porcelain data/subs.json').toString().trim()) {
       execSync('git config user.name "savdo-notifier"');
       execSync('git config user.email "savdo-notifier@users.noreply.github.com"');
-      execSync('git add data/subs.json data/bot-state.json');
-      execSync('git commit -m "chore: notifier state cycle"');
+      execSync('git add data/subs.json');
+      execSync('git commit -m "chore: reminder sweep"');
+      execSync('git pull --rebase -X theirs');
       execSync('git push');
       console.log('state committed');
     } else console.log('no state changes');

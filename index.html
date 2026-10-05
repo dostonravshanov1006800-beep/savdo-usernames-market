@@ -142,7 +142,7 @@ a{color:var(--accent); text-decoration:none;}
 .sv-head .sp{flex:1;}
 .sv-head button{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;}
 .sv-body{flex:1; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#000;}
-.sv-body img{max-width:100%; max-height:100%; object-fit:contain; -webkit-user-drag:none;}
+.sv-body img{width:100%; height:100%; object-fit:cover; -webkit-user-drag:none;}
 .sv-tap{position:absolute; top:0; bottom:0; width:33%; z-index:2;}
 .sv-tap.left{left:0;} .sv-tap.right{right:0;}
 .sv-cap{position:absolute; left:0; right:0; bottom:0; padding:18px 16px calc(16px + env(safe-area-inset-bottom)); background:linear-gradient(to top, rgba(0,0,0,.65), transparent); color:#fff; font-size:14px; line-height:1.4;}
@@ -1046,7 +1046,7 @@ function renderStoryViewer(){
       <button onclick="closeStoryViewer()" aria-label="close"><i data-lucide="x" class="icon" style="width:22px;height:22px"></i></button>
     </div>
     <div class="sv-body">
-      ${st.type==='video'?`<video id="svVideo" src="${st.img}" autoplay muted playsinline style="max-width:100%; max-height:100%; object-fit:contain"></video>`:`<img src="${st.img}">`}
+      ${st.type==='video'?`<video id="svVideo" src="${st.img}" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover"></video>`:`<img src="${st.img}">`}
       <div class="sv-tap left" onclick="svPrev()"></div>
       <div class="sv-tap right" onclick="svNext()"></div>
       ${st.caption?`<div class="sv-cap">${escHTML(st.caption)}</div>`:''}
