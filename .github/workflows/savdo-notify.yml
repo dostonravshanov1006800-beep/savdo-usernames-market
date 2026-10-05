@@ -1,0 +1,32 @@
+name: Savdo Notify
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # every 10 minutes, free for public repos
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'dry run (no sending, no commit)'
+        type: boolean
+        default: false
+
+concurrency:
+  group: savdo-notify
+  cancel-in-progress: false   # queue runs, never overlap (getUpdates conflicts)
+
+permissions:
+  contents: write             # commit state files
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run notification cycle
+        run: node scripts/notify.mjs
+        env:
+          SAVDO_BOT_TOKEN: ${{ secrets.SAVDO_BOT_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run == true }}
