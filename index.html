@@ -1486,7 +1486,6 @@ function renderAdmin(){
     </div>
     <div style="padding:0 16px 8px; display:flex; gap:10px">
       <button class="btn btn-primary" style="height:42px;font-size:13px" onclick="openEditSheet(null)"><i data-lucide="plus" class="icon" style="width:16px;height:16px"></i>${t('adminAdd')}</button>
-      <button class="btn btn-outline" style="height:42px;font-size:13px" onclick="openTokenSheet()"><i data-lucide="key-round" class="icon" style="width:16px;height:16px"></i>${t('tokenTitle')}</button>
     </div>
     <div style="padding:0 16px 8px; display:flex; gap:10px">
       <button class="btn btn-ghost" style="height:42px;font-size:13px" onclick="publishData()"><i data-lucide="upload-cloud" class="icon" style="width:16px;height:16px"></i>${t('publish')}</button>
@@ -1612,24 +1611,6 @@ function saveAdminForm(){
   DIRTY = true; closeSheet(); toast(t('saved')); render(); autoPublish();
 }
 
-function openTokenSheet(){
-  const has = !!localStorage.getItem('savdo_gh_token');
-  openSheet(`<h3>${t('tokenTitle')}</h3>
-    <p style="font-size:12px;color:var(--text-2);line-height:1.5">${t('tokenDesc')}</p>
-    <p style="font-size:11px;color:var(--text-2)">Резервный способ. Основной работает автоматически из Telegram.</p>
-    <p style="font-size:11px;color:var(--text-2)">github.com → Settings → Developer settings → Fine-grained personal access tokens → ${REPO}</p>
-    <div class="field"><label>PAT</label><input id="gh_tok" type="password" placeholder="github_pat_…"></div>
-    <div class="sheet-actions">
-      ${has?`<button class="btn btn-ghost" onclick="localStorage.removeItem('savdo_gh_token'); closeSheet(); toast('${t('deleted')}')">${t('deleteL')}</button>`:''}
-      <button class="btn btn-primary" onclick="saveToken()">${t('tokenSave')}</button>
-    </div>`);
-}
-function saveToken(){
-  const v = document.getElementById('gh_tok').value.trim();
-  if(!v){ toast(t('noToken')); return; }
-  localStorage.setItem('savdo_gh_token', v);
-  closeSheet(); toast(t('tokenSaved'));
-}
 
 function b64encode(str){
   const bytes = new TextEncoder().encode(str);
@@ -1647,29 +1628,7 @@ async function publishData(){
       if(j.ok){ DIRTY=false; toast(t('published')); render(); return; }
     }catch(e){}
   }
-  // 2) fallback: manual PAT
-  const token = localStorage.getItem('savdo_gh_token');
-  if(!token){ openTokenSheet(); toast(t('noToken')); return; }
-  toast('…');
-  const payload = JSON.stringify({listings: LISTINGS}, null, 2);
-  let sha = null;
-  try{
-    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${DATA_PATH}`,
-      {headers:{Authorization:'Bearer '+token, Accept:'application/vnd.github+json'}});
-    if(r.ok){ sha = (await r.json()).sha; }
-  }catch(e){}
-  const body = { message:'Savdo admin: update listings ('+LISTINGS.length+')',
-    content: b64encode(payload), branch:'main' };
-  if(sha) body.sha = sha;
-  try{
-    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${DATA_PATH}`, {
-      method:'PUT',
-      headers:{Authorization:'Bearer '+token, 'Content-Type':'application/json', Accept:'application/vnd.github+json'},
-      body: JSON.stringify(body)
-    });
-    if(res.ok){ DIRTY=false; toast(t('published')); render(); }
-    else { toast(t('publishErr')); }
-  }catch(e){ toast(t('publishErr')); }
+  toast(t('publishErr')); // relay unavailable (opened outside Telegram)
 }
 
 /* ---------------- helpers ---------------- */
