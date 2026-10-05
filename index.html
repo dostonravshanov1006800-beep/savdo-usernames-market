@@ -468,7 +468,7 @@ const I18N = {
   offerCopied:'Текст предложения скопирован — вставь его в чат', openingTg:'Открываю Telegram…',
   adminListings:'Лоты', adminAdd:'Добавить лот', adminEditTitle:'Редактировать лот',
   adminSync:'Синхронизация', publish:'Опубликовать на сайт', reloadSite:'Загрузить с сайта', unpublished:'неопубликованных изменений',
-  published:'Опубликовано ✓', publishErr:'Не удалось опубликовать — проверь токен', tokenTitle:'GitHub токен',
+  published:'Опубликовано ✓', autoPublished:'Опубликовано ✓ — видно всем', autoPublishErr:'Не удалось опубликовать — нажми «Опубликовать на сайт»', publishErr:'Не удалось опубликовать — проверь токен', tokenTitle:'GitHub токен',
   tokenDesc:'Fine-grained PAT (Contents: Read and write) для репозитория. Хранится только на этом устройстве.',
   tokenSave:'Сохранить токен', tokenSaved:'Токен сохранён', noToken:'Нужен токен',
   username:'Юзернейм', displayName:'Отображаемое имя', category:'Категория', status:'Статус',
@@ -507,7 +507,7 @@ const I18N = {
   offerCopied:'Taklif matni nusxalandi — chatga qo‘ying', openingTg:'Telegram ochilmoqda…',
   adminListings:'Listinglar', adminAdd:'Listing qo‘shish', adminEditTitle:'Listingni tahrirlash',
   adminSync:'Sinxron', publish:'Saytga chiqarish', reloadSite:'Saytdan yuklash', unpublished:'chop etilmagan o‘zgarishlar',
-  published:'Chop etildi ✓', publishErr:'Chop etish xatosi — tokenni tekshiring', tokenTitle:'GitHub token',
+  published:'Chop etildi ✓', autoPublished:'Chop etildi ✓ — hammaga ko‘rinadi', autoPublishErr:'Chop etilmadi — «Saytga chiqarish»ni bosing', publishErr:'Chop etish xatosi — tokenni tekshiring', tokenTitle:'GitHub token',
   tokenDesc:'Repo uchun fine-grained PAT (Contents: Read and write). Faqat shu qurilmada saqlanadi.',
   tokenSave:'Tokenni saqlash', tokenSaved:'Token saqlandi', noToken:'Token kerak',
   username:'Username', displayName:'Ko‘rinadigan nom', category:'Kategoriya', status:'Holat',
@@ -546,7 +546,7 @@ const I18N = {
   offerCopied:'Offer text copied — paste it in the chat', openingTg:'Opening Telegram…',
   adminListings:'Listings', adminAdd:'Add listing', adminEditTitle:'Edit listing',
   adminSync:'Sync', publish:'Publish to site', reloadSite:'Reload from site', unpublished:'unpublished changes',
-  published:'Published ✓', publishErr:'Publish failed — check token', tokenTitle:'GitHub token',
+  published:'Published ✓', autoPublished:'Published ✓ — visible to everyone', autoPublishErr:'Publish failed — press Publish to site', publishErr:'Publish failed — check token', tokenTitle:'GitHub token',
   tokenDesc:'Fine-grained PAT (Contents: Read and write) for the repo. Stored only on this device.',
   tokenSave:'Save token', tokenSaved:'Token saved', noToken:'Token required',
   username:'Username', displayName:'Display name', category:'Category', status:'Status',
@@ -961,7 +961,7 @@ function handleStoryVideo(file){
   if(area){ area.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-2);font-size:12px"><i data-lucide="video" class="icon" style="width:30px;height:30px"></i><span>${t('processing')}</span></div>`; try{ lucide.createIcons(); }catch(e){} }
   const url = URL.createObjectURL(file);
   const v = document.createElement('video');
-  v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+  v.playsInline = true; v.preload = 'auto'; v.src = url; // unmuted: audio is routed into the recording graph, not the speakers
   let done = false;
   const fail = ()=>{ if(done) return; done = true; URL.revokeObjectURL(url); toast(t('storyVideoErr'));
     if(btn){ btn.disabled=false; btn.style.opacity='1'; btn.textContent=t('postStory'); } };
@@ -969,15 +969,27 @@ function handleStoryVideo(file){
   v.onloadedmetadata = ()=>{
     try{
       const END = Math.min(v.duration && isFinite(v.duration) ? v.duration : 15, 15);
-      const scale = Math.min(1, 480/Math.max(v.videoWidth||480, v.videoHeight||480));
+      const scale = Math.min(1, 720/Math.max(v.videoWidth||720, v.videoHeight||720));
       const w = Math.max(2, Math.round((v.videoWidth||480)*scale));
       const h = Math.max(2, Math.round((v.videoHeight||480)*scale));
       const canvas = document.createElement('canvas'); canvas.width=w; canvas.height=h;
       const ctx = canvas.getContext('2d');
-      const stream = canvas.captureStream(24);
+      const stream = canvas.captureStream(30);
+      // --- AUDIO: route the video element's sound into the recording (not the speakers) ---
+      let audioCtx = null;
+      try{
+        audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+        const src = audioCtx.createMediaElementSource(v);
+        const dest = audioCtx.createMediaStreamDestination();
+        src.connect(dest); // no connection to audioCtx.destination -> stays silent for the user
+        dest.stream.getAudioTracks().forEach(tr => stream.addTrack(tr));
+      }catch(e){ audioCtx = null; }
+      // --- QUALITY: 720p, adaptive bitrate targeting ~3.5 MB per clip ---
       let mime='video/webm;codecs=vp8';
       try{ if(!MediaRecorder.isTypeSupported(mime)) mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':(MediaRecorder.isTypeSupported('video/webm')?'video/webm':''); }catch(e){ mime=''; }
-      const rec = new MediaRecorder(stream, Object.assign({videoBitsPerSecond:500000}, mime?{mimeType:mime}:{}));
+      const vbps = Math.min(2500000, Math.floor(28000000 / Math.max(END, 1)));
+      const recOpts = Object.assign({videoBitsPerSecond: vbps, audioBitsPerSecond: 96000}, mime?{mimeType:mime}:{}); // 96 kbps audio
+      const rec = new MediaRecorder(stream, recOpts);
       const chunks=[];
       rec.ondataavailable = ev=>{ if(ev.data && ev.data.size) chunks.push(ev.data); };
       rec.onstop = ()=>{
@@ -996,12 +1008,18 @@ function handleStoryVideo(file){
         fr.readAsDataURL(blob);
       };
       let stopped = false;
-      const stop = ()=>{ if(stopped) return; stopped = true; clearTimeout(to); try{ v.pause(); }catch(e){} try{ rec.stop(); }catch(e){} };
+      const stop = ()=>{ if(stopped) return; stopped = true; clearTimeout(to); try{ v.pause(); }catch(e){} try{ rec.stop(); }catch(e){} try{ if(audioCtx) audioCtx.close(); }catch(e){} };
       const to = setTimeout(stop, END*1000 + 400);
       v.onended = stop;
       rec.start(250);
       v.currentTime = 0;
-      v.play().catch(fail);
+      // Unmuted playback (so audio reaches the recorder); if the browser blocks
+      // unmuted autoplay, retry after resuming the AudioContext, and as a last
+      // resort fall back to muted playback (silent story, still works).
+      v.play().catch(()=>{
+        const retry = ()=> v.play().catch(()=>{ v.muted = true; v.play().catch(fail); });
+        if(audioCtx){ audioCtx.resume().then(retry).catch(retry); } else { retry(); }
+      });
       (function draw(){ if(stopped || done) return; try{ ctx.drawImage(v,0,0,w,h); }catch(e){} requestAnimationFrame(draw); })();
     }catch(err){ fail(); }
   };
@@ -1050,7 +1068,7 @@ function renderStoryViewer(){
       <button onclick="closeStoryViewer()" aria-label="close"><i data-lucide="x" class="icon" style="width:22px;height:22px"></i></button>
     </div>
     <div class="sv-body">
-      ${st.type==='video'?`<video id="svVideo" src="${st.img}" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover"></video>`:`<img src="${st.img}">`}
+      ${st.type==='video'?`<video id="svVideo" src="${st.img}" autoplay playsinline style="width:100%; height:100%; object-fit:cover"></video>`:`<img src="${st.img}">`}
       <div class="sv-tap left" onclick="svPrev()"></div>
       <div class="sv-tap right" onclick="svNext()"></div>
       ${st.caption?`<div class="sv-cap">${escHTML(st.caption)}</div>`:''}
@@ -1058,6 +1076,8 @@ function renderStoryViewer(){
   try{ lucide.createIcons(); }catch(e){}
   const vid = document.getElementById('svVideo');
   if(vid){
+    vid.volume = 1;
+    vid.play().catch(()=>{}); // story opened by tap = user gesture, unmuted autoplay is allowed
     vid.onended = ()=> svNext();
     vid.onerror = ()=> svNext();
     vid.ontimeupdate = ()=>{
@@ -1491,15 +1511,35 @@ function renderAdmin(){
 }
 function adminSet(id, key, val){
   const l = LISTINGS.find(x=>x.id===id); if(!l) return;
-  l[key]=val; l.updatedAt=Date.now(); DIRTY=true; render();
+  l[key]=val; l.updatedAt=Date.now(); DIRTY=true; render(); autoPublish();
 }
 function adminCycle(id){
   const l = LISTINGS.find(x=>x.id===id); if(!l) return;
   l.status = STATUSES[(STATUSES.indexOf(l.status||'active')+1)%STATUSES.length];
-  l.updatedAt=Date.now(); DIRTY=true; render();
+  l.updatedAt=Date.now(); DIRTY=true; render(); autoPublish();
 }
 function adminDelete(id){
-  LISTINGS = LISTINGS.filter(x=>x.id!==id); DIRTY=true; render();
+  LISTINGS = LISTINGS.filter(x=>x.id!==id); DIRTY=true; render(); autoPublish();
+}
+/* Auto-publish: every admin change is pushed to the live site immediately,
+   so all users (any account/device) see it within ~1 minute. */
+let _autoPubTO = null, _autoPubBusy = false;
+function autoPublish(){
+  clearTimeout(_autoPubTO);
+  _autoPubTO = setTimeout(async ()=>{
+    if(_autoPubBusy){ autoPublish(); return; }
+    const initData = (tg && tg.initData) ? tg.initData : '';
+    if(!initData) return; // outside Telegram: manual "Publish" button still works (PAT fallback)
+    _autoPubBusy = true;
+    try{
+      const res = await fetch(PUBLISH_FUNC, {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({initData, listings: LISTINGS})});
+      const j = await res.json();
+      if(j.ok){ DIRTY=false; toast(t('autoPublished')); render(); }
+      else toast(t('autoPublishErr'));
+    }catch(e){ toast(t('autoPublishErr')); }
+    finally{ _autoPubBusy = false; }
+  }, 1500);
 }
 
 function openEditSheet(id){
@@ -1569,7 +1609,7 @@ function saveAdminForm(){
   } else {
     LISTINGS.unshift({ id:'l'+Date.now(), createdAt:Date.now(), updatedAt:Date.now(), ...data });
   }
-  DIRTY = true; closeSheet(); toast(t('saved')); render();
+  DIRTY = true; closeSheet(); toast(t('saved')); render(); autoPublish();
 }
 
 function openTokenSheet(){
