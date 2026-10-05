@@ -386,6 +386,7 @@ const ADMIN_ID = 8396883978;
 const REPO = 'dostonravshanov1006800-beep/savdo-usernames-market';
 const DATA_PATH = 'data/listings.json';
 const BOT_USERNAME = 'savdouser_bot';
+const PUBLISH_FUNC = 'https://superagent-a868bc34.base44.app/functions/savdoPublish';
 
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 if(tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
@@ -1218,6 +1219,7 @@ function openTokenSheet(){
   const has = !!localStorage.getItem('savdo_gh_token');
   openSheet(`<h3>${t('tokenTitle')}</h3>
     <p style="font-size:12px;color:var(--text-2);line-height:1.5">${t('tokenDesc')}</p>
+    <p style="font-size:11px;color:var(--text-2)">Резервный способ. Основной работает автоматически из Telegram.</p>
     <p style="font-size:11px;color:var(--text-2)">github.com → Settings → Developer settings → Fine-grained personal access tokens → ${REPO}</p>
     <div class="field"><label>PAT</label><input id="gh_tok" type="password" placeholder="github_pat_…"></div>
     <div class="sheet-actions">
@@ -1238,6 +1240,17 @@ function b64encode(str){
   return btoa(bin);
 }
 async function publishData(){
+  // 1) primary: server relay (works automatically when opened from Telegram)
+  const initData = (tg && tg.initData) ? tg.initData : '';
+  if(initData){
+    try{
+      const res = await fetch(PUBLISH_FUNC, {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({initData, listings: LISTINGS})});
+      const j = await res.json();
+      if(j.ok){ DIRTY=false; toast(t('published')); render(); return; }
+    }catch(e){}
+  }
+  // 2) fallback: manual PAT
   const token = localStorage.getItem('savdo_gh_token');
   if(!token){ openTokenSheet(); toast(t('noToken')); return; }
   toast('…');
