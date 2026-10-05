@@ -65,6 +65,10 @@ const upsert = (id, name, uname) => {
   return s;
 };
 
+if (!DRY) {
+  await tg('setChatMenuButton', { menu_button: { type: 'web_app', text: '🛍 Savdo', web_app: { url: SITE } } });
+}
+
 /* ---- 1) poll updates ---- */
 let offset = state.offset || 0;
 const upd = await tg('getUpdates', { offset, limit: 100, timeout: 0, allowed_updates: ['message'] });
@@ -87,11 +91,9 @@ for (const u of upd.result) {
       }
     } catch (e) { console.log('bad web_app_data payload'); }
   } else if ((m.text || '').startsWith('/start')) {
-    if (!s.welcomed) {
-      await send(s.id, `👋 <b>Savdo Marketplace</b> — маркетплейс Instagram-юзернеймов и аккаунтов.\n\nОткрой каталог, добавь лоты в избранное ❤️ и нажми «Синхронизировать» в профиле — бот будет следить за ними и напоминать, пока они доступны.`);
-      s.welcomed = true;
-      console.log(`welcome user=${s.id}`);
-    }
+    await send(s.id, `👋 <b>Savdo Marketplace</b>\nМаркетплейс Instagram-юзернеймов и аккаунтов.\n\n❤️ Добавляй лоты в избранное в каталоге\n🔔 Бот напомнит о доступных лотах (до 3 раз в день)\n⏳ Лот продан — напоминания сами прекратятся\n\nЖми кнопку ниже, чтобы войти 👇`);
+    s.welcomed = true;
+    console.log(`welcome user=${s.id}`);
   } else {
     console.log(`msg user=${s.id}`);
   }
