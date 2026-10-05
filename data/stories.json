@@ -1,0 +1,17 @@
+{
+  "stories": [
+    {
+      "id": "st17912292268159946",
+      "user_id": "555000111",
+      "user_name": "TestUser",
+      "user_photo": "",
+      "media_type": "photo",
+      "media_url": "data/stories/st17912292268159946.jpg",
+      "poster_url": "",
+      "duration_sec": 15,
+      "caption": "test story",
+      "created_at": 1791229226815,
+      "expires_at": 1791315626815
+    }
+  ]
+}
