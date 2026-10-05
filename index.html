@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Savdo — Instagram Usernames Marketplace</title>
+<meta name="description" content="Маркетплейс Instagram-юзернеймов. Покупай, продавай, торгуйся — безопасно.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F4F5F7">
+<link rel="icon" href="https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0b5eee824_generated_image.png">
+<link rel="apple-touch-icon" href="https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0b5eee824_generated_image.png">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{
+  --bg:#F4F5F7; --surface:#FFFFFF; --surface-2:#ECEEF2; --border:#E3E6EC;
+  --text:#0F1115; --text-2:#6B7280; --accent:#3D7BF0; --success:#22C55E;
+  --warn:#F59E0B; --danger:#EF4444;
+  --ig1:#F58529; --ig2:#DD2A7B; --ig3:#8134AF; --ig4:#515BD4;
+  --shadow-sm:0 1px 2px rgba(15,17,21,.04); --shadow-lg:0 8px 24px rgba(15,17,21,.06);
+  --r-card:16px; --r-tile:14px; --r-chip:999px; --r-input:12px; --r-btn:14px;
+}
+html[data-theme="dark"]{
+  --bg:#0B0C10; --surface:#14161C; --surface-2:#1C1F27; --border:#262A34;
+  --text:#F2F4F8; --text-2:#9AA1B2; --accent:#5B93FF; --success:#34D399;
+  --warn:#FBBF24; --danger:#F87171; --shadow-sm:none; --shadow-lg:none;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{margin:0; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing:antialiased;}
+.wordmark{font-family:'Pacifico',cursive; font-size:22px; color:var(--text); line-height:1;}
+button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+img{max-width:100%; display:block;}
+a{color:var(--accent); text-decoration:none;}
+#app{max-width:430px; margin:0 auto; min-height:100vh; position:relative; padding-bottom:84px;
+  background:var(--bg); overflow-x:hidden;}
+.hide{display:none !important;}
+.icon{width:20px;height:20px;stroke-width:1.75;flex-shrink:0;}
+
+/* Topbar */
+.topbar{display:flex; align-items:center; justify-content:space-between; padding:16px 16px 8px;}
+.topbar .right{display:flex; align-items:center; gap:12px;}
+.icon-btn{width:40px;height:40px; display:flex; align-items:center; justify-content:center;
+  border-radius:999px; background:var(--surface-2);}
+.icon-btn .icon{color:var(--text);}
+.badge-dot{position:absolute; top:-2px; right:-2px; width:9px;height:9px; border-radius:50%;
+  background:var(--danger); border:2px solid var(--bg);}
+
+/* search */
+.search-wrap{padding:4px 16px 8px; display:flex; gap:8px;}
+.search-box{flex:1; background:var(--surface-2); border-radius:var(--r-input); display:flex;
+  align-items:center; gap:8px; padding:0 12px; height:44px;}
+.search-box input{border:none; background:none; color:var(--text); font-size:14px; width:100%; outline:none;}
+.search-box .icon{color:var(--text-2);}
+.sq-btn{width:44px;height:44px; border-radius:var(--r-input); background:var(--surface-2);
+  display:flex; align-items:center; justify-content:center;}
+.sq-btn .icon{color:var(--text-2);}
+
+/* section header */
+.section{padding:12px 16px 0;}
+.section-head{display:flex; align-items:center; justify-content:between; justify-content:space-between; margin-bottom:10px;}
+.section-head h3{font-size:16px; font-weight:600; margin:0;}
+.see-all{font-size:13px; font-weight:600; color:var(--accent);}
+
+/* categories */
+.cat-row{display:flex; gap:10px; overflow-x:auto; padding:2px 16px 4px; scroll-snap-type:x proximity;}
+.cat-row::-webkit-scrollbar{display:none;}
+.cat-tile{flex:0 0 auto; scroll-snap-align:start; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-tile); padding:10px 16px; font-size:13px; font-weight:600; white-space:nowrap;
+  box-shadow:var(--shadow-sm); display:flex; align-items:center; gap:6px; transition:transform .2s;}
+.cat-tile:active{transform:scale(.96);}
+.cat-tile.active{background:var(--text); color:var(--bg);}
+
+/* banner carousel */
+.banner-wrap{padding:14px 16px 4px; position:relative;}
+.banner-track{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; border-radius:18px; scroll-behavior:smooth;}
+.banner-track::-webkit-scrollbar{display:none;}
+.banner-slide{flex:0 0 100%; scroll-snap-align:start; border-radius:18px; overflow:hidden; position:relative; aspect-ratio:16/8.2;}
+.banner-slide img{width:100%; height:100%; object-fit:cover;}
+.banner-cap{position:absolute; left:16px; bottom:14px; color:#1a1a1a; font-weight:700; font-size:15px;
+  background:rgba(255,255,255,.72); padding:6px 12px; border-radius:999px; backdrop-filter:blur(6px);}
+.dots{display:flex; justify-content:center; gap:6px; margin-top:10px;}
+.dot{width:6px;height:6px;border-radius:50%; background:var(--border); transition:all .25s;}
+.dot.active{width:16px; background:var(--text);}
+
+/* listings grid */
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px;}
+.chips-row{display:flex; gap:8px; overflow-x:auto; padding:0 16px 10px;}
+.chips-row::-webkit-scrollbar{display:none;}
+.chip{flex:0 0 auto; padding:7px 14px; border-radius:var(--r-chip); font-size:13px; font-weight:600;
+  background:var(--surface-2); color:var(--text-2); white-space:nowrap;}
+.chip.active{background:var(--accent); color:#fff;}
+
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-card);
+  box-shadow:var(--shadow-sm); overflow:hidden; cursor:pointer; transition:transform .15s; position:relative;}
+.card:active{transform:scale(.98);}
+.card-preview{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative; padding:14px;}
+.card-preview .at{font-weight:700; letter-spacing:-0.02em; font-size:22px; color:#20212b; text-align:center;
+  word-break:break-word; line-height:1.1;}
+.fav-btn{position:absolute; top:10px; right:10px; width:32px;height:32px; border-radius:50%;
+  background:rgba(255,255,255,.85); display:flex; align-items:center; justify-content:center; z-index:2;}
+.fav-btn .icon{color:#20212b; width:17px;height:17px;}
+.fav-btn.active .icon{color:var(--danger); fill:var(--danger);}
+.card-badges{position:absolute; top:10px; left:10px; display:flex; gap:4px; z-index:2;}
+.pill{font-size:10px; font-weight:700; padding:3px 7px; border-radius:999px; color:#fff; display:flex; align-items:center; gap:3px;}
+.pill.hot{background:linear-gradient(135deg,#F58529,#DD2A7B);}
+.pill.verified{background:var(--success);}
+.pill.auction{background:var(--warn); color:#1a1a1a;}
+.card-body{padding:10px 12px 12px;}
+.card-body .name{font-size:13px; font-weight:700; margin:0 0 2px;}
+.card-body .price{font-size:13px; color:var(--text-2); font-weight:600;}
+.rarity-dots{display:flex; gap:3px; justify-content:center; margin-top:8px;}
+.rarity-dots span{width:5px;height:5px;border-radius:50%; background:var(--border);}
+.rarity-dots span.on{background:var(--success);}
+
+/* bottom nav */
+.bottom-nav{position:fixed; bottom:0; left:0; right:0; max-width:430px; margin:0 auto; height:64px;
+  padding-bottom:env(safe-area-inset-bottom); background:color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter:blur(16px); border-top:1px solid var(--border); display:flex; z-index:50;}
+.nav-item{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; position:relative;}
+.nav-item .icon{color:var(--text-2);}
+.nav-item .pill-bg{position:absolute; top:2px; width:40px;height:26px; border-radius:999px; background:var(--surface-2); z-index:-1;
+  opacity:0; transition:opacity .2s;}
+.nav-item.active .icon{color:var(--text);}
+.nav-item.active .pill-bg{opacity:1;}
+.nav-item.active::before{content:''; position:absolute; top:-1px; left:30%; right:30%; height:2px; background:var(--text); border-radius:2px;}
+.nav-item .lbl{font-size:10px; font-weight:600; color:var(--text-2);}
+.nav-item.active .lbl{color:var(--text);}
+.nav-item .nbadge{position:absolute; top:0; right:22%; min-width:15px; height:15px; border-radius:999px; background:var(--danger);
+  color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; padding:0 3px;}
+
+/* views */
+.view{animation:fadeIn .25s ease-out;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+/* profile */
+.profile-top{display:flex; align-items:center; gap:14px; padding:16px;}
+.avatar-wrap{position:relative;}
+.avatar{width:72px;height:72px; border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));
+  display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:26px;}
+.plus-btn{position:absolute; bottom:-2px; right:-2px; width:24px;height:24px; border-radius:50%; background:var(--success);
+  border:3px solid var(--bg); display:flex; align-items:center; justify-content:center;}
+.plus-btn .icon{width:12px;height:12px; color:#fff;}
+.profile-stats{display:flex; gap:16px; margin-top:6px;}
+.profile-stats div{font-size:12px; color:var(--text-2);}
+.profile-stats b{color:var(--text); font-size:14px; display:block;}
+.stories-row{display:flex; gap:14px; padding:4px 16px 16px; overflow-x:auto;}
+.story{display:flex; flex-direction:column; align-items:center; gap:5px; flex:0 0 auto;}
+.story .ring{width:58px;height:58px; border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));
+  display:flex; align-items:center; justify-content:center; padding:2px;}
+.story .ring div{width:100%;height:100%; border-radius:50%; background:var(--surface); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;}
+.story span{font-size:10px; color:var(--text-2);}
+.ptabs{display:flex; border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+.ptab{flex:1; display:flex; justify-content:center; padding:10px 0; position:relative;}
+.ptab.active::after{content:''; position:absolute; bottom:-1px; left:30%; right:30%; height:2px; background:var(--text);}
+.ptab .icon{color:var(--text-2);}
+.ptab.active .icon{color:var(--text);}
+.settings-list{padding:16px;}
+.srow{display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); font-size:14px;}
+.srow .left{display:flex; align-items:center; gap:10px;}
+.srow .icon{color:var(--text-2);}
+.switch{width:44px;height:26px; border-radius:999px; background:var(--surface-2); position:relative; transition:.2s;}
+.switch.on{background:var(--success);}
+.switch i{position:absolute; top:3px; left:3px; width:20px;height:20px; border-radius:50%; background:#fff; transition:.2s; box-shadow:var(--shadow-sm);}
+.switch.on i{left:21px;}
+.lang-pick{display:flex; gap:6px;}
+.lang-pick button{padding:5px 10px; border-radius:999px; background:var(--surface-2); font-size:12px; font-weight:700;}
+.lang-pick button.active{background:var(--accent); color:#fff;}
+.admin-entry{margin:16px; padding:14px; border-radius:var(--r-card); background:linear-gradient(135deg,#1a1a1a,#333); color:#fff;
+  display:flex; align-items:center; justify-content:space-between;}
+
+/* buttons */
+.btn{height:48px; border-radius:var(--r-btn); font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; gap:6px; width:100%;}
+.btn-primary{background:var(--text); color:var(--bg);}
+.btn-outline{background:var(--surface); border:1px solid var(--border); color:var(--text);}
+.btn-ghost{background:var(--surface-2); color:var(--text);}
+.btn:active{transform:scale(.98);}
+
+/* listing detail */
+.detail-hero{aspect-ratio:1/0.8; display:flex; align-items:center; justify-content:center; position:relative; margin:0 16px; border-radius:20px;}
+.detail-hero .at{font-weight:700; font-size:40px; letter-spacing:-0.02em; color:#20212b; text-align:center; padding:0 20px;}
+.back-fab{position:absolute; top:16px; left:16px; width:40px;height:40px; border-radius:50%; background:rgba(255,255,255,.85);
+  display:flex; align-items:center; justify-content:center; z-index:5;}
+.rarity-ring-wrap{display:flex; align-items:center; gap:14px; padding:16px;}
+.price-row{display:flex; align-items:baseline; justify-content:space-between; padding:0 16px;}
+.price-row .amt{font-size:26px; font-weight:700;}
+.price-row .label{font-size:12px; color:var(--text-2);}
+.seller-row{display:flex; align-items:center; gap:10px; padding:14px 16px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin:14px 0;}
+.seller-row .av{width:40px;height:40px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-weight:700;}
+.seller-row .meta{flex:1;}
+.seller-row .meta .nm{font-size:14px; font-weight:600; display:flex; align-items:center; gap:4px;}
+.seller-row .meta .st{font-size:12px; color:var(--text-2);}
+.verified-chip{display:inline-flex; align-items:center; gap:3px; background:color-mix(in srgb, var(--success) 15%, transparent); color:var(--success); font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px;}
+.escrow-steps{display:flex; flex-direction:column; gap:0; padding:0 16px;}
+.estep{display:flex; gap:12px; padding-bottom:18px; position:relative;}
+.estep .dot{width:22px;height:22px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; z-index:1;}
+.estep.done .dot{background:var(--success); color:#fff;}
+.estep:not(:last-child)::before{content:''; position:absolute; left:10px; top:22px; bottom:0; width:2px; background:var(--border);}
+.estep .txt b{display:block; font-size:13px;}
+.estep .txt span{font-size:12px; color:var(--text-2);}
+.sparkline{padding:16px;}
+.chat-box{margin:0 16px; border:1px solid var(--border); border-radius:16px; overflow:hidden;}
+.chat-msgs{max-height:220px; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px;}
+.msg{max-width:75%; padding:8px 12px; border-radius:14px; font-size:13px;}
+.msg.in{background:var(--surface-2); align-self:flex-start;}
+.msg.out{background:var(--accent); color:#fff; align-self:flex-end;}
+.chat-input{display:flex; gap:8px; padding:10px; border-top:1px solid var(--border);}
+.chat-input input{flex:1; border:none; background:var(--surface-2); border-radius:999px; padding:0 14px; height:38px; font-size:13px; color:var(--text);}
+.review{padding:12px 16px; border-bottom:1px solid var(--border);}
+.review .top{display:flex; justify-content:space-between; font-size:13px; font-weight:600;}
+.stars{color:var(--warn); font-size:12px;}
+.action-bar{position:fixed; bottom:64px; left:0; right:0; max-width:430px; margin:0 auto; background:var(--surface);
+  border-top:1px solid var(--border); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); display:flex; gap:10px; z-index:40;}
+
+/* modal */
+.sheet-overlay{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:100; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity .2s;}
+.sheet-overlay.show{opacity:1; pointer-events:auto;}
+.sheet{width:100%; max-width:430px; margin:0 auto; background:var(--surface); border-radius:20px 20px 0 0; padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  transform:translateY(100%); transition:transform .25s ease-out; max-height:85vh; overflow-y:auto;}
+.sheet-overlay.show .sheet{transform:translateY(0);}
+.sheet h3{margin:0 0 14px;}
+.sheet .field{margin-bottom:12px;}
+.sheet label{font-size:12px; color:var(--text-2); display:block; margin-bottom:5px;}
+.sheet input, .sheet select, .sheet textarea{width:100%; height:46px; border-radius:var(--r-input); border:1px solid var(--border); background:var(--surface-2); padding:0 12px; font-size:14px; color:var(--text); font-family:inherit;}
+.sheet textarea{height:80px; padding:10px 12px;}
+.toast{position:fixed; bottom:140px; left:50%; transform:translateX(-50%); background:#1a1a1a; color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600; z-index:200; opacity:0; transition:opacity .25s, transform .25s; pointer-events:none;}
+.toast.show{opacity:1;}
+.skel{background:linear-gradient(90deg,var(--surface-2) 25%, var(--border) 37%, var(--surface-2) 63%); background-size:400% 100%; animation:sk 1.4s ease infinite; border-radius:var(--r-card);}
+@keyframes sk{0%{background-position:100% 50%}100%{background-position:0 50%}}
+.empty-state{text-align:center; padding:60px 24px; color:var(--text-2);}
+.empty-state .icon{width:44px;height:44px; margin:0 auto 10px; color:var(--border);}
+.disclaimer{padding:20px 16px 10px; font-size:11px; color:var(--text-2); text-align:center; line-height:1.5;}
+@media (prefers-reduced-motion: reduce){*{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}}
+.timer-pill{background:var(--surface-2); color:var(--text); font-size:11px; font-weight:700; padding:4px 9px; border-radius:999px; display:flex; align-items:center; gap:4px;}
+.timer-pill.danger{background:var(--danger); color:#fff;}
+.hero-tag{display:flex; justify-content:center; margin-top:10px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="bottom-nav" id="bottomNav"></div>
+<div class="sheet-overlay" id="sheetOverlay"><div class="sheet" id="sheetContent"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============== CONFIG & I18N ============== */
+const ADMIN_ID = 8396883978;
+const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+if(tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
+const urlUid = new URLSearchParams(location.search).get('uid');
+const CURRENT_UID = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || (urlUid ? Number(urlUid) : 777001);
+const CURRENT_UNAME = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || 'Siz';
+function isAdmin(){ return Number(CURRENT_UID) === ADMIN_ID; }
+function haptic(style){ try{ tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(style||'light'); }catch(e){} }
+
+const I18N = {
+  ru:{ home:'Главная', feed:'Лента', my:'Мои лоты', profile:'Профиль', search:'Поиск по юзернейму', searchOwner:'Поиск по владельцу',
+    categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All', buyNow:'Купить сейчас', makeOffer:'Предложить цену',
+    bid:'Сделать ставку', verified:'Проверен', topSeller:'Топ-продавец', hot:'Hot', auctionEnds:'До конца', rarity:'Индекс редкости',
+    priceHistory:'История цены', similar:'Похожие продажи', fairPrice:'Справедливая цена', escrow:'Безопасная сделка (эскроу)',
+    reviews:'Отзывы', chat:'Чат с продавцом', boost:'Продвинуть лот (Boost)', report:'Пожаловаться', myListings:'Мои лоты',
+    addListing:'Добавить лот', empty:'Пока пусто', emptyFav:'Нет избранных лотов', theme:'Тёмная тема', language:'Язык',
+    admin:'Админ-панель', loginAs:'Вы вошли как', referral:'Реферальная программа', copyLink:'Скопировать ссылку',
+    about:'О проекте', disclaimer:'Сервис не связан с Instagram и Meta Platforms, Inc. Названия и бренды — собственность их владельцев.',
+    sum:'сум', send:'Отправить', cancel:'Отмена', confirm:'Подтвердить', username:'Юзернейм', category:'Категория', price:'Цена (сум)',
+    saleType:'Способ продажи', description:'Описание', create:'Создать лот', step1:'Оплата заморожена', step2:'Продавец передаёт доступ',
+    step3:'Покупатель подтверждает', step4:'Деньги переведены продавцу', favAdded:'Добавлено в избранное', favRemoved:'Убрано из избранного',
+    offerSent:'Предложение отправлено', bidPlaced:'Ставка принята', listingCreated:'Лот создан', deals:'сделок', rating:'рейтинг',
+    adminTitle:'Админ-панель', adminStats:'Статистика', adminListings:'Управление лотами', adminUsers:'Пользователи', feature:'В Featured',
+    unfeature:'Убрать из Featured', delete:'Удалить', verify:'Верифицировать', denied:'Доступ только для администратора',
+    all:'Все', auction:'Аукцион', offer:'Оффер', buy:'Фикс. цена', notifyMe:'Подписка на поиск', saved:'Фильтр сохранён', newMsg:'Написать сообщение...',
+    maskedWarn:'Контакты и ссылки скрыты для безопасности сделки'
+  },
+  uz:{ home:'Bosh sahifa', feed:'Lenta', my:'Lotlarim', profile:'Profil', search:'Username bo‘yicha qidirish', searchOwner:'Egasi bo‘yicha qidirish',
+    categories:'Marketplace categories', featured:'Tanlangan lotlar', seeAll:'Barchasi', buyNow:'Hoziroq sotib olish', makeOffer:'Narx taklif qilish',
+    bid:'Stavka qo‘yish', verified:'Tasdiqlangan', topSeller:'Top sotuvchi', hot:'Hot', auctionEnds:'Tugashiga', rarity:'Noyoblik indeksi',
+    priceHistory:'Narx tarixi', similar:'O‘xshash savdolar', fairPrice:'Adolatli narx', escrow:'Xavfsiz bitim (eskrou)',
+    reviews:'Sharhlar', chat:'Sotuvchi bilan chat', boost:'Lotni ko‘tarish (Boost)', report:'Shikoyat qilish', myListings:'Lotlarim',
+    addListing:'Lot qo‘shish', empty:'Hozircha bo‘sh', emptyFav:'Sevimli lotlar yo‘q', theme:'Tungi rejim', language:'Til',
+    admin:'Admin panel', loginAs:'Siz quyidagi sifatida kirdingiz', referral:'Referal dasturi', copyLink:'Havolani nusxalash',
+    about:'Loyiha haqida', disclaimer:'Xizmat Instagram va Meta Platforms, Inc. bilan bog‘liq emas. Nomlar va brendlar egalariga tegishli.',
+    sum:'so‘m', send:'Yuborish', cancel:'Bekor qilish', confirm:'Tasdiqlash', username:'Username', category:'Kategoriya', price:'Narx (so‘m)',
+    saleType:'Sotish usuli', description:'Tavsif', create:'Lot yaratish', step1:'To‘lov bloklandi', step2:'Sotuvchi huquqni topshiradi',
+    step3:'Xaridor tasdiqlaydi', step4:'Pul sotuvchiga o‘tkazildi', favAdded:'Sevimlilarga qo‘shildi', favRemoved:'Sevimlilardan olib tashlandi',
+    offerSent:'Taklif yuborildi', bidPlaced:'Stavka qabul qilindi', listingCreated:'Lot yaratildi', deals:'bitim', rating:'reyting',
+    adminTitle:'Admin panel', adminStats:'Statistika', adminListings:'Lotlarni boshqarish', adminUsers:'Foydalanuvchilar', feature:'Featuredga',
+    unfeature:'Featureddan olish', delete:'O‘chirish', verify:'Tasdiqlash', denied:'Faqat administrator uchun',
+    all:'Barchasi', auction:'Auksion', offer:'Taklif', buy:'Fiks narx', notifyMe:'Qidiruvga obuna', saved:'Filtr saqlandi', newMsg:'Xabar yozing...',
+    maskedWarn:'Aloqalar va havolalar bitim xavfsizligi uchun yashirilgan'
+  },
+  en:{ home:'Home', feed:'Feed', my:'My listings', profile:'Profile', search:'Search for usernames', searchOwner:'Search by owner',
+    categories:'Marketplace categories', featured:'Featured Listings', seeAll:'See All', buyNow:'Buy now', makeOffer:'Make offer',
+    bid:'Place bid', verified:'Verified', topSeller:'Top seller', hot:'Hot', auctionEnds:'Ends in', rarity:'Rarity score',
+    priceHistory:'Price history', similar:'Similar sales', fairPrice:'Fair price', escrow:'Secure deal (escrow)',
+    reviews:'Reviews', chat:'Chat with seller', boost:'Boost listing', report:'Report', myListings:'My listings',
+    addListing:'Add listing', empty:'Nothing here yet', emptyFav:'No favorites yet', theme:'Dark theme', language:'Language',
+    admin:'Admin panel', loginAs:'Signed in as', referral:'Referral program', copyLink:'Copy link',
+    about:'About', disclaimer:'This service is not affiliated with Instagram or Meta Platforms, Inc. Names and brands belong to their owners.',
+    sum:'UZS', send:'Send', cancel:'Cancel', confirm:'Confirm', username:'Username', category:'Category', price:'Price (UZS)',
+    saleType:'Sale type', description:'Description', create:'Create listing', step1:'Payment held', step2:'Seller transfers access',
+    step3:'Buyer confirms', step4:'Funds released to seller', favAdded:'Added to favorites', favRemoved:'Removed from favorites',
+    offerSent:'Offer sent', bidPlaced:'Bid placed', listingCreated:'Listing created', deals:'deals', rating:'rating',
+    adminTitle:'Admin panel', adminStats:'Stats', adminListings:'Manage listings', adminUsers:'Users', feature:'Feature',
+    unfeature:'Unfeature', delete:'Delete', verify:'Verify', denied:'Admin access only',
+    all:'All', auction:'Auction', offer:'Offer', buy:'Fixed price', notifyMe:'Save search', saved:'Filter saved', newMsg:'Type a message...',
+    maskedWarn:'Contacts and links are masked for deal safety'
+  }
+};
+let LANG = localStorage.getItem('savdo_lang') || 'ru';
+let THEME = localStorage.getItem('savdo_theme') || 'light';
+document.documentElement.setAttribute('data-theme', THEME);
+function t(k){ return (I18N[LANG] && I18N[LANG][k]) || I18N.ru[k] || k; }
+
+/* ============== DATA ============== */
+const CATS = [
+  {id:'short', name:{ru:'Короткие',uz:'Qisqa',en:'Short'}, g:['#E9ECFF','#F6F0FF']},
+  {id:'digits', name:{ru:'Цифры',uz:'Raqamli',en:'Digits'}, g:['#E6F6F1','#F1F9FF']},
+  {id:'words', name:{ru:'Слова',uz:'So‘zlar',en:'Words'}, g:['#FFF1E6','#FFF8F0']},
+  {id:'brands', name:{ru:'Бренды',uz:'Brendlar',en:'Brands'}, g:['#F0F0F3','#E8EAF0']},
+  {id:'names', name:{ru:'Имена',uz:'Ismlar',en:'Names'}, g:['#FDE9F1','#F5ECFF']},
+  {id:'niche', name:{ru:'Ниши',uz:'Niша',en:'Niche'}, g:['#E7F4FF','#EAFBF1']},
+  {id:'premium', name:{ru:'Premium',uz:'Premium',en:'Premium'}, g:['#FFF4D6','#FFE8EE']},
+];
+function catName(id){ const c = CATS.find(c=>c.id===id); return c ? c.name[LANG] : id; }
+function catGrad(id){ const c = CATS.find(c=>c.id===id) || CATS[0]; return `linear-gradient(135deg, ${c.g[0]}, ${c.g[1]})`; }
+
+const BANNERS = [
+  'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/2392e14a0_generated_image.png',
+  'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0034c3e8f_generated_image.png',
+  'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/fbe620e43_generated_image.png',
+];
+
+function rarityScore(u){
+  let s = 0;
+  const name = u.replace('@','');
+  if(name.length<=3) s+=40; else if(name.length<=5) s+=28; else if(name.length<=7) s+=16; else s+=6;
+  if(/^[a-z]+$/.test(name)) s+=15;
+  if(/\d/.test(name)) s += /^\d+$/.test(name) ? 20 : 5;
+  if(new Set(name).size < name.length*0.6) s+=10;
+  s += Math.floor(Math.random()*10);
+  return Math.min(99, s);
+}
+function fmtPrice(n){ return n.toLocaleString('ru-RU').replace(/,/g,' ') + ' ' + t('sum'); }
+function timeLeft(ts){
+  let d = ts - Date.now();
+  if(d<=0) return {done:true,label:'00:00:00'};
+  const h = Math.floor(d/3600000), m = Math.floor((d%3600000)/60000), s = Math.floor((d%60000)/1000);
+  return {done:false, danger: d<60000, label:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`};
+}
+
+const SEED_NAMES = ['flow','nova','kyra','zent','pulse','orbit','vibe','aura','venus','dusk','mira','echo','sumo','blaze','nino','opal','ritz','teva','luno','kaia','zeta','nura','fayz','jaz','x7','ai99','1love','007vip','elite_','iqra','sardor','malika','gold','prime','studio','agency','market','travel','coffee_','fashion','007','1920','rich','vip7'];
+function genListings(){
+  let arr = [];
+  SEED_NAMES.forEach((n,i)=>{
+    const cat = CATS[i % CATS.length].id;
+    const types = ['buy','offer','auction'];
+    const saleType = types[i % 3];
+    const base = 150000 + (i*53217 % 4200000);
+    const rarity = rarityScore(n);
+    const hist = Array.from({length:7}, (_,k)=> Math.round(base*(0.75+0.05*k) ));
+    arr.push({
+      id:'l'+i, username:'@'+n, category:cat, saleType, price:base, rarity,
+      verified: i%3===0, topSeller: i%4===0, hot: rarity>70,
+      auctionEnd: saleType==='auction' ? Date.now() + (3600000* (1+(i%6)) ) : null,
+      currentBid: saleType==='auction' ? Math.round(base*0.82) : null,
+      seller:{ id: 900+i, name: ['Aziz','Dilnoza','Jasur','Shahzod','Nilufar','Botir','Kamola'][i%7], rating:(3.8+ (i%12)/10).toFixed(1), deals: 4+ (i%40) },
+      ownerId: i<4 ? CURRENT_UID : 900+i,
+      favorited: false, views: 80 + i*17, priceHistory: hist, created: Date.now() - i*86400000,
+      desc: {ru:'Чистый, активный аккаунт. Готов передать через безопасную сделку сразу после оплаты.',
+             uz:'Toza, faol username. To‘lovdan so‘ng xavfsiz bitim orqali darhol topshiriladi.',
+             en:'Clean, active handle. Transferred via secure escrow right after payment.'}
+    });
+  });
+  return arr;
+}
+let LISTINGS = JSON.parse(localStorage.getItem('savdo_listings')||'null') || genListings();
+function saveListings(){ localStorage.setItem('savdo_listings', JSON.stringify(LISTINGS)); }
+let FAVS = JSON.parse(localStorage.getItem('savdo_favs')||'[]');
+function saveFavs(){ localStorage.setItem('savdo_favs', JSON.stringify(FAVS)); }
+
+/* ============== ROUTER ============== */
+let STATE = { tab:'home', detailId:null, catFilter:'all', myFilter:'all' };
+
+function render(){
+  document.documentElement.setAttribute('data-theme', THEME);
+  renderNav();
+  const app = document.getElementById('app');
+  if(STATE.detailId){ app.innerHTML = renderDetail(STATE.detailId); }
+  else if(STATE.tab==='home') app.innerHTML = renderHome();
+  else if(STATE.tab==='feed') app.innerHTML = renderFeed();
+  else if(STATE.tab==='my') app.innerHTML = renderMy();
+  else if(STATE.tab==='profile') app.innerHTML = renderProfile();
+  else if(STATE.tab==='admin') app.innerHTML = renderAdmin();
+  requestAnimationFrame(()=>{ try{ lucide.createIcons(); }catch(e){} initTimers(); });
+}
+function go(tab){ STATE = {...STATE, tab, detailId:null}; haptic('light'); render(); window.scrollTo(0,0); }
+function openDetail(id){ STATE.detailId = id; haptic('light'); render(); window.scrollTo(0,0); }
+function closeDetail(){ STATE.detailId = null; render(); }
+
+function renderNav(){
+  const items = [
+    {id:'home', icon:'home', lbl:t('home')},
+    {id:'feed', icon:'file-text', lbl:t('feed')},
+    {id:'my', icon:'tag', lbl:t('my')},
+    {id:'profile', icon:'user', lbl:t('profile')},
+  ];
+  document.getElementById('bottomNav').innerHTML = items.map(it=>`
+    <button class="nav-item ${STATE.tab===it.id && !STATE.detailId ? 'active':''}" onclick="go('${it.id}')">
+      <div class="pill-bg"></div>
+      <i data-lucide="${it.icon}" class="icon"></i>
+      <span class="lbl">${it.lbl}</span>
+    </button>`).join('');
+}
+
+/* ---------- CARD ---------- */
+function cardHTML(l){
+  const favd = FAVS.includes(l.id);
+  return `<div class="card" onclick="openDetail('${l.id}')">
+    <div class="card-preview" style="background:${catGrad(l.category)}">
+      <div class="card-badges">
+        ${l.hot?`<span class="pill hot"><i data-lucide="flame" style="width:9px;height:9px"></i>${t('hot')}</span>`:''}
+        ${l.verified?`<span class="pill verified"><i data-lucide="badge-check" style="width:9px;height:9px"></i></span>`:''}
+      </div>
+      <button class="fav-btn ${favd?'active':''}" onclick="event.stopPropagation(); toggleFav('${l.id}')">
+        <i data-lucide="heart" class="icon" ${favd?'style="fill:currentColor"':''}></i>
+      </button>
+      <div class="at">${l.username}</div>
+    </div>
+    <div class="card-body">
+      <div class="name">${l.username}</div>
+      <div class="price">${l.saleType==='auction' ? fmtPrice(l.currentBid) : fmtPrice(l.price)}</div>
+      <div class="rarity-dots">${[0,1,2].map(i=> `<span class="${ (l.rarity>=((i+1)*33)) ?'on':''}"></span>`).join('')}</div>
+    </div>
+  </div>`;
+}
+function toggleFav(id){
+  if(FAVS.includes(id)){ FAVS = FAVS.filter(f=>f!==id); toast(t('favRemoved')); }
+  else { FAVS.push(id); toast(t('favAdded')); haptic('medium'); }
+  saveFavs(); render();
+}
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const featured = LISTINGS.slice().sort((a,b)=> b.rarity-a.rarity).slice(0,8);
+  return `<div class="view">
+    ${topbarHTML()}
+    ${searchHTML()}
+    <div class="section">
+      <div class="section-head"><h3>${t('categories')}</h3></div>
+    </div>
+    <div class="cat-row">
+      ${CATS.map(c=>`<div class="cat-tile ${STATE.catFilter===c.id?'active':''}" onclick="STATE.catFilter='${c.id}'; go('feed')">${c.name[LANG]}</div>`).join('')}
+    </div>
+    <div class="banner-wrap">
+      <div class="banner-track" id="bannerTrack">
+        ${BANNERS.map((b,i)=>`<div class="banner-slide"><img src="${b}" loading="lazy"><div class="banner-cap">Savdo Premium</div></div>`).join('')}
+      </div>
+      <div class="dots" id="bannerDots">${BANNERS.map((_,i)=>`<div class="dot ${i===0?'active':''}"></div>`).join('')}</div>
+    </div>
+    <div class="section">
+      <div class="section-head"><h3>${t('featured')}</h3><span class="see-all" onclick="go('feed')">${t('seeAll')}</span></div>
+    </div>
+    <div class="grid-2">${featured.map(cardHTML).join('')}</div>
+    ${disclaimerHTML()}
+  </div>`;
+}
+
+function topbarHTML(){
+  return `<div class="topbar">
+    <div class="wordmark">savdo <span style="font-family:Inter;font-weight:700;font-size:14px;vertical-align:middle">Usernames</span></div>
+    <div class="right">
+      <button class="icon-btn" onclick="openMenu()"><i data-lucide="menu" class="icon"></i></button>
+    </div>
+  </div>`;
+}
+function searchHTML(){
+  return `<div class="search-wrap">
+    <div class="search-box"><i data-lucide="search" class="icon"></i><input placeholder="${t('search')}" oninput="doSearch(this.value)"></div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-box"><i data-lucide="sliders-horizontal" class="icon"></i><input placeholder="${t('searchOwner')}"></div>
+    <div class="sq-btn" onclick="toast(t('saved'))"><i data-lucide="user" class="icon"></i></div>
+  </div>`;
+}
+let searchQuery = '';
+function doSearch(v){ searchQuery = v.toLowerCase(); if(STATE.tab!=='feed'){ go('feed'); } else render(); }
+
+/* ---------- FEED ---------- */
+function renderFeed(){
+  let items = LISTINGS.slice().sort((a,b)=>b.created-a.created);
+  if(searchQuery) items = items.filter(l=>l.username.toLowerCase().includes(searchQuery));
+  if(STATE.catFilter && STATE.catFilter!=='all') items = items.filter(l=>l.category===STATE.catFilter);
+  const chips = [{id:'all',lbl:t('all')}, ...CATS.map(c=>({id:c.id,lbl:c.name[LANG]}))];
+  return `<div class="view">
+    ${topbarHTML()}
+    ${searchHTML()}
+    <div class="section"><div class="section-head"><h3>${t('feed')}</h3></div></div>
+    <div class="chips-row">${chips.map(c=>`<div class="chip ${STATE.catFilter===c.id?'active':''}" onclick="STATE.catFilter='${c.id}'; render()">${c.lbl}</div>`).join('')}</div>
+    ${items.length? `<div class="grid-2" style="margin-top:10px">${items.map(cardHTML).join('')}</div>` : emptyState()}
+    ${disclaimerHTML()}
+  </div>`;
+}
+
+/* ---------- MY LISTINGS ---------- */
+function renderMy(){
+  const mine = LISTINGS.filter(l=>l.ownerId===CURRENT_UID);
+  const favItems = LISTINGS.filter(l=>FAVS.includes(l.id));
+  const filt = STATE.myFilter||'mine';
+  const items = filt==='mine' ? mine : favItems;
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="section"><div class="section-head"><h3>${t('myListings')}</h3>
+      <span class="see-all" onclick="openCreateSheet()"><i data-lucide="plus" class="icon" style="width:16px;height:16px;vertical-align:middle"></i></span>
+    </div></div>
+    <div class="chips-row">
+      <div class="chip ${filt==='mine'?'active':''}" onclick="STATE.myFilter='mine'; render()">${t('my')} (${mine.length})</div>
+      <div class="chip ${filt==='fav'?'active':''}" onclick="STATE.myFilter='fav'; render()">♥ ${FAVS.length}</div>
+    </div>
+    ${items.length? `<div class="grid-2" style="margin-top:10px">${items.map(cardHTML).join('')}</div>` : emptyState(filt==='fav'?t('emptyFav'):t('empty'))}
+    <div style="padding:16px"><button class="btn btn-primary" onclick="openCreateSheet()"><i data-lucide="plus" class="icon"></i>${t('addListing')}</button></div>
+    ${disclaimerHTML()}
+  </div>`;
+}
+function openCreateSheet(){
+  openSheet(`<h3>${t('addListing')}</h3>
+    <div class="field"><label>${t('username')}</label><input id="cf_name" placeholder="@username"></div>
+    <div class="field"><label>${t('category')}</label><select id="cf_cat">${CATS.map(c=>`<option value="${c.id}">${c.name[LANG]}</option>`).join('')}</select></div>
+    <div class="field"><label>${t('saleType')}</label><select id="cf_type"><option value="buy">${t('buy')}</option><option value="offer">${t('offer')}</option><option value="auction">${t('auction')}</option></select></div>
+    <div class="field"><label>${t('price')}</label><input id="cf_price" type="number" placeholder="1000000"></div>
+    <div class="field"><label>${t('description')}</label><textarea id="cf_desc"></textarea></div>
+    <button class="btn btn-primary" onclick="submitCreate()">${t('create')}</button>`);
+}
+function submitCreate(){
+  const name = document.getElementById('cf_name').value.trim();
+  if(!name){ toast('@username?'); return; }
+  const price = Number(document.getElementById('cf_price').value) || 500000;
+  const cat = document.getElementById('cf_cat').value;
+  const stype = document.getElementById('cf_type').value;
+  const id = 'u'+Date.now();
+  LISTINGS.unshift({ id, username: name.startsWith('@')?name:'@'+name, category:cat, saleType:stype, price,
+    rarity: rarityScore(name), verified:false, topSeller:false, hot:false,
+    auctionEnd: stype==='auction'? Date.now()+86400000*2 : null, currentBid: stype==='auction'? Math.round(price*0.6):null,
+    seller:{id:CURRENT_UID, name:CURRENT_UNAME, rating:'5.0', deals:0}, ownerId:CURRENT_UID, favorited:false, views:0,
+    priceHistory:[price], created:Date.now(), desc:{ru:document.getElementById('cf_desc').value||'',uz:'',en:''} });
+  saveListings(); closeSheet(); toast(t('listingCreated')); go('my');
+}
+
+/* ---------- PROFILE ---------- */
+function renderProfile(){
+  const mine = LISTINGS.filter(l=>l.ownerId===CURRENT_UID);
+  const admin = isAdmin();
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="profile-top">
+      <div class="avatar-wrap">
+        <div class="avatar">${(CURRENT_UNAME||'S')[0].toUpperCase()}</div>
+        <button class="plus-btn" onclick="toast('Demo: upload avatar')"><i data-lucide="plus" class="icon"></i></button>
+      </div>
+      <div>
+        <div style="font-weight:700; font-size:16px">${CURRENT_UNAME}</div>
+        <div class="profile-stats">
+          <div><b>${mine.length}</b>${t('my')}</div>
+          <div><b>${12}</b>${t('deals')}</div>
+          <div><b>4.9</b>${t('rating')}</div>
+        </div>
+      </div>
+    </div>
+    <div class="stories-row">
+      ${['Короткие','VIP','Избранное','Сделки','Отзывы'].map((s,i)=>`
+        <div class="story"><div class="ring"><div>${s[0]}</div></div><span>${s}</span></div>`).join('')}
+    </div>
+    <div class="ptabs">
+      <div class="ptab active"><i data-lucide="layout-grid" class="icon"></i></div>
+      <div class="ptab"><i data-lucide="gavel" class="icon"></i></div>
+      <div class="ptab"><i data-lucide="star" class="icon"></i></div>
+    </div>
+    <div class="settings-list">
+      <div class="srow"><div class="left"><i data-lucide="moon" class="icon"></i>${t('theme')}</div>
+        <div class="switch ${THEME==='dark'?'on':''}" onclick="toggleTheme()"><i></i></div></div>
+      <div class="srow"><div class="left"><i data-lucide="globe" class="icon"></i>${t('language')}</div>
+        <div class="lang-pick">
+          <button class="${LANG==='ru'?'active':''}" onclick="setLang('ru')">RU</button>
+          <button class="${LANG==='uz'?'active':''}" onclick="setLang('uz')">UZ</button>
+          <button class="${LANG==='en'?'active':''}" onclick="setLang('en')">EN</button>
+        </div></div>
+      <div class="srow" onclick="toast('t.me/savdouser_bot?start=ref_'+${CURRENT_UID}); copyRef()" style="cursor:pointer">
+        <div class="left"><i data-lucide="share-2" class="icon"></i>${t('referral')}</div>
+        <div style="color:var(--accent); font-weight:600; font-size:13px">${t('copyLink')}</div></div>
+      <div class="srow" style="border-bottom:none"><div class="left"><i data-lucide="shield-check" class="icon"></i>${t('about')}</div></div>
+    </div>
+    ${admin ? `<div class="admin-entry" onclick="go('admin')">
+      <div style="display:flex; align-items:center; gap:10px"><i data-lucide="lock" class="icon"></i><b>${t('admin')}</b></div>
+      <i data-lucide="chevron-right" class="icon"></i></div>` : ''}
+    ${disclaimerHTML()}
+  </div>`;
+}
+function toggleTheme(){ THEME = THEME==='dark'?'light':'dark'; localStorage.setItem('savdo_theme',THEME); render(); }
+function setLang(l){ LANG=l; localStorage.setItem('savdo_lang',LANG); render(); }
+function copyRef(){ const link = `https://t.me/savdouser_bot?start=ref_${CURRENT_UID}`; navigator.clipboard && navigator.clipboard.writeText(link).catch(()=>{}); }
+
+/* ---------- ADMIN ---------- */
+function renderAdmin(){
+  if(!isAdmin()){
+    return `<div class="view">${topbarHTML()}<div class="empty-state"><i data-lucide="lock" class="icon"></i><div>${t('denied')}</div>
+      <button class="btn btn-outline" style="margin-top:16px" onclick="go('profile')">${t('profile')}</button></div></div>`;
+  }
+  const totalVol = LISTINGS.reduce((s,l)=>s+l.price,0);
+  return `<div class="view">
+    ${topbarHTML()}
+    <div class="section"><div class="section-head"><h3>${t('adminTitle')}</h3></div></div>
+    <div class="section" style="display:flex; gap:10px">
+      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">Lots</div><div style="font-size:20px;font-weight:700">${LISTINGS.length}</div></div>
+      <div class="card" style="flex:1; padding:14px"><div style="font-size:11px; color:var(--text-2)">GMV</div><div style="font-size:20px;font-weight:700">${fmtPrice(totalVol)}</div></div>
+    </div>
+    <div class="section"><div class="section-head"><h3>${t('adminListings')}</h3></div></div>
+    <div style="padding:0 16px">
+      ${LISTINGS.slice(0,30).map(l=>`
+        <div class="srow">
+          <div class="left"><span style="font-weight:600">${l.username}</span><span style="color:var(--text-2); font-size:12px">· ${fmtPrice(l.price)}</span></div>
+          <div style="display:flex; gap:6px">
+            <button class="chip" onclick="adminToggleHot('${l.id}')">${l.hot?t('unfeature'):t('feature')}</button>
+            <button class="chip" style="color:var(--danger)" onclick="adminDelete('${l.id}')">${t('delete')}</button>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${disclaimerHTML()}
+  </div>`;
+}
+function adminToggleHot(id){ const l=LISTINGS.find(x=>x.id===id); if(l){ l.hot=!l.hot; saveListings(); render(); } }
+function adminDelete(id){ LISTINGS = LISTINGS.filter(x=>x.id!==id); saveListings(); render(); }
+
+/* ---------- DETAIL ---------- */
+function renderDetail(id){
+  const l = LISTINGS.find(x=>x.id===id);
+  if(!l) return renderHome();
+  const seller = l.seller;
+  const circumference = 2*Math.PI*26;
+  const dash = circumference * (l.rarity/100);
+  const chatMsgs = [
+    {in:true, text: LANG==='ru'?'Здравствуйте! Аккаунт активен?':'Salom! Hisob faol-mi?'},
+    {in:false, text: LANG==='ru'?'Да, передам сразу после оплаты через эскроу.':'Ha, eskrou orqali to‘lovdan so‘ng darhol topshiraman.'},
+    {in:true, text: `[${t('maskedWarn')}]`}
+  ];
+  const reviews = [
+    {name:'Dilshod', stars:5, text: LANG==='ru'?'Всё быстро и честно, рекомендую':'Hammasi tez va halol'},
+    {name:'Amira', stars:4, text: LANG==='ru'?'Хороший продавец, чуть долго ждал передачу':'Yaxshi sotuvchi'}
+  ];
+  const similar = LISTINGS.filter(x=>x.category===l.category && x.id!==l.id).slice(0,4);
+  return `<div class="view">
+    <div style="position:relative">
+      <div class="detail-hero" style="background:${catGrad(l.category)}">
+        <button class="back-fab" onclick="closeDetail()"><i data-lucide="chevron-left" class="icon"></i></button>
+        <div class="at">${l.username}</div>
+      </div>
+    </div>
+    <div class="card-badges" style="position:static; display:flex; gap:6px; padding:12px 16px 0">
+      ${l.verified?`<span class="pill verified"><i data-lucide="badge-check" style="width:10px;height:10px"></i>${t('verified')}</span>`:''}
+      ${l.topSeller?`<span class="pill" style="background:#1a1a1a"><i data-lucide="star" style="width:10px;height:10px"></i>${t('topSeller')}</span>`:''}
+      ${l.hot?`<span class="pill hot"><i data-lucide="flame" style="width:10px;height:10px"></i>${t('hot')}</span>`:''}
+    </div>
+    <div class="price-row" style="margin-top:10px">
+      <div><div class="label">${l.saleType==='auction'? t('bid') : t('price')}</div><div class="amt">${fmtPrice(l.saleType==='auction'?l.currentBid:l.price)}</div></div>
+      <button class="fav-btn" style="position:static; background:var(--surface-2)" onclick="toggleFav('${l.id}')"><i data-lucide="heart" class="icon" style="color:${FAVS.includes(l.id)?'var(--danger)':'var(--text)'}"></i></button>
+    </div>
+    ${l.saleType==='auction' ? `<div style="padding:10px 16px"><span class="timer-pill" id="timer_${l.id}" data-end="${l.auctionEnd}">⏱ ${t('auctionEnds')}: --:--:--</span></div>` : ''}
+
+    <div class="rarity-ring-wrap">
+      <svg width="60" height="60" viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="26" fill="none" stroke="var(--border)" stroke-width="5"/>
+        <circle cx="30" cy="30" r="26" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="${dash} ${circumference}" stroke-linecap="round" transform="rotate(-90 30 30)"/>
+        <text x="30" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">${l.rarity}</text>
+      </svg>
+      <div><div style="font-weight:600; font-size:13px">${t('rarity')}</div><div style="font-size:12px; color:var(--text-2)">0–100, ${LANG==='ru'?'авторасчёт по длине и редкости':LANG==='uz'?'uzunlik va noyoblik bo‘yicha':'auto by length & rarity'}</div></div>
+    </div>
+
+    <div class="seller-row">
+      <div class="av">${seller.name[0]}</div>
+      <div class="meta"><div class="nm">${seller.name} ${l.verified?'<i data-lucide="badge-check" class="icon" style="width:13px;height:13px;color:var(--success)"></i>':''}</div>
+      <div class="st">★ ${seller.rating} · ${seller.deals} ${t('deals')}</div></div>
+      <button class="icon-btn" onclick="toast(t('report'))"><i data-lucide="flag" class="icon"></i></button>
+    </div>
+
+    <div class="section"><div class="section-head"><h3>${t('escrow')}</h3></div></div>
+    <div class="escrow-steps">
+      <div class="estep done"><div class="dot"><i data-lucide="check" style="width:12px;height:12px"></i></div><div class="txt"><b>${t('step1')}</b><span>${t('escrow')}</span></div></div>
+      <div class="estep"><div class="dot"><i data-lucide="clock" style="width:12px;height:12px; color:var(--text-2)"></i></div><div class="txt"><b>${t('step2')}</b></div></div>
+      <div class="estep"><div class="dot"></div><div class="txt"><b>${t('step3')}</b></div></div>
+      <div class="estep"><div class="dot"></div><div class="txt"><b>${t('step4')}</b></div></div>
+    </div>
+
+    <div class="section"><div class="section-head"><h3>${t('priceHistory')}</h3></div></div>
+    <div class="sparkline"><svg width="100%" height="60" viewBox="0 0 300 60" preserveAspectRatio="none">
+      <polyline fill="none" stroke="var(--accent)" stroke-width="2.5" points="${l.priceHistory.map((p,i)=>`${(i/(l.priceHistory.length-1))*300},${60 - ( (p-Math.min(...l.priceHistory)) / (Math.max(...l.priceHistory)-Math.min(...l.priceHistory)+1) )*50 - 5}`).join(' ')}"/>
+    </svg><div style="font-size:12px; color:var(--text-2); margin-top:6px">${t('fairPrice')}: ${fmtPrice(Math.round(l.priceHistory.reduce((a,b)=>a+b,0)/l.priceHistory.length))}</div></div>
+
+    ${similar.length? `<div class="section"><div class="section-head"><h3>${t('similar')}</h3></div></div>
+    <div class="grid-2">${similar.map(cardHTML).join('')}</div>` : ''}
+
+    <div class="section"><div class="section-head"><h3>${t('chat')}</h3></div></div>
+    <div class="chat-box">
+      <div class="chat-msgs" id="chatMsgs">${chatMsgs.map(m=>`<div class="msg ${m.in?'in':'out'}">${m.text}</div>`).join('')}</div>
+      <div class="chat-input"><input id="chatInput" placeholder="${t('newMsg')}" onkeydown="if(event.key==='Enter')sendChat('${l.id}')"><button class="icon-btn" onclick="sendChat('${l.id}')"><i data-lucide="send" class="icon"></i></button></div>
+    </div>
+
+    <div class="section"><div class="section-head"><h3>${t('reviews')}</h3></div></div>
+    ${reviews.map(r=>`<div class="review"><div class="top"><span>${r.name}</span><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span></div><div style="font-size:12px; color:var(--text-2); margin-top:4px">${r.text}</div></div>`).join('')}
+
+    <div style="padding:16px"><button class="btn btn-ghost" onclick="boostListing('${l.id}')"><i data-lucide="sparkles" class="icon"></i>${t('boost')}</button></div>
+    <div style="height:90px"></div>
+    ${disclaimerHTML()}
+  </div>
+  <div class="action-bar">
+    ${l.saleType==='buy' ? `<button class="btn btn-outline" onclick="openOfferSheet('${l.id}')">${t('makeOffer')}</button><button class="btn btn-primary" onclick="buyNow('${l.id}')">${t('buyNow')}</button>` : ''}
+    ${l.saleType==='offer' ? `<button class="btn btn-primary" onclick="openOfferSheet('${l.id}')">${t('makeOffer')}</button>` : ''}
+    ${l.saleType==='auction' ? `<button class="btn btn-primary" onclick="openBidSheet('${l.id}')">${t('bid')}</button>` : ''}
+  </div>`;
+}
+function sendChat(id){
+  const inp = document.getElementById('chatInput');
+  if(!inp || !inp.value.trim()) return;
+  let v = inp.value.trim();
+  v = v.replace(/@?\w{3,}\.\w{2,}|\+?\d[\d\s\-]{6,}\d|https?:\/\/\S+/gi, '•••masked•••');
+  const box = document.getElementById('chatMsgs');
+  box.insertAdjacentHTML('beforeend', `<div class="msg out">${v}</div>`);
+  box.scrollTop = box.scrollHeight; inp.value='';
+}
+function buyNow(id){ openSheet(`<h3>${t('confirm')}</h3><p style="font-size:13px; color:var(--text-2)">${t('escrow')}: ${t('step1')} → ${t('step2')} → ${t('step3')} → ${t('step4')}.</p>
+  <button class="btn btn-primary" onclick="closeSheet(); toast('✅ ${t('step1')}')">${t('confirm')}</button>`); }
+function openOfferSheet(id){ openSheet(`<h3>${t('makeOffer')}</h3><div class="field"><label>${t('price')}</label><input id="offerAmt" type="number"></div>
+  <button class="btn btn-primary" onclick="closeSheet(); toast(t('offerSent'))">${t('send')}</button>`); }
+function openBidSheet(id){ const l=LISTINGS.find(x=>x.id===id); openSheet(`<h3>${t('bid')}</h3><div class="field"><label>${t('price')}</label><input id="bidAmt" type="number" value="${Math.round(l.currentBid*1.1)}"></div>
+  <button class="btn btn-primary" onclick="placeBid('${id}')">${t('confirm')}</button>`); }
+function placeBid(id){
+  const l = LISTINGS.find(x=>x.id===id);
+  const amt = Number(document.getElementById('bidAmt').value)||l.currentBid;
+  l.currentBid = amt;
+  if(l.auctionEnd - Date.now() < 120000) l.auctionEnd += 120000; // anti-snipe +2min
+  saveListings(); closeSheet(); toast(t('bidPlaced')); render();
+}
+function boostListing(id){ const l=LISTINGS.find(x=>x.id===id); l.hot=true; saveListings(); toast('🚀 Boost'); render(); }
+
+/* ---------- helpers ---------- */
+function emptyState(msg){ return `<div class="empty-state"><i data-lucide="search" class="icon"></i><div>${msg||t('empty')}</div></div>`; }
+function disclaimerHTML(){ return `<div class="disclaimer">${t('disclaimer')}</div>`; }
+function openMenu(){ openSheet(`<h3>Savdo</h3>
+  <div class="srow" onclick="closeSheet(); go('profile')"><div class="left"><i data-lucide="user" class="icon"></i>${t('profile')}</div></div>
+  <div class="srow" onclick="closeSheet(); go('my')"><div class="left"><i data-lucide="tag" class="icon"></i>${t('myListings')}</div></div>
+  <div class="srow" style="border-bottom:none"><div class="left"><i data-lucide="shield-check" class="icon"></i>${t('about')}</div></div>
+  <p style="font-size:12px; color:var(--text-2); margin-top:10px">${t('disclaimer')}</p>`); }
+
+function openSheet(html){ document.getElementById('sheetContent').innerHTML = html; const ov=document.getElementById('sheetOverlay'); ov.classList.add('show'); requestAnimationFrame(()=>{try{lucide.createIcons();}catch(e){}}); }
+function closeSheet(){ document.getElementById('sheetOverlay').classList.remove('show'); }
+document.getElementById('sheetOverlay').addEventListener('click', e=>{ if(e.target.id==='sheetOverlay') closeSheet(); });
+
+let toastTimer;
+function toast(msg){ const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>el.classList.remove('show'), 1800); }
+
+/* banner autoplay + dots */
+let bannerIdx = 0, bannerInterval;
+function initBanner(){
+  const track = document.getElementById('bannerTrack'); if(!track) return;
+  clearInterval(bannerInterval);
+  bannerInterval = setInterval(()=>{
+    bannerIdx = (bannerIdx+1) % BANNERS.length;
+    track.scrollTo({left: track.clientWidth*bannerIdx, behavior:'smooth'});
+    document.querySelectorAll('#bannerDots .dot').forEach((d,i)=>d.classList.toggle('active', i===bannerIdx));
+  }, 5000);
+}
+
+/* auction timers */
+let timerInterval;
+function initTimers(){
+  initBanner();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    document.querySelectorAll('[id^="timer_"]').forEach(el=>{
+      const end = Number(el.dataset.end);
+      const info = timeLeft(end);
+      el.textContent = `⏱ ${t('auctionEnds')}: ${info.label}`;
+      el.classList.toggle('danger', info.danger);
+    });
+  }, 1000);
+}
+
+/* register SW */
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
+
+render();
+</script>
+</body>
+</html>
