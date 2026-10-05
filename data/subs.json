@@ -4,15 +4,13 @@
       "id": 8396883978,
       "name": "Достонхожа",
       "username": "dostonxoja",
-      "favs": [
-        "relay_test_1"
-      ],
+      "favs": [],
       "last_seen": 1791217353147,
-      "last_rem": 1791217353147,
+      "last_rem": 0,
       "last_re": 0,
-      "day": "2026-10-05",
-      "rem": 1,
-      "sent": 1,
+      "day": "",
+      "rem": 0,
+      "sent": 0,
       "welcomed": true
     }
   ]

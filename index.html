@@ -233,7 +233,7 @@ a{color:var(--accent); text-decoration:none;}
 /* profile */
 .profile-top{display:flex; align-items:center; gap:14px; padding:16px;}
 .avatar-wrap{position:relative;}
-.avatar{width:72px;height:72px; border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));
+.avatar{width:72px;height:72px; border-radius:50%; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4)); overflow:hidden;
   display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:26px;}
 .profile-top .meta{flex:1; min-width:0;}
 .profile-top .nm{font-weight:700; font-size:16px; display:flex; align-items:center; gap:5px;}
@@ -477,7 +477,8 @@ const I18N = {
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
     notifyTitle:'Уведомления бота', notifyHint:'Бот следит за избранным: напоминает до 3 раз в день, пока лоты доступны. Если лот продадут — напоминания прекратятся. Через 2 дня без визита — напомню проверить каталог.', syncBtn:'🔔 Синхронизировать с ботом', syncedLbl:'Синхронизировано', syncToast:'Синхронизирую с ботом…', syncErr:'Открой мини-апп из Telegram', later:'Позже',
-    yourStory:'Моя история', addStory:'Добавить историю', storyHint:'История видна только на этом устройстве — она личная, как заметка, и не публикуется другим пользователям. Исчезает через 24 часа.', choosePhoto:'Выбрать фото', storyCaption:'Подпись', storyCaptionPh:'Необязательно…', postStory:'Опубликовать', storyPosted:'История добавлена', storyAgoNow:'сейчас', storyAgoH:'ч назад',
+    editProfile:'Редактировать профиль', changePhoto:'Изменить фото', nameLbl:'Имя', bannerCtaTitle:'Попади в баннер', bannerCtaSub:'Добавь фото и имя в профиле', 
+  yourStory:'Моя история', addStory:'Добавить историю', storyHint:'История видна только на этом устройстве — она личная, как заметка, и не публикуется другим пользователям. Исчезает через 24 часа.', choosePhoto:'Выбрать фото', storyCaption:'Подпись', storyCaptionPh:'Необязательно…', postStory:'Опубликовать', storyPosted:'История добавлена', storyAgoNow:'сейчас', storyAgoH:'ч назад',
   sum:'сум', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  },
@@ -514,7 +515,8 @@ const I18N = {
   saveLocal:'Saqlash', saved:'Saqlandi — chiqarish uchun Publish bosing',
   cancel:'Bekor qilish', confirm:'Tasdiqlash', deleteL:'O‘chirish', editAction:'Tahrirlash',
     notifyTitle:'Bot xabarnomalar', notifyHint:'Bot sevimlilarni kuzatadi: lotlar mavjud bo‘lguncha kuniga 3 martagacha eslatadi. Lot sotilsa — eslatmalar to‘xtaydi. 2 kun kirmasang — katalogni tekshirishni eslatadi.', syncBtn:'🔔 Bot bilan sinxronlash', syncedLbl:'Sinxronlandi', syncToast:'Bot bilan sinxronlanmoqda…', syncErr:'Mini-apni Telegramdan oching', later:'Keyinroq',
-    yourStory:'Mening tarixim', addStory:'Tarix qo‘shish', storyHint:'Tarix faqat shu qurilmada ko‘rinadi — u shaxsiy, boshqa foydalanuvchilarga chop etilmaydi. 24 soatdan keyin yo‘qoladi.', choosePhoto:'Rasm tanlash', storyCaption:'Sarlavha', storyCaptionPh:'Ixtiyoriy…', postStory:'Chop etish', storyPosted:'Tarix qo‘shildi', storyAgoNow:'hozir', storyAgoH:'soat oldin',
+    editProfile:'Profilni tahrirlash', changePhoto:'Rasmni almashtirish', nameLbl:'Ism', bannerCtaTitle:'Bannerga tushing', bannerCtaSub:'Profilga rasm va ism qo‘shing', 
+  yourStory:'Mening tarixim', addStory:'Tarix qo‘shish', storyHint:'Tarix faqat shu qurilmada ko‘rinadi — u shaxsiy, boshqa foydalanuvchilarga chop etilmaydi. 24 soatdan keyin yo‘qoladi.', choosePhoto:'Rasm tanlash', storyCaption:'Sarlavha', storyCaptionPh:'Ixtiyoriy…', postStory:'Chop etish', storyPosted:'Tarix qo‘shildi', storyAgoNow:'hozir', storyAgoH:'soat oldin',
   sum:'so‘m', loading:'Yuklanmoqda…', reload:'Qayta yuklash', added:'Listing qo‘shildi',
   deleted:'O‘chirildi', userId:'Telegram ID', about:'Loyiha haqida'
  },
@@ -551,7 +553,8 @@ const I18N = {
   saveLocal:'Save', saved:'Saved — press Publish to make it live',
   cancel:'Cancel', confirm:'Confirm', deleteL:'Delete', editAction:'Edit',
     notifyTitle:'Bot notifications', notifyHint:'The bot tracks your favorites: up to 3 reminders a day while listings are available. If one sells, reminders stop. After 2 days without a visit you get a check-the-catalog ping.', syncBtn:'🔔 Sync with bot', syncedLbl:'Synced', syncToast:'Syncing with the bot…', syncErr:'Open the mini app from Telegram', later:'Later',
-    yourStory:'Your story', addStory:'Add story', storyHint:'Your story is visible only on this device — it is personal and is not published to other users. It disappears after 24 hours.', choosePhoto:'Choose photo', storyCaption:'Caption', storyCaptionPh:'Optional…', postStory:'Post', storyPosted:'Story added', storyAgoNow:'now', storyAgoH:'h ago',
+    editProfile:'Edit profile', changePhoto:'Change photo', nameLbl:'Name', bannerCtaTitle:'Get featured', bannerCtaSub:'Add a photo and name to your profile', 
+  yourStory:'Your story', addStory:'Add story', storyHint:'Your story is visible only on this device — it is personal and is not published to other users. It disappears after 24 hours.', choosePhoto:'Choose photo', storyCaption:'Caption', storyCaptionPh:'Optional…', postStory:'Post', storyPosted:'Story added', storyAgoNow:'now', storyAgoH:'h ago',
   sum:'UZS', loading:'Loading…', reload:'Reload', added:'Listing added',
   deleted:'Deleted', userId:'Telegram ID', about:'About'
  }
@@ -580,6 +583,19 @@ const BANNERS = [
   'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/0034c3e8f_generated_image.png',
   'https://media.base44.com/images/public/6ab0a3e2e959cd31a868bc34/fbe620e43_generated_image.png',
 ];
+function userBannerSlideHTML(){
+  if(PROFILE.photo){
+    return `<div class="banner-slide" onclick="go('profile')" style="cursor:pointer">
+      <img src="${PROFILE.photo}" alt="">
+      <div class="banner-cap">✨ ${escHTML(profileName())}</div>
+    </div>`;
+  }
+  return `<div class="banner-slide" onclick="openEditProfile()" style="cursor:pointer; background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4)); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; color:#fff; text-align:center; padding:20px">
+    <i data-lucide="sparkles" class="icon" style="width:30px;height:30px"></i>
+    <div style="font-weight:700; font-size:15px">${t('bannerCtaTitle')}</div>
+    <div style="font-size:12px; opacity:.85">${t('bannerCtaSub')}</div>
+  </div>`;
+}
 function catName(id){ const c=CATS.find(c=>c.id===id); return c?c.name[LANG==='uz'?'uz':LANG==='en'?'en':'ru']:id; }
 function catGrad(id){ const c=(CATS.find(c=>c.id===id)||CATS[0]); return `linear-gradient(135deg, ${c.g[0]}, ${c.g[1]})`; }
 function fmtPrice(n, cur){
@@ -809,6 +825,60 @@ function syncFavs(){
   setTimeout(()=>{ try{ tg.sendData(JSON.stringify({v:1, favs: FAVS})); }catch(e){} }, 400);
 }
 
+function escHTML(x){ return String(x).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+/* ---------------- PROFILE (name + photo, personal/local, every user) ---------------- */
+let PROFILE = store.get('savdo_profile', {name:'', photo:''});
+function saveProfileData(){ store.set('savdo_profile', PROFILE); }
+function profileName(){ return (PROFILE.name && PROFILE.name.trim()) || (tgUser&&(tgUser.first_name||tgUser.username)) || 'User'; }
+function profileAvatarInner(){ return PROFILE.photo ? `<img src="${PROFILE.photo}" style="width:100%;height:100%;object-fit:cover">` : escHTML(profileName()[0]||'U').toUpperCase(); }
+
+let PROF_DRAFT_PHOTO = null;
+function openEditProfile(){
+  PROF_DRAFT_PHOTO = null;
+  openSheet(`<h3>${t('editProfile')}</h3>
+    <div style="display:flex;justify-content:center;margin:14px 0 6px">
+      <div id="profPicArea" onclick="document.getElementById('profFileInput').click()"
+        style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--ig1),var(--ig2),var(--ig3),var(--ig4));display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;cursor:pointer;overflow:hidden;position:relative">
+        ${profileAvatarInner()}
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);color:#fff;font-size:9px;text-align:center;padding:4px 0">${t('changePhoto')}</div>
+      </div>
+    </div>
+    <input type="file" id="profFileInput" accept="image/*" style="display:none" onchange="handleProfileFile(event)">
+    <div class="field"><label>${t('nameLbl')}</label><input id="profNameInput" maxlength="30" value="${escHTML(PROFILE.name||'')}" placeholder="${escHTML((tgUser&&(tgUser.first_name||tgUser.username))||'')}"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" onclick="closeSheet()">${t('cancel')}</button>
+      <button class="btn btn-primary" onclick="saveProfileForm()">${t('saveLocal')}</button>
+    </div>`);
+}
+function handleProfileFile(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const minSide = Math.min(img.width, img.height);
+      const sx = (img.width-minSide)/2, sy = (img.height-minSide)/2;
+      const size = 420;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      canvas.getContext('2d').drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+      PROF_DRAFT_PHOTO = canvas.toDataURL('image/jpeg', 0.85);
+      const area = document.getElementById('profPicArea');
+      if(area) area.innerHTML = `<img src="${PROF_DRAFT_PHOTO}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);color:#fff;font-size:9px;text-align:center;padding:4px 0">${t('changePhoto')}</div>`;
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function saveProfileForm(){
+  const name = (document.getElementById('profNameInput')||{}).value.trim();
+  PROFILE.name = name;
+  if(PROF_DRAFT_PHOTO) PROFILE.photo = PROF_DRAFT_PHOTO;
+  saveProfileData(); PROF_DRAFT_PHOTO = null;
+  closeSheet(); toast(t('saved')); haptic('medium'); render();
+}
+
 /* ---------------- STORIES (personal, local-only, available to EVERY user) ---------------- */
 let STORIES = store.get('savdo_stories', []);
 function pruneStories(){
@@ -818,12 +888,11 @@ function pruneStories(){
 }
 pruneStories();
 function saveStories(){ store.set('savdo_stories', STORIES); }
-function escHTML(x){ return String(x).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function storiesRowHTML(){
   pruneStories();
   const has = STORIES.length>0;
-  const initial = ((tgUser&&tgUser.first_name)||'S')[0].toUpperCase();
+  const initial = (profileName()[0]||'S').toUpperCase();
   const thumb = has ? STORIES[STORIES.length-1].img : null;
   return `<div class="stories-row">
     <div class="story-item">
@@ -907,12 +976,12 @@ function renderStoryViewer(){
   clearTimeout(SV_TIMER);
   const st = STORIES[SV_IDX];
   if(!st){ closeStoryViewer(); return; }
-  const initial = ((tgUser&&tgUser.first_name)||'S')[0].toUpperCase();
+  const initial = (profileName()[0]||'S').toUpperCase();
   const el = document.getElementById('storyViewer');
   el.innerHTML = `
     <div class="sv-progress">${STORIES.map((_,i)=>`<div class="seg ${i<SV_IDX?'done':''}"><i ${i===SV_IDX?'id="svBar"':''}></i></div>`).join('')}</div>
     <div class="sv-head">
-      <div class="av">${initial}</div>
+      <div class="av">${PROFILE.photo?`<img src="${PROFILE.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:initial}</div>
       <div><div class="nm">${t('yourStory')}</div><div class="tm">${svAgo(st.createdAt)}</div></div>
       <div class="sp"></div>
       <button onclick="deleteCurrentStory()" aria-label="delete"><i data-lucide="trash-2" class="icon" style="width:19px;height:19px"></i></button>
@@ -957,9 +1026,10 @@ function renderHome(){
     </div>
     <div class="banner-wrap">
       <div class="banner-track" id="bannerTrack">
+        ${userBannerSlideHTML()}
         ${BANNERS.map(b=>`<div class="banner-slide"><img src="${b}" loading="lazy" alt=""><div class="banner-cap">Savdo Premium</div></div>`).join('')}
       </div>
-      <div class="dots" id="bannerDots">${BANNERS.map((_,i)=>`<div class="dot ${i===0?'active':''}"></div>`).join('')}</div>
+      <div class="dots" id="bannerDots">${Array(BANNERS.length+1).fill(0).map((_,i)=>`<div class="dot ${i===0?'active':''}"></div>`).join('')}</div>
     </div>
     ${featured.length?`
     <div class="section"><div class="section-head"><h3>${t('featured')}</h3><span class="see-all" onclick="go('market')">${t('seeAll')}</span></div></div>
@@ -1243,9 +1313,12 @@ function renderProfile(){
   return `<div class="view">
     ${topbarHTML()}
     <div class="profile-top">
-      <div class="avatar-wrap"><div class="avatar">${((tgUser&&tgUser.first_name)||'S')[0].toUpperCase()}</div></div>
+      <div class="avatar-wrap" onclick="openEditProfile()" style="cursor:pointer; position:relative">
+        <div class="avatar">${profileAvatarInner()}</div>
+        <div class="story-plus" style="width:24px;height:24px"><i data-lucide="pencil" class="icon" style="width:12px;height:12px"></i></div>
+      </div>
       <div class="meta">
-        <div class="nm">${(tgUser&&(tgUser.first_name||tgUser.username))||'User'}</div>
+        <div class="nm">${escHTML(profileName())}</div>
         <div class="sub">@${CURRENT_UNAME} · ${t('userId')}: ${CURRENT_UID}</div>
       </div>
     </div>
@@ -1501,8 +1574,10 @@ let bannerIdx=0, bannerInterval;
 function initBanner(){
   const track=document.getElementById('bannerTrack'); if(!track) return;
   clearInterval(bannerInterval);
+  const total = track.querySelectorAll('.banner-slide').length;
+  if(!total) return;
   bannerInterval=setInterval(()=>{
-    bannerIdx=(bannerIdx+1)%BANNERS.length;
+    bannerIdx=(bannerIdx+1)%total;
     track.scrollTo({left:track.clientWidth*bannerIdx, behavior:'smooth'});
     document.querySelectorAll('#bannerDots .dot').forEach((d,i)=>d.classList.toggle('active', i===bannerIdx));
   },5000);
