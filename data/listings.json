@@ -1,6 +1,33 @@
 {
   "listings": [
     {
+      "id": "l1791446492776",
+      "username": "@uzssou",
+      "displayName": "uzssou",
+      "category": "other",
+      "description": "Красивые юзер телеграм 🔥🌏",
+      "followers": 0,
+      "following": 0,
+      "posts": 0,
+      "engagement": 0,
+      "accountAge": 0,
+      "niche": "Телеграм аккаунт",
+      "country": "Uzbekistan",
+      "language": "Uzbek",
+      "price": 50,
+      "currency": "USD",
+      "minOffer": 40,
+      "sellerHandle": "@trader_hojiaka",
+      "tags": [
+        "User telegram"
+      ],
+      "featured": false,
+      "status": "active",
+      "curated": true,
+      "createdAt": 0,
+      "updatedAt": 0
+    },
+    {
       "id": "l1791227525650",
       "username": "@p2puzb",
       "displayName": "p2puzb",
